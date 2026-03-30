@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: white;
+  color: #111;
+}
+section {
+  position: relative;
+}
+
+::selection {
+  background: #f97316;
+  color: white;
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 12px));
+  }
+}
+
+@keyframes marqueeReverse {
+  0% {
+    transform: translateX(calc(-50% - 12px));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marqueeReverse 30s linear infinite;
+}
+/* Background lines */
+.light-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.light {
+  position: absolute;
+  width: 2px;
+  height: 220px;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.45);
+  opacity: 0;
+  top: 100vh;
+}
+
+@keyframes floatUp {
+  0% {
+    top: 100vh;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.35;
+  }
+  50% {
+    top: 20vh;
+    opacity: 0.2;
+  }
+  100% {
+    top: -120vh;
+    opacity: 0;
+  }
+}
+
+.x1 { left: 8%; animation: floatUp 7s infinite linear; }
+.x2 { left: 18%; animation: floatUp 9s infinite linear; }
+.x3 { left: 30%; animation: floatUp 6s infinite linear; }
+.x4 { left: 42%; animation: floatUp 10s infinite linear; }
+.x5 { left: 56%; animation: floatUp 8s infinite linear; }
+.x6 { left: 68%; animation: floatUp 7s infinite linear; }
+.x7 { left: 78%; animation: floatUp 9s infinite linear; }
+.x8 { left: 88%; animation: floatUp 6s infinite linear; }
+.x9 { left: 94%; animation: floatUp 11s infinite linear; }
+
+/* Mouse particles */
+.mouse-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.mouse-particle {
+  position: absolute;
+  background: #ff7a00;
+  border-radius: 9999px;
+  opacity: 0.55;
+  transition: all 0.8s ease-out;
 }

@@ -433,7 +433,7 @@ export default function UploadPage() {
                       : "border border-black/10 bg-white text-neutral-700"
                   }`}
                 >
-                  {paintingRequested ? "Да" : "Не"}
+                  {paintingRequested ? "Не" : "Да"}
                 </button>
               </div>
 

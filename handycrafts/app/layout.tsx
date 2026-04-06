@@ -7,8 +7,13 @@ import MouseParticles from "./components/MouseParticles";
 
 export const metadata: Metadata = {
   title: "HandyCrafts 3D",
-  description: "3D Printing & Scanning Services",
+  description: "3D Printing · Scanning · Modeling",
+  icons: {
+    icon: "/logo-remove.png",
+  },
 };
+
+
 
 export default function RootLayout({
   children,

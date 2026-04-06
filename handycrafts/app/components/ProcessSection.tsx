@@ -23,8 +23,8 @@ const steps = [
 
 export default function ProcessSection() {
   return (
-    <section className="bg-white py-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="bg-white py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mb-14 max-w-3xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
             Процес
@@ -32,7 +32,7 @@ export default function ProcessSection() {
           <h2 className="mb-5 text-3xl font-bold text-neutral-900 md:text-5xl">
             Как работим
           </h2>
-          <p className="text-lg leading-8 text-neutral-700">
+          <p className="text-base leading-7 text-neutral-700 sm:text-lg sm:leading-8">
             Процесът е структуриран така, че да е лесен за клиента и ефективен за
             изпълнение — от първоначалната идея до реалния резултат.
           </p>
@@ -42,18 +42,18 @@ export default function ProcessSection() {
           {steps.map((step) => (
             <div
               key={step.number}
-              className="relative overflow-hidden rounded-[30px] border border-black/5 bg-neutral-50 p-8"
+              className="group lift-card relative overflow-hidden rounded-[26px] border border-black/5 bg-neutral-50 p-6 sm:rounded-[30px] sm:p-8"
             >
-              <div className="absolute right-6 top-6 text-6xl font-bold text-orange-100">
+              <div className="absolute right-5 top-5 text-5xl font-bold text-orange-100 transition duration-300 group-hover:scale-110 group-hover:text-orange-200 sm:right-6 sm:top-6 sm:text-6xl">
                 {step.number}
               </div>
 
               <div className="relative z-10 max-w-xl">
-                <div className="mb-4 h-1 w-16 rounded-full bg-orange-500" />
-                <h3 className="mb-4 text-2xl font-bold text-neutral-900">
+                <div className="mb-4 h-1 w-16 rounded-full bg-orange-500 transition-all duration-300 group-hover:w-24 group-hover:bg-orange-400" />
+                <h3 className="mb-4 text-xl font-bold text-neutral-900 sm:text-2xl">
                   {step.title}
                 </h3>
-                <p className="leading-8 text-neutral-700">{step.text}</p>
+                <p className="leading-7 text-neutral-700 sm:leading-8">{step.text}</p>
               </div>
             </div>
           ))}

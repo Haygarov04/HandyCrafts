@@ -34,6 +34,7 @@ export default function Footer() {
             <Link href="/portfolio" className="block hover:text-white">Портфолио</Link>
             <Link href="/upload" className="block hover:text-white">Качи файл</Link>
             <Link href="/contact" className="block hover:text-white">Контакти</Link>
+            <Link href="/terms" className="block hover:text-white">Общи условия</Link>
           </div>
         </div>
 

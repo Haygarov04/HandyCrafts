@@ -32,8 +32,8 @@ function UploadProcedurePreview() {
   ];
 
   return (
-    <section className="bg-neutral-50 py-24">
-      <div className="mx-auto max-w-7xl px-6">
+    <section className="bg-neutral-50 py-20 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mb-14 max-w-3xl">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
             Качване на проект
@@ -41,18 +41,18 @@ function UploadProcedurePreview() {
           <h2 className="mb-5 text-3xl font-bold text-neutral-900 md:text-4xl">
             Ясна и удобна процедура за изпращане на файлове и запитвания
           </h2>
-          <p className="text-lg leading-8 text-neutral-700">
+          <p className="text-base leading-7 text-neutral-700 sm:text-lg sm:leading-8">
             Не е нужно да имате всичко подготвено перфектно още в началото.
             Можете да качите готов модел, да изпратите идея, снимка или описание,
             а ние ще помогнем с правилния избор на материал, технология и следващи стъпки.
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {steps.map((step) => (
             <div
               key={step.number}
-              className="rounded-[28px] bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.05)]"
+              className="lift-card glow-orange rounded-[28px] bg-white p-6 shadow-[0_20px_60px_rgba(0,0,0,0.05)] sm:p-8"
             >
               <div className="mb-4 text-sm font-bold tracking-[0.2em] text-orange-500">
                 {step.number}

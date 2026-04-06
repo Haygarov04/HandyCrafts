@@ -8,6 +8,7 @@ body {
   background: white;
   color: #111;
 }
+
 section {
   position: relative;
 }
@@ -16,6 +17,46 @@ section {
   background: #f97316;
   color: white;
 }
+
+/* Shared hover card styles */
+.lift-card {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    background-color 0.35s ease,
+    opacity 0.35s ease;
+}
+
+.lift-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+}
+
+.glow-orange:hover {
+  box-shadow:
+    0 24px 70px rgba(249, 115, 22, 0.18),
+    0 0 0 1px rgba(249, 115, 22, 0.18);
+}
+
+.soft-scale {
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.soft-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Portfolio row */
+.portfolio-row:hover > div {
+  opacity: 0.55;
+}
+
+.portfolio-row > div:hover {
+  opacity: 1;
+}
+
+/* Marquee */
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -41,6 +82,7 @@ section {
 .animate-marquee-reverse {
   animation: marqueeReverse 30s linear infinite;
 }
+
 /* Background lines */
 .light-wrapper {
   position: fixed;
@@ -101,4 +143,12 @@ section {
   border-radius: 9999px;
   opacity: 0.55;
   transition: all 0.8s ease-out;
+}
+
+/* Mobile tweaks */
+@media (max-width: 768px) {
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation-duration: 40s;
+  }
 }

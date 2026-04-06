@@ -2,12 +2,13 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-neutral-950 px-6 py-12 text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-4">
+    <footer className="bg-neutral-950 px-4 py-12 text-white sm:px-6">
+      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 xl:grid-cols-4">
         <div>
           <h3 className="mb-4 text-xl font-bold">HandyCrafts 3D</h3>
-          <p className="text-white/70">
-            3D принтиране, 3D сканиране и 3D моделиране за модерни проекти и реални приложения.
+          <p className="text-white/70 leading-7">
+            3D принтиране, 3D сканиране и 3D моделиране за модерни проекти и
+            реални приложения.
           </p>
         </div>
 

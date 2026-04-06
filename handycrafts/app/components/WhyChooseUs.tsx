@@ -9,8 +9,8 @@ const points = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="bg-neutral-950 py-24 text-white">
-      <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:items-center">
+    <section className="bg-neutral-950 py-20 text-white sm:py-24">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:gap-12 sm:px-6 lg:grid-cols-2 lg:items-center">
         <div>
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-orange-400">
             Защо да изберете нас
@@ -20,7 +20,7 @@ export default function WhyChooseUs() {
             3D услуги с техническа логика и premium усещане
           </h2>
 
-          <p className="max-w-2xl text-lg leading-8 text-white/75">
+          <p className="max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
             Целта ни не е просто да отпечатаме нещо, а да помогнем проектът да
             стане правилно — с подходящ материал, добра подготовка и резултат,
             който изглежда професионално и работи надеждно.
@@ -31,7 +31,7 @@ export default function WhyChooseUs() {
           {points.map((point) => (
             <div
               key={point}
-              className="rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-white/90"
+              className="lift-card rounded-2xl border border-white/10 bg-white/5 px-5 py-5 text-white/90 backdrop-blur-sm sm:px-6"
             >
               {point}
             </div>

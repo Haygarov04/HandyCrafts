@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
+import { faceCloseupPrompt } from "@/lib/figurine";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 90;
 
 const MESHY = "https://api.meshy.ai/openapi/v1/image-to-3d";
 
@@ -10,6 +11,47 @@ function meshyHeaders() {
     Authorization: `Bearer ${process.env.MESHY_API_KEY}`,
     "Content-Type": "application/json",
   };
+}
+
+function imageFromResponse(payload: unknown): string | null {
+  if (!payload || typeof payload !== "object") return null;
+  const data = payload as {
+    url?: string;
+    b64_json?: string;
+    image?: { url?: string; b64_json?: string };
+    data?: Array<{ url?: string; b64_json?: string }>;
+  };
+  const url = data.url || data.image?.url || data.data?.[0]?.url;
+  if (url) return url;
+  const b64 = data.b64_json || data.image?.b64_json || data.data?.[0]?.b64_json;
+  if (b64) return `data:image/png;base64,${b64}`;
+  return null;
+}
+
+async function faceTexture(imageUrl: string) {
+  const key = process.env.XAI_API_KEY;
+  if (!key) return imageUrl;
+  try {
+    const response = await fetch("https://api.x.ai/v1/images/edits", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "grok-imagine-image-2.0",
+        prompt: faceCloseupPrompt(),
+        image: { url: imageUrl, type: "image_url" },
+        aspect_ratio: "1:1",
+        resolution: "2k",
+      }),
+    });
+    const payload = await response.json().catch(() => null);
+    if (!response.ok) return imageUrl;
+    return imageFromResponse(payload) || imageUrl;
+  } catch {
+    return imageUrl;
+  }
 }
 
 export async function POST(req: Request) {
@@ -37,17 +79,18 @@ export async function POST(req: Request) {
     );
   }
 
+  const textureUrl = await faceTexture(imageUrl);
   const response = await fetch(MESHY, {
     method: "POST",
     headers: meshyHeaders(),
     body: JSON.stringify({
       image_url: imageUrl,
-      texture_image_url: imageUrl,
+      texture_image_url: textureUrl,
       ai_model: "latest",
       model_type: "standard",
       should_texture: true,
       enable_pbr: true,
-      image_enhancement: true,
+      image_enhancement: false,
       remove_lighting: true,
       target_formats: ["glb", "stl"],
       moderation: true,

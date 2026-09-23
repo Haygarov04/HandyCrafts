@@ -73,7 +73,7 @@ export async function POST(req: Request) {
         prompt: figurinePrompt({ product, size, clothes, pose }),
         image: { url: dataUri, type: "image_url" },
         aspect_ratio: "1:1",
-        resolution: "1k",
+        resolution: "2k",
       }),
     });
 

@@ -2,53 +2,68 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-neutral-950 px-4 py-12 text-white sm:px-6">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 xl:grid-cols-4">
+    <footer className="bg-ink px-4 py-14 text-paper sm:px-6">
+      <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
         <div>
-          <h3 className="mb-4 text-xl font-bold">HandyCrafts 3D</h3>
-          <p className="text-white/70 leading-7">
-            3D принтиране, 3D сканиране и 3D моделиране за модерни проекти и
-            реални приложения.
+          <p className="font-display text-3xl">HandyCrafts 3D</p>
+          <p className="mt-4 max-w-xs text-sm leading-7 text-paper/65">
+            Работилница в Русе за фигурки по снимка, 3D печат, сканиране и
+            моделиране. Първо визуализация, после изработка.
           </p>
         </div>
-
         <div>
-          <h4 className="mb-4 font-semibold">Услуги</h4>
-          <div className="space-y-2 text-white/70">
-            <Link href="/services/printing" className="block hover:text-white">
-              3D Принтиране
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-paper/45">
+            Студио
+          </p>
+          <div className="mt-4 space-y-2 text-sm text-paper/75">
+            <Link href="/studio" className="block hover:text-paper">
+              Фигурка по снимка
             </Link>
-            <Link href="/services/scanning" className="block hover:text-white">
-              3D Сканиране
+            <Link href="/upload" className="block hover:text-paper">
+              Качи файл
             </Link>
-            <Link href="/services/modeling" className="block hover:text-white">
-              3D Моделиране
+            <Link href="/portfolio" className="block hover:text-paper">
+              Портфолио
             </Link>
           </div>
         </div>
-
         <div>
-          <h4 className="mb-4 font-semibold">Навигация</h4>
-          <div className="space-y-2 text-white/70">
-            <Link href="/" className="block hover:text-white">Начало</Link>
-            <Link href="/portfolio" className="block hover:text-white">Портфолио</Link>
-            <Link href="/upload" className="block hover:text-white">Качи файл</Link>
-            <Link href="/contact" className="block hover:text-white">Контакти</Link>
-            <Link href="/terms" className="block hover:text-white">Общи условия</Link>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-paper/45">
+            Услуги
+          </p>
+          <div className="mt-4 space-y-2 text-sm text-paper/75">
+            <Link href="/services/printing" className="block hover:text-paper">
+              3D принтиране
+            </Link>
+            <Link href="/services/scanning" className="block hover:text-paper">
+              3D сканиране
+            </Link>
+            <Link href="/services/modeling" className="block hover:text-paper">
+              3D моделиране
+            </Link>
           </div>
         </div>
-
         <div>
-          <h4 className="mb-4 font-semibold">Контакт</h4>
-          <div className="space-y-2 text-white/70">
-            <p>info@handycrafts3d.com</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-paper/45">
+            Контакт
+          </p>
+          <div className="mt-4 space-y-2 text-sm text-paper/75">
+            <a href="mailto:handycraftshelp@gmail.com" className="block hover:text-paper">
+              handycraftshelp@gmail.com
+            </a>
             <p>Русе, България</p>
+            <Link href="/terms" className="block hover:text-paper">
+              Общи условия
+            </Link>
+            <Link href="/crm" className="block hover:text-paper">
+              Поръчки
+            </Link>
           </div>
         </div>
       </div>
-
-      <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-white/50">
-        © 2026 HandyCrafts 3D. Всички права запазени.
+      <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-2 border-t border-white/10 pt-6 text-xs text-paper/40 sm:flex-row sm:justify-between">
+        <p>© {new Date().getFullYear()} HandyCrafts 3D</p>
+        <p>Визуализацията се одобрява преди печат.</p>
       </div>
     </footer>
   );

@@ -9,7 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@supabase/supabase-js": "^2.101.0",
+    "@vercel/blob": "^2.8.0",
     "framer-motion": "^12.38.0",
     "next": "16.2.1",
     "nodemailer": "^8.0.4",

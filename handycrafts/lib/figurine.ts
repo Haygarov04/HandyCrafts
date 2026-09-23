@@ -38,11 +38,12 @@ export function figurinePrompt(input: {
   const pose = input.pose.trim() || "a calm standing pose with arms slightly away from the body";
 
   return [
-    `Turn this photo into one physical ${kind}, studio product photo, about ${input.size} tall when printed.`,
-    "Keep this exact person recognizable: face, age, hairstyle, glasses, and distinguishing features.",
+    `Turn this photo into one physical ${kind} for image-to-3D conversion, about ${input.size} tall when printed.`,
+    "Keep this exact person recognizable: face shape, age, hairstyle, glasses, and distinguishing features.",
     `Clothes and details: ${clothes}.`,
-    `Pose: ${pose}. Full subject visible, nothing cropped, feet or base fully in frame.`,
-    "Style: slightly stylized resin miniature, smooth matte plastic, solid sculpted hair with no loose strands, clothing as solid volumes with few seams, chunky separated hands.",
-    "Scene: one figure only, centered, seamless light gray background, soft even lighting, no text, no logo, no extra people, no scenery.",
+    `Pose: ${pose}. Front view, full subject visible, both arms slightly away from the torso, feet separated, nothing cropped.`,
+    "Style: clean stylized resin miniature, smooth matte plastic, solid sculpted hair with no loose strands, clothing as simple solid volumes, chunky separated hands, face large and sharp.",
+    "Framing: square image, one figure only, centered, the figure fills most of the frame, plain seamless light gray background, even soft light, no floor shadow, no table, no text, no logo.",
+    "Base: one simple low cylinder under the feet, not a thick podium.",
   ].join(" ");
 }

@@ -72,7 +72,7 @@ export async function POST(req: Request) {
         model: "grok-imagine-image-2.0",
         prompt: figurinePrompt({ product, size, clothes, pose }),
         image: { url: dataUri, type: "image_url" },
-        aspect_ratio: product === "bust" ? "1:1" : "2:3",
+        aspect_ratio: "1:1",
         resolution: "1k",
       }),
     });

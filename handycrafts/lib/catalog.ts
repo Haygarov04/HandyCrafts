@@ -24,6 +24,22 @@ export const catalog = {
 
 export type ProductId = keyof typeof catalog;
 
+export const subjects = {
+  person: { label: "Човек", of: "" },
+  pet: { label: "Домашен любимец", of: "на любимец" },
+} as const;
+
+export type SubjectId = keyof typeof subjects;
+
+export function isSubjectId(value: unknown): value is SubjectId {
+  return typeof value === "string" && value in subjects;
+}
+
+/** "Фигурка", "Фигурка на любимец", "Ключодържател на любимец"… */
+export function itemLabel(product: ProductId, subject: SubjectId = "person") {
+  return [catalog[product].label, subjects[subject].of].filter(Boolean).join(" ");
+}
+
 export const productIds = Object.keys(catalog) as ProductId[];
 
 export function isProductId(value: unknown): value is ProductId {

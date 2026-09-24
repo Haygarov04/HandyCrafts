@@ -7,6 +7,7 @@ import { useCart } from "./cart";
 
 const links = [
   { href: "/studio?product=figurine", label: "Фигурки" },
+  { href: "/studio?product=figurine&subject=pet", label: "Любимци" },
   { href: "/studio?product=keychain", label: "Ключодържатели" },
   { href: "/#how", label: "Как работи" },
   { href: "/#faq", label: "Въпроси" },
@@ -55,8 +56,8 @@ export default function Navbar() {
           <span className="hidden font-display text-[17px] font-semibold tracking-tight sm:inline">HandyCrafts</span>
         </Link>
 
-        <nav className={`${pill} hidden h-16 items-center gap-7 px-7 text-[15px] lg:flex`}>
-          {links.map((item) => (
+        <nav className={`${pill} hidden h-16 items-center gap-6 px-7 text-[15px] lg:flex`}>
+          {links.filter((item) => item.href !== "/contact").map((item) => (
             <Link key={item.href} href={item.href} className="transition hover:text-ember-deep">
               {item.label}
             </Link>

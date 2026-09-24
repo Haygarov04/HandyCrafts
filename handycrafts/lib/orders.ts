@@ -5,6 +5,7 @@ export type Draft = {
   id: string;
   createdAt: string;
   product: "figurine" | "keychain";
+  subject?: "person" | "pet";
   cm: number;
   clothes: string;
   pose: string;

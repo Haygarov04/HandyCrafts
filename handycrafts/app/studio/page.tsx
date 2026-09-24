@@ -5,19 +5,47 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CartButton } from "@/app/components/Navbar";
 import { useCart } from "@/app/components/cart";
-import { catalog, isProductId, money, priceFor, productIds, type ProductId } from "@/lib/catalog";
+import {
+  catalog,
+  isProductId,
+  isSubjectId,
+  itemLabel,
+  money,
+  priceFor,
+  productIds,
+  type ProductId,
+  type SubjectId,
+} from "@/lib/catalog";
 
 const steps = ["Продукт", "Снимка", "Детайли", "Визуализация"];
 
-const poseIdeas = ["Стои естествено", "Ръце на кръста", "Маха с ръка", "Ръце в джобовете", "Скръстени ръце"];
+const copy = {
+  person: {
+    photo: "Един човек, лицето отпред и на светло. За фигурка в цял ръст — снимка от главата до краката.",
+    tips: ["✓ Ясно лице", "✓ Дневна светлина", "✗ Без тъмни очила"],
+    extrasLabel: "Дрехи и аксесоари",
+    extrasHint: "Напр. бяла риза, тъмни дънки, червени кецове, държи букет",
+    poseHint: "Напр. стои изправен и маха с ръка",
+    poses: ["Стои естествено", "Ръце на кръста", "Маха с ръка", "Ръце в джобовете", "Скръстени ръце"],
+  },
+  pet: {
+    photo: "Едно животно, цялото в кадъра, на светло. Най-добре муцуната гледа към теб.",
+    tips: ["✓ Цялото животно", "✓ Ясни очи и муцуна", "✓ Истинските цветове"],
+    extrasLabel: "Аксесоари",
+    extrasHint: "Напр. червен нашийник, бандана с име, звънче",
+    poseHint: "Напр. седи и гледа нагоре",
+    poses: ["Седи", "Лежи", "Стои на четири лапи", "С топка в устата", "Наклонена глава"],
+  },
+} as const;
 
-type Preview = { draftId: string; url: string; product: ProductId };
+type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId };
 
 export default function StudioPage() {
   const cart = useCart();
   const fileRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState(0);
   const [product, setProduct] = useState<ProductId>("figurine");
+  const [subject, setSubject] = useState<SubjectId>("person");
   const [cm, setCm] = useState<number>(catalog.figurine.sizes[0].cm);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoUrl, setPhotoUrl] = useState("");
@@ -34,6 +62,8 @@ export default function StudioPage() {
     const params = new URLSearchParams(window.location.search);
     const requested = params.get("product");
     const size = Number(params.get("cm"));
+    const who = params.get("subject");
+    if (isSubjectId(who)) setSubject(who);
     if (isProductId(requested)) {
       setProduct(requested);
       setCm(priceFor(requested, size) !== null ? size : catalog[requested].sizes[0].cm);
@@ -56,6 +86,11 @@ export default function StudioPage() {
     setProduct(id);
     setCm(catalog[id].sizes[0].cm);
     if (preview && preview.product !== id) setPreview(null);
+  }
+
+  function chooseSubject(id: SubjectId) {
+    setSubject(id);
+    if (preview && preview.subject !== id) setPreview(null);
   }
 
   function choosePhoto(file: File | null) {
@@ -88,6 +123,7 @@ export default function StudioPage() {
     try {
       const body = new FormData();
       body.set("product", product);
+      body.set("subject", subject);
       body.set("cm", String(cm));
       body.set("clothes", clothes);
       body.set("pose", pose);
@@ -96,7 +132,7 @@ export default function StudioPage() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.draftId) throw new Error(data.error || "Визуализацията не се получи.");
       setProgress(100);
-      setPreview({ draftId: data.draftId, url: data.previewUrl, product });
+      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject });
     } catch (issue) {
       setError(issue instanceof Error ? issue.message : "Нещо се обърка.");
     } finally {
@@ -110,7 +146,8 @@ export default function StudioPage() {
     cart.add({
       draftId: preview.draftId,
       product: preview.product,
-      label: catalog[preview.product].label,
+      subject: preview.subject,
+      label: itemLabel(preview.product, preview.subject),
       cm,
       price,
       qty: 1,
@@ -167,7 +204,19 @@ export default function StudioPage() {
         {step === 0 ? (
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">Какво да направим?</h1>
-            <p className="mt-3 text-center text-ink/60">Избери форма и размер. Цената е крайна за изработката.</p>
+            <p className="mt-3 text-center text-ink/60">Избери кого, формата и размера. Цената е крайна за изработката.</p>
+            <div className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-2 rounded-full bg-white p-1.5">
+              {(["person", "pet"] as const).map((id) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => chooseSubject(id)}
+                  className={`rounded-full py-3 text-sm font-semibold transition ${subject === id ? "bg-ink text-paper" : "hover:bg-paper"}`}
+                >
+                  {id === "person" ? "Човек" : "Домашен любимец"}
+                </button>
+              ))}
+            </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               {productIds.map((id) => (
                 <button
@@ -178,8 +227,8 @@ export default function StudioPage() {
                     product === id ? "border-ember shadow-[0_16px_40px_rgba(255,122,0,0.18)]" : "border-transparent hover:border-ink/15"
                   }`}
                 >
-                  <span className="relative block aspect-[4/3] bg-sand">
-                    <Image src={`/shop/${id}.webp`} alt="" fill className="object-cover" sizes="(min-width: 640px) 360px, 100vw" />
+                  <span className="relative block aspect-[16/10] bg-sand sm:aspect-[4/3]">
+                    <Image src={`/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`} alt="" fill className="object-cover" sizes="(min-width: 640px) 360px, 100vw" />
                   </span>
                   <span className="block p-5">
                     <span className="flex items-center justify-between">
@@ -199,7 +248,7 @@ export default function StudioPage() {
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">Качи снимка</h1>
             <p className="mx-auto mt-3 max-w-md text-center text-ink/60">
-              Един човек, лицето отпред и на светло. За фигурка в цял ръст — снимка от главата до краката.
+              {copy[subject].photo}
             </p>
             <button
               type="button"
@@ -230,9 +279,11 @@ export default function StudioPage() {
               onChange={(event) => choosePhoto(event.target.files?.[0] || null)}
             />
             <ul className="mx-auto mt-8 grid max-w-lg gap-2 text-sm text-ink/65 sm:grid-cols-3">
-              <li className="rounded-2xl bg-white px-4 py-3">✓ Ясно лице</li>
-              <li className="rounded-2xl bg-white px-4 py-3">✓ Дневна светлина</li>
-              <li className="rounded-2xl bg-white px-4 py-3">✗ Без тъмни очила</li>
+              {copy[subject].tips.map((tip) => (
+                <li key={tip} className="rounded-2xl bg-white px-4 py-3">
+                  {tip}
+                </li>
+              ))}
             </ul>
             <p className="mx-auto mt-4 max-w-lg text-center text-xs text-ink/45">
               Снимката се пази затворена и се ползва само за твоята поръчка.
@@ -245,12 +296,12 @@ export default function StudioPage() {
             <h1 className="text-center text-3xl sm:text-4xl">Детайли</h1>
             <p className="mt-3 text-center text-ink/60">По желание. Остави празно и ще копираме снимката.</p>
             <label className="mt-8 block text-sm font-semibold">
-              Дрехи и аксесоари
+              {copy[subject].extrasLabel}
               <textarea
                 value={clothes}
                 onChange={(event) => setClothes(event.target.value)}
                 maxLength={500}
-                placeholder="Напр. бяла риза, тъмни дънки, червени кецове, държи букет"
+                placeholder={copy[subject].extrasHint}
                 className="mt-2 min-h-28 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 font-normal outline-none focus:border-ember"
               />
             </label>
@@ -260,12 +311,12 @@ export default function StudioPage() {
                 value={pose}
                 onChange={(event) => setPose(event.target.value)}
                 maxLength={300}
-                placeholder="Напр. стои изправен и маха с ръка"
+                placeholder={copy[subject].poseHint}
                 className="mt-2 min-h-24 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 font-normal outline-none focus:border-ember"
               />
             </label>
             <div className="mt-3 flex flex-wrap gap-2">
-              {poseIdeas.map((idea) => (
+              {copy[subject].poses.map((idea) => (
                 <button key={idea} type="button" onClick={() => setPose(idea)} className="rounded-full bg-white px-3 py-1.5 text-sm hover:bg-sand">
                   {idea}
                 </button>
@@ -363,13 +414,13 @@ export default function StudioPage() {
             type="button"
             onClick={() => setStep((value) => Math.max(0, value - 1))}
             disabled={step === 0 || busy}
-            className="rounded-full border border-ink/15 px-4 py-3 text-sm disabled:opacity-30"
+            className="shrink-0 whitespace-nowrap rounded-full border border-ink/15 px-4 py-3 text-sm disabled:opacity-30"
           >
             ‹ Назад
           </button>
-          <p className="text-center text-sm leading-tight">
-            <span className="block font-semibold">
-              {catalog[product].label} · {cm} см
+          <p className="min-w-0 text-center text-xs leading-tight sm:text-sm">
+            <span className="block truncate font-semibold">
+              {itemLabel(product, subject)} · {cm} см
             </span>
             <span className="font-display text-lg">{money(price)}</span>
           </p>
@@ -378,7 +429,7 @@ export default function StudioPage() {
               type="button"
               onClick={next}
               disabled={(step === 1 && !photoFile) || (step === 2 && enabled === false)}
-              className="rounded-full bg-ember px-5 py-3 font-semibold text-ink transition hover:bg-ember-deep disabled:opacity-40 sm:px-7"
+              className="shrink-0 whitespace-nowrap rounded-full bg-ember px-5 py-3 font-semibold text-ink transition hover:bg-ember-deep disabled:opacity-40 sm:px-7"
             >
               {step === 2 ? "Създай ✦" : "Напред →"}
             </button>
@@ -387,7 +438,7 @@ export default function StudioPage() {
               type="button"
               onClick={addToCart}
               disabled={!preview || busy || added}
-              className="rounded-full bg-ink px-5 py-3 font-semibold text-paper transition hover:bg-ember hover:text-ink disabled:opacity-40 sm:px-7"
+              className="shrink-0 whitespace-nowrap rounded-full bg-ink px-5 py-3 font-semibold text-paper transition hover:bg-ember hover:text-ink disabled:opacity-40 sm:px-7"
             >
               {added ? "Добавено ✓" : "В количката"}
             </button>

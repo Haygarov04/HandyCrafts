@@ -6,6 +6,7 @@ import { maxQty, type ProductId } from "@/lib/catalog";
 export type CartItem = {
   draftId: string;
   product: ProductId;
+  subject?: "person" | "pet";
   label: string;
   cm: number;
   price: number;

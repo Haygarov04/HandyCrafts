@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { isProductId, priceFor } from "@/lib/catalog";
+import { isProductId, isSubjectId, priceFor } from "@/lib/catalog";
 import { figurinePrompt } from "@/lib/figurine";
 import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
 import { incr } from "@/lib/kv";
@@ -57,6 +57,8 @@ export async function POST(req: Request) {
     const form = await req.formData();
     const product = String(form.get("product") || "");
     const cm = Number(form.get("cm"));
+    const subjectRaw = String(form.get("subject") || "person");
+    const subject = isSubjectId(subjectRaw) ? subjectRaw : "person";
     const clothes = cleanText(form.get("clothes"), 500);
     const pose = cleanText(form.get("pose"), 300);
 
@@ -96,7 +98,7 @@ export async function POST(req: Request) {
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: process.env.XAI_IMAGE_MODEL || "grok-imagine-image-2.0",
-        prompt: figurinePrompt({ product, cm, clothes, pose }),
+        prompt: figurinePrompt({ product, subject, cm, clothes, pose }),
         image: {
           url: `data:${photo.contentType};base64,${photo.bytes.toString("base64")}`,
           type: "image_url",
@@ -128,6 +130,7 @@ export async function POST(req: Request) {
       id,
       createdAt: new Date().toISOString(),
       product,
+      subject,
       cm,
       clothes,
       pose,

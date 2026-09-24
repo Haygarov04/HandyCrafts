@@ -40,16 +40,28 @@ const gallery = [1, 2, 3, 4, 5, 6].map((n) => `/shop/gallery-${n}.webp`);
 
 const products = [
   {
-    id: "figurine" as const,
+    n: "01",
+    title: "Фигурки по снимка",
+    text: "Ти, половинката ти или цялото семейство — на рафта.",
     image: "/shop/figurine.webp",
-    tone: "bg-blush",
-    badge: "Най-поръчвана",
+    href: "/studio?product=figurine",
+    product: "figurine" as const,
   },
   {
-    id: "keychain" as const,
+    n: "02",
+    title: "Любимци",
+    text: "Кучето или котката ти, с всяко петно на козината.",
+    image: "/shop/pet.webp",
+    href: "/studio?product=figurine&subject=pet",
+    product: "figurine" as const,
+  },
+  {
+    n: "03",
+    title: "Ключодържатели",
+    text: "Винаги с теб. Човек или любимец, в джоба.",
     image: "/shop/keychain.webp",
-    tone: "bg-sky",
-    badge: "Малък подарък",
+    href: "/studio?product=keychain",
+    product: "keychain" as const,
   },
 ];
 
@@ -130,60 +142,51 @@ export default function Home() {
 
       <section id="products" className="scroll-mt-28 px-4 py-20 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-6xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember-deep">Избери формата</p>
-            <h2 className="mt-3 text-3xl leading-tight sm:text-5xl">Фигурка или ключодържател</h2>
-            <p className="mt-4 text-ink/65">Една снимка, два начина да я запазиш. Цената е крайна за изработката.</p>
-          </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            {products.map((product) => {
-              const item = catalog[product.id];
-              return (
-                <article key={product.id} className="lift-card group overflow-hidden rounded-[2rem] bg-white">
-                  <Link href={`/studio?product=${product.id}`} className={`relative block aspect-[5/4] overflow-hidden ${product.tone}`}>
-                    <Image
-                      src={product.image}
-                      alt={item.label}
-                      fill
-                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                      sizes="(min-width: 768px) 45vw, 100vw"
-                    />
-                    <span className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold">
-                      {product.badge}
-                    </span>
-                  </Link>
-                  <div className="p-6 sm:p-8">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h3 className="text-2xl sm:text-3xl">{item.label}</h3>
-                        <p className="mt-2 max-w-sm text-sm leading-6 text-ink/60">{item.line}</p>
-                      </div>
-                      <p className="shrink-0 text-right text-sm text-ink/50">
-                        от<span className="block font-display text-2xl text-ink">{money(fromPrice(product.id))}</span>
-                      </p>
-                    </div>
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      {item.sizes.map((size) => (
-                        <Link
-                          key={size.cm}
-                          href={`/studio?product=${product.id}&cm=${size.cm}`}
-                          className="rounded-2xl border border-ink/10 px-4 py-3 text-center transition hover:border-ember hover:bg-ember/5"
-                        >
-                          <span className="block text-sm font-semibold">{size.cm} см</span>
-                          <span className="block text-xs text-ink/55">{money(size.price)}</span>
-                        </Link>
+          <h2 className="text-[2.4rem] font-semibold leading-[1.02] tracking-[-0.03em] sm:text-6xl">
+            Твоят спомен.
+            <span className="block">Твоята форма.</span>
+          </h2>
+          <p className="mt-4 text-lg text-ink/70 sm:text-xl">Избери как да го запазиш.</p>
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {products.map((item) => (
+              <Link
+                key={item.n}
+                href={item.href}
+                className="lift-card group flex flex-col overflow-hidden rounded-[2rem] border border-ink/10 bg-white"
+              >
+                <span className="relative block aspect-[4/3.4] overflow-hidden bg-sand">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                  />
+                  <span className="absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold">
+                    от {money(fromPrice(item.product))}
+                  </span>
+                </span>
+                <span className="flex flex-1 items-start gap-4 p-6">
+                  <span className="pt-1 font-display text-lg text-ink/80">{item.n}</span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display text-xl sm:text-2xl">{item.title}</span>
+                    <span className="mt-2 block leading-7 text-ink/65">{item.text}</span>
+                    <span className="mt-4 flex flex-wrap gap-1.5">
+                      {catalog[item.product].sizes.map((size) => (
+                        <span key={size.cm} className="rounded-full bg-paper px-2.5 py-1 text-xs text-ink/70">
+                          {size.cm} см · {money(size.price)}
+                        </span>
                       ))}
-                    </div>
-                    <Link
-                      href={`/studio?product=${product.id}`}
-                      className="mt-6 block rounded-full bg-ember py-3.5 text-center font-semibold text-ink transition hover:bg-ember-deep"
-                    >
-                      Качи снимка
-                    </Link>
-                  </div>
-                </article>
-              );
-            })}
+                    </span>
+                  </span>
+                  <span className="grid h-12 w-12 shrink-0 place-items-center self-end rounded-full bg-ink text-paper shadow-[0_8px_20px_rgba(22,21,19,0.25)] transition group-hover:bg-ember group-hover:text-ink">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                </span>
+              </Link>
+            ))}
           </div>
 
           <div className="mt-8 rounded-[2rem] bg-white p-6 sm:p-8">

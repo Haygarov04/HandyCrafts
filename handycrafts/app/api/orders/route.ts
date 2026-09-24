@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { catalog, maxQty, priceFor } from "@/lib/catalog";
+import { itemLabel, maxQty, priceFor } from "@/lib/catalog";
 import { sendOrderMails } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
 import { deliveryLabel, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
@@ -83,7 +83,8 @@ export async function POST(req: Request) {
       items.push({
         draftId: draft.id,
         product: draft.product,
-        label: catalog[draft.product].label,
+        subject: draft.subject || "person",
+        label: itemLabel(draft.product, draft.subject),
         cm,
         price,
         qty,

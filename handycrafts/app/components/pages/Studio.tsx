@@ -7,6 +7,7 @@ import { trackEvent } from "@/app/components/Analytics";
 import { CartButton } from "@/app/components/Navbar";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
+import { INPUT_MAX, preparePhoto } from "@/app/components/prepare-photo";
 import { loadPhoto, loadState, savePhoto, saveState } from "@/app/components/studio-store";
 import {
   catalog,
@@ -42,6 +43,7 @@ export default function StudioPage() {
   const [added, setAdded] = useState(false);
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [restored, setRestored] = useState(false);
+  const [converting, setConverting] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -103,17 +105,23 @@ export default function StudioPage() {
     if (preview && preview.subject !== id) setPreview(null);
   }
 
-  function choosePhoto(file: File | null) {
-    if (!file) return;
-    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
-      setError(s.badType);
-      return;
-    }
-    if (file.size > 8 * 1024 * 1024) {
+  async function choosePhoto(picked: File | null) {
+    if (!picked) return;
+    if (picked.size > INPUT_MAX) {
       setError(s.tooBig);
       return;
     }
     setError("");
+    setConverting(true);
+    let file: File;
+    try {
+      file = await preparePhoto(picked);
+    } catch {
+      setError(s.badType);
+      return;
+    } finally {
+      setConverting(false);
+    }
     setPhotoFile(file);
     setPhotoUrl(URL.createObjectURL(file));
     setPreview(null);
@@ -281,7 +289,12 @@ export default function StudioPage() {
               onClick={() => fileRef.current?.click()}
               className="mx-auto mt-8 block w-full max-w-lg overflow-hidden rounded-[2rem] border-2 border-dashed border-ink/20 bg-white transition hover:border-ember"
             >
-              {photoUrl ? (
+              {converting ? (
+                <span className="flex flex-col items-center gap-3 px-6 py-16 text-center">
+                  <span className="h-12 w-12 animate-spin rounded-full border-4 border-sand border-t-ember" />
+                  <span className="text-sm text-ink/60">{s.converting}</span>
+                </span>
+              ) : photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={photoUrl} alt={s.uploaded} className="max-h-[26rem] w-full object-contain" />
               ) : (
@@ -300,9 +313,12 @@ export default function StudioPage() {
             <input
               ref={fileRef}
               type="file"
-              accept="image/jpeg,image/png,image/webp"
+              accept="image/*,.heic,.heif"
               hidden
-              onChange={(event) => choosePhoto(event.target.files?.[0] || null)}
+              onChange={(event) => {
+                choosePhoto(event.target.files?.[0] || null);
+                event.target.value = "";
+              }}
             />
             <ul className="mx-auto mt-8 grid max-w-lg gap-2 text-sm text-ink/65 sm:grid-cols-3">
               {copy[subject].tips.map((tip) => (
@@ -452,7 +468,7 @@ export default function StudioPage() {
             <button
               type="button"
               onClick={next}
-              disabled={(step === 1 && !photoFile && !preview) || (step === 2 && enabled === false)}
+              disabled={(step === 1 && ((!photoFile && !preview) || converting)) || (step === 2 && enabled === false)}
               className="shrink-0 whitespace-nowrap rounded-full bg-ember px-5 py-3 font-semibold text-ink transition hover:bg-ember-deep disabled:opacity-40 sm:px-7"
             >
               {step === 2 ? s.create : s.next}

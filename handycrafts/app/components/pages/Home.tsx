@@ -95,16 +95,16 @@ export default function Home({ lang }: { lang: Lang }) {
           url: href("/klyuchodarzhatel-po-snimka"),
         })}
       />
-      <section className="bed-grid relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:pb-20">
+      <section className="hero-glow relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:pb-20">
         <div className="relative mx-auto grid max-w-6xl items-center gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
           <div>
             <p className="hidden items-center gap-2 rounded-full border border-ink/15 bg-paper px-3 py-1.5 text-[13px] font-semibold text-ink/70 sm:inline-flex">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
               {h.heroBadge}
             </p>
-            <h1 className="text-[2.7rem] leading-[1.02] sm:mt-6 sm:text-7xl lg:text-[5.2rem]">
+            <h1 className="text-[2.15rem] leading-[1.08] tracking-[-0.03em] sm:mt-6 sm:text-6xl lg:text-[4.4rem]">
               {h.heroTitle[0]}
-              <span className="relative block italic text-ember-deep">
+              <span className="relative block text-ember-deep">
                 <span className="relative">
                   {h.heroTitle[1]}
                   <svg className="absolute -bottom-2 left-0 h-3 w-full text-ember sm:-bottom-3 sm:h-4" viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden>
@@ -139,7 +139,7 @@ export default function Home({ lang }: { lang: Lang }) {
                 <Image src="/shop/hero-mobile.webp" alt={h.heroAlt} fill priority className="object-cover" sizes="(min-width: 1024px) 480px, 90vw" />
               </div>
             </div>
-            <div className="absolute -left-1 top-5 -rotate-6 rounded-xl bg-ink px-4 py-2 font-display text-lg italic text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:-left-6 sm:text-xl">
+            <div className="absolute -left-1 top-5 -rotate-6 rounded-xl bg-ink px-4 py-2 font-display text-lg text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:-left-6 sm:text-xl">
               {t.from} {t.money(fromPrice("keychain"))}
             </div>
           </div>
@@ -168,8 +168,8 @@ export default function Home({ lang }: { lang: Lang }) {
       <section id="products" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="text-[2.4rem] leading-[1.05] sm:text-6xl">
-              {h.productsTitle[0]} <span className="italic text-ember-deep">{h.productsTitle[1]}</span>
+            <h2 className="text-[2rem] leading-[1.1] tracking-[-0.03em] sm:text-5xl lg:text-6xl">
+              {h.productsTitle[0]} <span className="text-ember-deep">{h.productsTitle[1]}</span>
             </h2>
             <p className="max-w-sm text-lg text-ink/65">{h.productsText}</p>
           </div>
@@ -236,8 +236,8 @@ export default function Home({ lang }: { lang: Lang }) {
       <section id="how" className="scroll-mt-24 border-y border-ink/10 bg-white px-4 py-20 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-6xl">
           <div className="grid items-end gap-6 lg:grid-cols-2">
-            <h2 className="text-[2.4rem] leading-[1.05] sm:text-6xl">
-              {h.howTitle[0]} <span className="italic text-ember-deep">{h.howTitle[1]}</span>
+            <h2 className="text-[2rem] leading-[1.1] tracking-[-0.03em] sm:text-5xl lg:text-6xl">
+              {h.howTitle[0]} <span className="text-ember-deep">{h.howTitle[1]}</span>
             </h2>
             <p className="max-w-md text-lg text-ink/65 lg:justify-self-end">{h.heroText}</p>
           </div>
@@ -266,7 +266,7 @@ export default function Home({ lang }: { lang: Lang }) {
               <Image src="/shop/process.webp" alt={h.processAlt} fill className="hidden object-cover sm:block" sizes="(min-width: 1024px) 60vw, 100vw" />
             </div>
             <div>
-              <p className="flex items-center gap-2 font-display text-2xl italic">
+              <p className="flex items-center gap-2 font-display text-2xl">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="#ff7a00" />
                   <circle cx="12" cy="10" r="2.6" fill="#fff" />
@@ -291,9 +291,9 @@ export default function Home({ lang }: { lang: Lang }) {
       <section className="px-4 py-20 sm:px-6 sm:py-24">
         <div className="relative mx-auto grid max-w-6xl items-center gap-10 overflow-hidden rounded-[2rem] bg-ink px-6 py-12 text-paper sm:px-12 sm:py-16 md:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <p className="font-display text-lg italic text-ember">{h.giftKicker}</p>
-            <h2 className="mt-3 text-[2.3rem] leading-[1.05] sm:text-6xl">
-              {h.giftTitle[0]} <span className="italic text-ember">{h.giftTitle[1]}</span>
+            <p className="font-display text-lg text-ember">{h.giftKicker}</p>
+            <h2 className="mt-3 text-[2rem] leading-[1.1] tracking-[-0.03em] sm:text-5xl lg:text-6xl">
+              {h.giftTitle[0]} <span className="text-ember">{h.giftTitle[1]}</span>
             </h2>
             <div className="mt-7 flex flex-wrap gap-2">
               {h.occasions.map((item, index) => (

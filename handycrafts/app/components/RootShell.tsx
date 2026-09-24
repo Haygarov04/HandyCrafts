@@ -1,4 +1,4 @@
-import { Manrope, Playfair_Display } from "next/font/google";
+import { Manrope, Unbounded } from "next/font/google";
 import "../globals.css";
 import { dict, type Lang } from "@/lib/i18n";
 import { seller, sellerComplete } from "@/lib/legal";
@@ -11,11 +11,10 @@ const manrope = Manrope({
   variable: "--font-manrope",
 });
 
-const playfair = Playfair_Display({
+const unbounded = Unbounded({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-playfair",
-  weight: ["500", "600", "700"],
-  style: ["normal", "italic"],
+  variable: "--font-unbounded",
+  weight: ["400", "500", "600"],
 });
 
 export default function RootShell({ lang, children }: { lang: Lang; children: React.ReactNode }) {
@@ -40,7 +39,7 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
   };
 
   return (
-    <html lang={t.htmlLang} className={`${manrope.variable} ${playfair.variable}`}>
+    <html lang={t.htmlLang} className={`${manrope.variable} ${unbounded.variable}`}>
       <body className="relative overflow-x-hidden antialiased">
         <JsonLd data={store} />
         <SiteFrame sellerLine={sellerComplete() ? `${seller.name}, ${lang === "en" ? "EIK" : "ЕИК"} ${seller.eik}` : undefined}>{children}</SiteFrame>

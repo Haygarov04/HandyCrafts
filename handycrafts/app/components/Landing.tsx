@@ -43,7 +43,7 @@ export default function Landing({ content, lang }: { content: LandingContent; la
       <JsonLd data={breadcrumbJsonLd([{ name: t.landing.home, path: href("/") }, { name: content.crumb, path: href(content.path) }])} />
       <JsonLd data={faqJsonLd(content.faq)} />
 
-      <section className="bed-grid border-b border-ink/10 px-4 pb-16 pt-24 sm:px-6 sm:pt-32">
+      <section className="hero-glow border-b border-ink/10 px-4 pb-16 pt-24 sm:px-6 sm:pt-32">
         <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <nav aria-label={t.landing.breadcrumbs} className="text-sm text-ink/50">
@@ -53,7 +53,7 @@ export default function Landing({ content, lang }: { content: LandingContent; la
               / <span className="text-ink/70">{content.crumb}</span>
             </nav>
             <p className="mt-6 text-sm font-semibold uppercase tracking-[0.2em] text-ember-deep">{content.kicker}</p>
-            <h1 className="mt-3 text-[2.4rem] leading-[1.05] sm:text-6xl">{content.title}</h1>
+            <h1 className="mt-3 text-[2rem] leading-[1.1] tracking-[-0.03em] sm:text-5xl">{content.title}</h1>
             <p className="mt-5 max-w-xl text-lg leading-8 text-ink/70">{content.lead}</p>
             <div className="mt-6 flex flex-wrap gap-2">
               {sizes.map((size) => (
@@ -85,7 +85,7 @@ export default function Landing({ content, lang }: { content: LandingContent; la
           <ol className="mt-8 grid gap-4 md:grid-cols-3">
             {steps.map(([n, title, text]) => (
               <li key={n} className="flex gap-4 rounded-[1.4rem] border border-ink/10 bg-paper p-5">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-ink font-display text-lg italic text-paper">{n}</span>
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-ink font-display text-lg text-paper">{n}</span>
                 <span>
                   <span className="block font-display text-lg">{title}</span>
                   <span className="mt-1 block text-sm leading-6 text-ink/65">{text}</span>

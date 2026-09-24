@@ -18,8 +18,6 @@ const steps = [
 
 const occasions = ["Рожден ден", "Годишнина", "Сватба", "Свети Валентин", "Коледа", "Абитуриент", "За колега", "За баба и дядо"];
 
-const gallery = [1, 2, 3, 4, 5, 6].map((n) => `/shop/gallery-${n}.webp`);
-
 const products = [
   {
     n: "01",
@@ -263,21 +261,6 @@ export default function Home() {
                 <path d="M5 12h14M13 6l6 6-6 6" />
               </svg>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-20 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="text-3xl leading-tight sm:text-5xl">От нашата работилница</h2>
-          </div>
-          <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
-            {gallery.map((src) => (
-              <div key={src} className="relative aspect-square overflow-hidden rounded-[1.6rem] bg-sand">
-                <Image src={src} alt="Изработена фигурка" fill className="object-cover transition duration-700 hover:scale-[1.04]" sizes="(min-width: 768px) 33vw, 50vw" />
-              </div>
-            ))}
           </div>
         </div>
       </section>

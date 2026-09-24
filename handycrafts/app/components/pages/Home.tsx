@@ -95,14 +95,14 @@ export default function Home({ lang }: { lang: Lang }) {
           url: href("/klyuchodarzhatel-po-snimka"),
         })}
       />
-      <section className="bed-grid relative overflow-hidden border-b border-ink/10 px-4 pb-14 pt-24 sm:px-6 sm:pt-32 lg:pb-20">
-        <div className="relative mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+      <section className="bed-grid relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:pb-20">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-paper px-3 py-1.5 text-[13px] font-semibold text-ink/70">
+            <p className="hidden items-center gap-2 rounded-full border border-ink/15 bg-paper px-3 py-1.5 text-[13px] font-semibold text-ink/70 sm:inline-flex">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
               {h.heroBadge}
             </p>
-            <h1 className="mt-4 text-[2.7rem] leading-[1.02] sm:mt-6 sm:text-7xl lg:text-[5.2rem]">
+            <h1 className="text-[2.7rem] leading-[1.02] sm:mt-6 sm:text-7xl lg:text-[5.2rem]">
               {h.heroTitle[0]}
               <span className="relative block italic text-ember-deep">
                 <span className="relative">
@@ -113,11 +113,11 @@ export default function Home({ lang }: { lang: Lang }) {
                 </span>
               </span>
             </h1>
-            <p className="mt-5 max-w-lg text-[17px] leading-7 text-ink/75 sm:mt-7 sm:text-xl sm:leading-9">{h.heroText}</p>
-            <div className="mt-6 flex flex-wrap items-center gap-2.5 sm:mt-8 sm:gap-3">
+            <p className="mt-4 max-w-md text-lg leading-7 text-ink/75 sm:mt-7 sm:text-xl sm:leading-9">{h.heroText}</p>
+            <div className="mt-5 flex flex-wrap items-center gap-2.5 sm:mt-8 sm:gap-3">
               <Link
                 href={href("/studio?product=figurine")}
-                className="inline-flex items-center gap-2 rounded-xl bg-ink px-5 py-3.5 text-base font-bold text-paper transition hover:bg-ember hover:text-ink sm:px-7 sm:py-4 sm:text-lg"
+                className="cta-pulse inline-flex w-full items-center justify-center gap-2 rounded-xl sm:w-auto bg-ember px-6 py-4 text-lg font-extrabold text-ink transition hover:bg-ember-deep sm:px-8 sm:text-xl"
               >
                 {h.create}
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -126,20 +126,20 @@ export default function Home({ lang }: { lang: Lang }) {
               </Link>
               <Link
                 href={href("/#products")}
-                className="rounded-xl border-2 border-ink/15 bg-paper px-5 py-3 text-base font-semibold transition hover:border-ink sm:px-7 sm:py-3.5 sm:text-lg"
+                className="hidden rounded-xl border-2 border-ink/15 bg-paper px-4 py-3.5 text-base sm:inline-block font-semibold transition hover:border-ink sm:px-7 sm:text-lg"
               >
                 {h.pricesFrom} {t.money(fromPrice("keychain"))}
               </Link>
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-            <div className="relative rotate-[1.5deg] rounded-[1.4rem] bg-white p-2.5 shadow-[0_30px_70px_rgba(22,21,19,0.16)] sm:p-3">
+          <div className="relative -mx-1 sm:mx-auto sm:w-full sm:max-w-md lg:max-w-none">
+            <div className="relative rounded-[1.4rem] bg-white p-2 shadow-[0_30px_70px_rgba(22,21,19,0.16)] sm:p-3">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-sand">
                 <Image src="/shop/hero-mobile.webp" alt={h.heroAlt} fill priority className="object-cover" sizes="(min-width: 1024px) 480px, 90vw" />
               </div>
             </div>
-            <div className="absolute -left-2 bottom-6 -rotate-6 rounded-xl bg-ember px-4 py-2.5 font-display text-lg italic text-ink shadow-[0_12px_30px_rgba(217,101,0,0.35)] sm:-left-6 sm:text-xl">
+            <div className="absolute -left-1 top-5 -rotate-6 rounded-xl bg-ink px-4 py-2 font-display text-lg italic text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:-left-6 sm:text-xl">
               {t.from} {t.money(fromPrice("keychain"))}
             </div>
           </div>
@@ -239,7 +239,7 @@ export default function Home({ lang }: { lang: Lang }) {
             <h2 className="text-[2.4rem] leading-[1.05] sm:text-6xl">
               {h.howTitle[0]} <span className="italic text-ember-deep">{h.howTitle[1]}</span>
             </h2>
-            <p className="max-w-md text-lg text-ink/65 lg:justify-self-end">{h.madeText}</p>
+            <p className="max-w-md text-lg text-ink/65 lg:justify-self-end">{h.heroText}</p>
           </div>
 
           <ol className="relative mt-12 grid gap-8 md:grid-cols-3 md:gap-6">
@@ -273,7 +273,7 @@ export default function Home({ lang }: { lang: Lang }) {
                 </svg>
                 {h.madeTitle}
               </p>
-              <p className="mt-3 leading-7 text-ink/65">{h.heroText}</p>
+              <p className="mt-3 leading-7 text-ink/65">{h.madeText}</p>
               <Link
                 href={href("/studio")}
                 className="mt-6 inline-flex items-center gap-3 rounded-xl bg-ember px-7 py-4 text-lg font-bold text-ink transition hover:bg-ink hover:text-paper"

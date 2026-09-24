@@ -133,7 +133,7 @@ const bg = {
   qty: { less: "Намали", more: "Увеличи" },
   home: {
     heroTitle: ["Твоята фигурка", "по една снимка."],
-    heroText: "Качи снимка на човек или любимец и след минута виж как ще изглежда. Изработваме я на ръка в Русе, а плащаш чак при доставка.",
+    heroText: "Качваш снимка, за минута виждаш фигурката и плащаш чак при доставка.",
     create: "Създай фигурка",
     pricesFrom: "Цени от",
     heroAlt: "Фигурка на момиче с къдрава коса до снимката, по която е направена",
@@ -414,7 +414,7 @@ const en: Dict = {
   qty: { less: "Decrease", more: "Increase" },
   home: {
     heroTitle: ["Your figurine,", "from one photo."],
-    heroText: "Upload a photo of a person or pet and see how it will look in a minute. We make it by hand in Ruse, and you pay only on delivery.",
+    heroText: "Upload a photo, see your figurine in a minute and pay only on delivery.",
     create: "Create a figurine",
     pricesFrom: "Prices from",
     heroAlt: "Figurine of a girl with curly hair next to the photo it was made from",

@@ -19,10 +19,6 @@ export const metadata: Metadata = {
   title: "HandyCrafts — фигурка по снимка",
   description:
     "Мини фигурка или ключодържател по твоя снимка. Виждаш визуализацията веднага, плащаш с наложен платеж. Изработено в Русе.",
-  icons: {
-    icon: "/logo-remove.png",
-    apple: "/icons/apple-touch-icon.png",
-  },
   openGraph: {
     title: "HandyCrafts — фигурка по снимка",
     description: "Качи снимка, виж фигурката си веднага и я поръчай с наложен платеж.",

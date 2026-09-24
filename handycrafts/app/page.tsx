@@ -99,10 +99,10 @@ export default function Home() {
         </div>
 
         <div className="relative mx-auto mt-12 max-w-5xl">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2.2rem] bg-sand shadow-[0_40px_90px_rgba(22,21,19,0.18)] sm:aspect-[16/10]">
+          <div className="relative aspect-[3/4] overflow-hidden rounded-[2.2rem] bg-sand shadow-[0_40px_90px_rgba(22,21,19,0.18)] sm:aspect-[16/9]">
             <Image
               src="/shop/hero-mobile.webp"
-              alt="Снимка на жена и нейната фигурка, изработена по снимката"
+              alt="Фигурка на момиче с къдрава коса до снимката, по която е направена"
               fill
               priority
               className="object-cover sm:hidden"
@@ -110,7 +110,7 @@ export default function Home() {
             />
             <Image
               src="/shop/hero.webp"
-              alt="Снимка на жена и нейната фигурка, изработена по снимката"
+              alt="Фигурка на момиче с къдрава коса до снимката, по която е направена"
               fill
               priority
               className="hidden object-cover sm:block"

@@ -9,20 +9,37 @@ import { absolute } from "@/lib/site";
 
 type Mail = { to: string; subject: string; html: string; replyTo?: string };
 
+/** The Resend key, whatever name it was saved under in Vercel. */
+export function resendKey() {
+  const named = process.env.RESEND_API_KEY || process.env.RESEND_KEY || process.env.RESEND_TOKEN || process.env.RESEND_API_TOKEN;
+  if (named) return named.trim();
+  // Fall back to any variable whose value looks like a Resend key.
+  const found = Object.entries(process.env).find(([name, value]) => /RESEND/i.test(name) && value?.trim().startsWith("re_"));
+  return found?.[1]?.trim() || "";
+}
+
+/** Which way emails go out right now: shown in /manage settings. */
+export function mailRoute() {
+  if (resendKey()) return "resend" as const;
+  if (process.env.SMTP_HOST && process.env.SMTP_USER) return "smtp" as const;
+  return "none" as const;
+}
+
 function sender() {
   return process.env.EMAIL_FROM || "HandyCrafts <onboarding@resend.dev>";
 }
 
 export function mailReady() {
-  return Boolean(process.env.RESEND_API_KEY || (process.env.SMTP_HOST && process.env.SMTP_USER));
+  return mailRoute() !== "none";
 }
 
 export async function sendEmail(mail: Mail): Promise<boolean> {
-  if (process.env.RESEND_API_KEY) {
+  const key = resendKey();
+  if (key) {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        Authorization: `Bearer ${key}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

@@ -1,5 +1,6 @@
 import { hasBlob } from "@/lib/files";
 import { sellerComplete } from "@/lib/legal";
+import { mailRoute } from "@/lib/mail";
 import { hasRedis } from "@/lib/kv";
 import { listSubscribers } from "@/lib/newsletter";
 import { pushReady, subscriptionCount } from "@/lib/push";
@@ -17,7 +18,10 @@ export default async function SettingsPage() {
     { label: "Снимки (Blob, private)", ok: hasBlob() },
     { label: "Визуализации (XAI_API_KEY)", ok: Boolean(process.env.XAI_API_KEY) },
     { label: "Push известия (VAPID)", ok: pushReady() },
-    { label: "Имейли (Resend)", ok: Boolean(process.env.RESEND_API_KEY) },
+    {
+      label: `Имейли — ${{ resend: "през Resend", smtp: "през Gmail/SMTP (резерва)", none: "не са настроени" }[mailRoute()]}`,
+      ok: mailRoute() === "resend",
+    },
     { label: "Подател (EMAIL_FROM)", ok: Boolean(process.env.EMAIL_FROM) },
     { label: "Имейл за поръчки (CONTACT_TO)", ok: Boolean(process.env.CONTACT_TO) },
     { label: "Адрес на сайта (NEXT_PUBLIC_SITE_URL)", ok: Boolean(process.env.NEXT_PUBLIC_SITE_URL) },

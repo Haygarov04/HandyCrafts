@@ -51,6 +51,7 @@ export default async function OrderPage({ params }: Props) {
           <Row label="Град" value={c.city} />
           <Row label={c.delivery === "address" ? "Адрес" : "Офис"} value={c.address} />
           <Row label="Плащане" value={`Наложен платеж · ${money(order.total)}`} />
+          <Row label="Език" value={order.lang === "en" ? "Английски" : "Български"} />
         </dl>
         {order.note ? (
           <p className="mt-4 rounded-2xl bg-paper px-4 py-3 text-sm leading-6">
@@ -60,7 +61,14 @@ export default async function OrderPage({ params }: Props) {
         ) : null}
       </section>
 
-      <OrderControls id={order.id} status={order.status} internalNote={order.internalNote} />
+      <OrderControls
+        id={order.id}
+        status={order.status}
+        internalNote={order.internalNote}
+        tracking={order.tracking}
+        hasEmail={Boolean(c.email)}
+        emails={order.emails || []}
+      />
 
       {order.items.map((item, index) => (
         <section key={item.draftId} className="rounded-3xl bg-white p-5">

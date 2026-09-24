@@ -74,6 +74,9 @@ export type Order = {
   internalNote: string;
   items: OrderItem[];
   total: number;
+  tracking?: { courier: "econt" | "speedy"; number: string };
+  /** Emails sent to the customer, newest last. */
+  emails?: { type: string; at: string; ok: boolean }[];
 };
 
 /** The stage an order normally moves to next; null at the end of the line. */

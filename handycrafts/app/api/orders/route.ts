@@ -2,10 +2,10 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
 import { itemLabel, maxQty, priceFor } from "@/lib/catalog";
-import { sendOrderMails } from "@/lib/mail";
+import { sendCustomerEmail, sendNewOrderToShop } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
 import { deliveryLabel, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
-import { createOrder, getDraft, listOrders, nextOrderNumber } from "@/lib/orders";
+import { createOrder, getDraft, listOrders, logEmail, nextOrderNumber } from "@/lib/orders";
 import { notifyAll } from "@/lib/push";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
 
@@ -18,10 +18,6 @@ export async function GET() {
   return NextResponse.json({ orders: await listOrders() });
 }
 
-function siteUrl(req: Request) {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
-  return new URL(req.url).origin;
-}
 
 export async function POST(req: Request) {
   const tr = translator(req);
@@ -115,14 +111,16 @@ export async function POST(req: Request) {
 
     await createOrder(order);
 
-    const base = siteUrl(req);
     await Promise.allSettled([
       notifyAll({
         title: `Нова поръчка ${order.number}`,
         body: `${name} · ${items.map((i) => `${i.label} ${i.cm} см`).join(", ")} · ${order.total} €`,
         url: `/manage/${order.id}`,
       }),
-      sendOrderMails(order, base),
+      sendNewOrderToShop(order),
+      order.customer.email
+        ? sendCustomerEmail(order, "received").then((ok) => logEmail(order.id, "received", ok))
+        : Promise.resolve(),
     ]);
 
     return NextResponse.json({ id: order.id, number: order.number });

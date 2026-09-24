@@ -48,13 +48,21 @@ export async function listOrders(limit = 300) {
 
 export async function updateOrder(
   id: string,
-  change: { status?: OrderStatus; internalNote?: string }
+  change: { status?: OrderStatus; internalNote?: string; tracking?: Order["tracking"] | null }
 ) {
   const order = await getOrder(id);
   if (!order) return null;
   if (change.status) order.status = change.status;
   if (change.internalNote !== undefined) order.internalNote = change.internalNote;
+  if (change.tracking !== undefined) order.tracking = change.tracking || undefined;
   order.updatedAt = new Date().toISOString();
   await setJSON(`order:${id}`, order);
   return order;
+}
+
+export async function logEmail(id: string, type: string, ok: boolean) {
+  const order = await getOrder(id);
+  if (!order) return;
+  order.emails = [...(order.emails || []), { type, at: new Date().toISOString(), ok }].slice(-20);
+  await setJSON(`order:${id}`, order);
 }

@@ -13,7 +13,9 @@ export default async function SettingsPage() {
     { label: "Снимки (Blob, private)", ok: hasBlob() },
     { label: "Визуализации (XAI_API_KEY)", ok: Boolean(process.env.XAI_API_KEY) },
     { label: "Push известия (VAPID)", ok: pushReady() },
-    { label: "Имейли (SMTP + CONTACT_TO)", ok: Boolean(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.CONTACT_TO) },
+    { label: "Имейли (Resend)", ok: Boolean(process.env.RESEND_API_KEY) },
+    { label: "Подател (EMAIL_FROM)", ok: Boolean(process.env.EMAIL_FROM) },
+    { label: "Имейл за поръчки (CONTACT_TO)", ok: Boolean(process.env.CONTACT_TO) },
     { label: "Адрес на сайта (NEXT_PUBLIC_SITE_URL)", ok: Boolean(process.env.NEXT_PUBLIC_SITE_URL) },
   ];
 

@@ -24,8 +24,9 @@ export function CartButton({ className = "" }: { className?: string }) {
       aria-label={`Количка, ${cart.count} продукта`}
     >
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-        <path d="M6 7h12l-1 13H7L6 7Z" />
-        <path d="M9 7a3 3 0 0 1 6 0" />
+        <circle cx="9" cy="20" r="1.4" />
+        <circle cx="18" cy="20" r="1.4" />
+        <path d="M2.5 3.5h2.6l2.4 11.2a1.6 1.6 0 0 0 1.6 1.3h8.6a1.6 1.6 0 0 0 1.6-1.2l1.6-6.8H6.3" />
       </svg>
       {cart.ready && cart.count > 0 ? (
         <span className="absolute right-0 top-0 grid h-5 min-w-5 place-items-center rounded-full bg-ember px-1 text-[11px] font-bold text-ink">

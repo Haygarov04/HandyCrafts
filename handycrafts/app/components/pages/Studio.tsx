@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { CartButton } from "@/app/components/Navbar";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
+import { loadPhoto, loadState, savePhoto, saveState } from "@/app/components/studio-store";
 import {
   catalog,
   isProductId,
@@ -39,17 +40,38 @@ export default function StudioPage() {
   const [error, setError] = useState("");
   const [added, setAdded] = useState(false);
   const [enabled, setEnabled] = useState<boolean | null>(null);
+  const [restored, setRestored] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const requested = params.get("product");
     const size = Number(params.get("cm"));
     const who = params.get("subject");
-    if (isSubjectId(who)) setSubject(who);
-    if (isProductId(requested)) {
-      setProduct(requested);
-      setCm(priceFor(requested, size) !== null ? size : catalog[requested].sizes[0].cm);
+    const saved = loadState();
+    if (saved && (saved.step > 0 || !requested)) {
+      // Pick up where the customer left off. A preview that was still running is lost, so go back to the details.
+      setStep(saved.step === 3 && !saved.preview ? 2 : saved.step);
+      setProduct(saved.product);
+      setSubject(saved.subject);
+      setCm(priceFor(saved.product, saved.cm) !== null ? saved.cm : catalog[saved.product].sizes[0].cm);
+      setClothes(saved.clothes || "");
+      setPose(saved.pose || "");
+      setPreview(saved.preview);
+      setAdded(Boolean(saved.added));
+    } else {
+      if (isSubjectId(who)) setSubject(who);
+      if (isProductId(requested)) {
+        setProduct(requested);
+        setCm(priceFor(requested, size) !== null ? size : catalog[requested].sizes[0].cm);
+      }
     }
+    loadPhoto().then((file) => {
+      if (file) {
+        setPhotoFile(file);
+        setPhotoUrl(URL.createObjectURL(file));
+      }
+      setRestored(true);
+    });
     fetch("/api/studio/status")
       .then((res) => res.json())
       .then((data) => setEnabled(Boolean(data.previews)))
@@ -61,6 +83,11 @@ export default function StudioPage() {
       if (photoUrl) URL.revokeObjectURL(photoUrl);
     };
   }, [photoUrl]);
+
+  useEffect(() => {
+    if (!restored) return;
+    saveState({ step, product, subject, cm, clothes, pose, preview, added });
+  }, [restored, step, product, subject, cm, clothes, pose, preview, added]);
 
   const price = priceFor(product, cm) ?? 0;
 
@@ -89,10 +116,11 @@ export default function StudioPage() {
     setPhotoFile(file);
     setPhotoUrl(URL.createObjectURL(file));
     setPreview(null);
+    savePhoto(file);
   }
 
   async function generate() {
-    if (!photoFile) {
+    if (!photoFile && !preview) {
       setStep(1);
       return;
     }
@@ -109,10 +137,18 @@ export default function StudioPage() {
       body.set("cm", String(cm));
       body.set("clothes", clothes);
       body.set("pose", pose);
-      body.set("photo", photoFile);
+      if (photoFile) body.set("photo", photoFile);
+      else if (preview) body.set("draftId", preview.draftId);
       const res = await fetch("/api/studio/preview", { method: "POST", body, headers: { "x-lang": lang } });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.draftId) throw new Error(data.error || s.failed);
+      // Load the finished image before showing it, so nothing else flashes in its place.
+      await new Promise<void>((resolve) => {
+        const img = new window.Image();
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+        img.src = data.previewUrl;
+      });
       setProgress(100);
       setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject });
     } catch (issue) {
@@ -326,10 +362,7 @@ export default function StudioPage() {
                 <img src={preview.url} alt={s.previewAlt} className="h-full w-full object-cover" />
               ) : (
                 <>
-                  {photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={photoUrl} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 blur-md" />
-                  ) : null}
+                  {busy ? <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-sand via-paper to-blush/60" /> : null}
                   <div className="absolute inset-0 grid place-items-center">
                     {busy ? (
                       <div className="text-center">
@@ -375,6 +408,7 @@ export default function StudioPage() {
                           setPreview(null);
                           setPhotoFile(null);
                           setPhotoUrl("");
+                          savePhoto(null);
                           setClothes("");
                           setPose("");
                           setAdded(false);
@@ -415,7 +449,7 @@ export default function StudioPage() {
             <button
               type="button"
               onClick={next}
-              disabled={(step === 1 && !photoFile) || (step === 2 && enabled === false)}
+              disabled={(step === 1 && !photoFile && !preview) || (step === 2 && enabled === false)}
               className="shrink-0 whitespace-nowrap rounded-full bg-ember px-5 py-3 font-semibold text-ink transition hover:bg-ember-deep disabled:opacity-40 sm:px-7"
             >
               {step === 2 ? s.create : s.next}

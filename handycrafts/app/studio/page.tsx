@@ -217,7 +217,7 @@ export default function StudioPage() {
                 </button>
               ))}
             </div>
-            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4">
               {productIds.map((id) => (
                 <button
                   key={id}
@@ -227,15 +227,20 @@ export default function StudioPage() {
                     product === id ? "border-ember shadow-[0_16px_40px_rgba(255,122,0,0.18)]" : "border-transparent hover:border-ink/15"
                   }`}
                 >
-                  <span className="relative block aspect-[16/10] bg-sand sm:aspect-[4/3]">
-                    <Image src={`/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`} alt="" fill className="object-cover" sizes="(min-width: 640px) 360px, 100vw" />
+                  <span className="relative block aspect-[4/5] bg-sand">
+                    <Image
+                      src={`/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
+                      alt=""
+                      fill
+                      style={{ objectPosition: subject === "pet" ? "48% 50%" : id === "keychain" ? "50% 75%" : "50% 55%" }}
+                      className="object-cover"
+                      sizes="(min-width: 640px) 360px, 50vw"
+                    />
                   </span>
-                  <span className="block p-5">
-                    <span className="flex items-center justify-between">
-                      <span className="font-display text-xl">{catalog[id].label}</span>
-                      <span className="text-sm text-ink/55">от {money(Math.min(...catalog[id].sizes.map((s) => s.price)))}</span>
-                    </span>
-                    <span className="mt-1 block text-sm text-ink/60">{catalog[id].short}</span>
+                  <span className="block p-3.5 sm:p-5">
+                    <span className="block truncate text-base font-bold sm:font-display sm:text-xl sm:font-medium">{catalog[id].label}</span>
+                    <span className="mt-0.5 block text-sm text-ink/55">от {money(Math.min(...catalog[id].sizes.map((s) => s.price)))}</span>
+                    <span className="mt-1 hidden text-sm text-ink/60 sm:block">{catalog[id].short}</span>
                   </span>
                 </button>
               ))}

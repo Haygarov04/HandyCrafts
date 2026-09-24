@@ -14,18 +14,27 @@ const unbounded = Unbounded({
   weight: ["400", "500", "600"],
 });
 
+// Absolute URLs for link previews (Instagram, Viber, Facebook). On Vercel the
+// production domain is known even when NEXT_PUBLIC_SITE_URL is not set.
+function siteUrl() {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  return "http://localhost:3000";
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
+  metadataBase: new URL(siteUrl()),
   title: "HandyCrafts — фигурка по снимка",
   description:
     "Мини фигурка или ключодържател по твоя снимка. Виждаш визуализацията веднага, плащаш с наложен платеж. Изработено в Русе.",
   openGraph: {
     title: "HandyCrafts — фигурка по снимка",
     description: "Качи снимка, виж фигурката си веднага и я поръчай с наложен платеж.",
-    images: ["/shop/hero.webp"],
     locale: "bg_BG",
     type: "website",
+    siteName: "HandyCrafts",
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {

@@ -206,12 +206,19 @@ export default function Home() {
               Всичко започва
               <span className="block">с една снимка.</span>
             </h2>
-            <div className="relative mt-8 aspect-[16/10] overflow-hidden rounded-[2rem] bg-sand shadow-[0_30px_70px_rgba(22,21,19,0.12)]">
+            <div className="relative mt-8 aspect-[9/16] overflow-hidden rounded-[2rem] bg-sand shadow-[0_30px_70px_rgba(22,21,19,0.12)] sm:aspect-[16/9]">
+              <Image
+                src="/shop/process-mobile.webp"
+                alt="Снимка на човек и готовата му фигурка една до друга"
+                fill
+                className="object-cover sm:hidden"
+                sizes="100vw"
+              />
               <Image
                 src="/shop/process.webp"
                 alt="Снимка на човек и готовата му фигурка една до друга"
                 fill
-                className="object-cover"
+                className="hidden object-cover sm:block"
                 sizes="(min-width: 1024px) 55vw, 100vw"
               />
             </div>

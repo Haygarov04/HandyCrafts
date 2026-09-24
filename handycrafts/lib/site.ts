@@ -21,8 +21,10 @@ export const business = {
 };
 
 
-export function productJsonLd(input: { product: ProductId; name: string; description: string; image: string; url: string }) {
-  const prices = catalog[input.product].sizes.map((size) => size.price);
+/** `product: "all"` covers figurines and keychains together, so the lowest price shown is the keychain's. */
+export function productJsonLd(input: { product: ProductId | "all"; name: string; description: string; image: string; url: string }) {
+  const products = input.product === "all" ? (Object.keys(catalog) as ProductId[]) : [input.product];
+  const prices = products.flatMap((id) => catalog[id].sizes.map((size) => size.price));
   return {
     "@context": "https://schema.org",
     "@type": "Product",

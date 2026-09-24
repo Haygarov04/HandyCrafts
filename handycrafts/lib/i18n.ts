@@ -74,9 +74,9 @@ const bg = {
   } as Record<ProductId, { label: string; short: string }>,
   delivery: { econt: "Офис на Еконт", speedy: "Офис на Спиди", address: "До адрес" },
   meta: {
-    title: "3D фигурки и ключодържатели по снимка | HandyCrafts",
+    title: "Фигурки и ключодържатели по снимка от 30 € | HandyCrafts",
     description:
-      "Мини фигурка или ключодържател по твоя снимка. Виждаш визуализацията веднага, плащаш с наложен платеж. Изработено в Русе.",
+      "3D фигурка или ключодържател по твоя снимка от 30 €. Виждаш визуализацията за минута, плащаш с наложен платеж. Изработено на ръка в Русе, доставка в цяла България.",
     ogTitle: "HandyCrafts — фигурка по снимка",
     ogDescription: "Качи снимка, виж фигурката си веднага и я поръчай с наложен платеж.",
     studioTitle: "Създай фигурка по снимка",
@@ -356,9 +356,9 @@ const en: Dict = {
   },
   delivery: { econt: "Econt office", speedy: "Speedy office", address: "To an address" },
   meta: {
-    title: "Custom 3D figurines and keychains from a photo | HandyCrafts",
+    title: "Custom figurines and keychains from a photo, from €30 | HandyCrafts",
     description:
-      "A mini figurine or keychain made from your photo. See the preview in a minute and pay cash on delivery. Handmade in Ruse, Bulgaria.",
+      "A 3D figurine or keychain made from your photo, from €30. See the preview in a minute and pay cash on delivery. Handmade in Ruse, Bulgaria.",
     ogTitle: "HandyCrafts — a figurine from your photo",
     ogDescription: "Upload a photo, see your figurine right away and order with cash on delivery.",
     studioTitle: "Create a figurine from a photo",

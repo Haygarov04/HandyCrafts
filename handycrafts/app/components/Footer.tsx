@@ -37,7 +37,11 @@ export default function Footer({ sellerLine }: { sellerLine?: string }) {
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-paper/45">{t.footer.contact}</p>
           <div className="mt-4 space-y-2 text-sm text-paper/75">
             <a href="mailto:handycraftshelp@gmail.com" className="block hover:text-paper">handycraftshelp@gmail.com</a>
-            <p>{t.footer.city}</p>
+            {lang === "bg" ? (
+              <Link href="/figurka-po-snimka/ruse" className="block hover:text-paper">Фигурки в Русе</Link>
+            ) : (
+              <p>{t.footer.city}</p>
+            )}
             <Link href={href("/contact")} className="block hover:text-paper">{t.footer.write}</Link>
           </div>
         </div>

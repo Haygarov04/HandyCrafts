@@ -29,11 +29,13 @@ export function cityContent(slug: string): LandingContent | null {
   const local = slug === "ruse";
   const where = inCity(n);
   return {
-    metaTitle: `Фигурка по снимка ${where} — доставка с наложен платеж`,
+    metaTitle: local
+      ? "Фигурки по снимка в Русе — от 30 €, изработени на ръка"
+      : `Фигурка по снимка ${where} — доставка с наложен платеж`,
     path: `/figurka-po-snimka/${slug}`,
     crumb: `Фигурка по снимка — ${n}`,
     kicker: local ? "Работилницата ни е тук" : `Доставка до ${n}`,
-    title: `Фигурка по снимка ${where}`,
+    title: local ? "Фигурки по снимка в Русе" : `Фигурка по снимка ${where}`,
     lead: `Персонализирана 3D фигурка или ключодържател по снимка, с доставка до офис на Еконт, Спиди или до адрес ${where}. Виждаш визуализацията веднага, плащаш при получаване.`,
     cta: { label: "Създай фигурка", href: "/studio?product=figurine" },
     image: { src: "/shop/hero-mobile.webp", alt: `Фигурка по снимка с доставка до ${n}`, ratio: "aspect-[9/16] max-h-[36rem]" },

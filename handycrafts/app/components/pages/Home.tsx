@@ -79,6 +79,15 @@ export default function Home({ lang }: { lang: Lang }) {
       <JsonLd data={faqJsonLd(t.faq)} />
       <JsonLd
         data={productJsonLd({
+          product: "all",
+          name: lang === "en" ? "Custom figurines and keychains from a photo" : "Фигурки и ключодържатели по снимка",
+          description: t.meta.description,
+          image: "/shop/hero-mobile.webp",
+          url: href("/"),
+        })}
+      />
+      <JsonLd
+        data={productJsonLd({
           product: "figurine",
           name: h.productFigurineName,
           description: h.productFigurineText,

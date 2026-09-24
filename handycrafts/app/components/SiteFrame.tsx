@@ -7,8 +7,9 @@ import Footer from "./Footer";
 import Navbar from "./Navbar";
 
 export default function SiteFrame({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const bare = pathname.startsWith("/studio") || pathname.startsWith("/manage");
+  const pathname = (usePathname() || "/").replace(/^\/en(?=\/|$)/, "") || "/";
+  const manage = pathname.startsWith("/manage");
+  const bare = pathname.startsWith("/studio") || manage;
   return (
     <CartProvider>
       {bare ? (
@@ -20,7 +21,7 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
           <Footer />
         </>
       )}
-      {pathname.startsWith("/manage") ? null : <CartDrawer />}
+      {manage ? null : <CartDrawer />}
     </CartProvider>
   );
 }

@@ -60,6 +60,8 @@ export type Order = {
   updatedAt: string;
   status: OrderStatus;
   payment: "cod";
+  /** Language the customer ordered in; older orders have none (Bulgarian). */
+  lang?: "bg" | "en";
   customer: {
     name: string;
     phone: string;

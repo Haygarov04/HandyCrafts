@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
+import { translator } from "@/lib/api-lang";
 import { sendContactMail } from "@/lib/mail";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  if (!sameOrigin(req)) return NextResponse.json({ error: "Невалидна заявка." }, { status: 403 });
+  const tr = translator(req);
+  if (!sameOrigin(req)) return NextResponse.json({ error: tr("Невалидна заявка.", "Invalid request.") }, { status: 403 });
   if (!(await allow("contact", req, 5, 3600))) {
-    return NextResponse.json({ error: "Много съобщения за кратко. Опитай след малко." }, { status: 429 });
+    return NextResponse.json({ error: tr("Много съобщения за кратко. Опитай след малко.", "Too many messages in a short time. Please try again shortly.") }, { status: 429 });
   }
   const body = await req.json().catch(() => null);
   if (cleanText(body?.website, 100)) return NextResponse.json({ success: true });
@@ -17,7 +19,7 @@ export async function POST(req: Request) {
   const phone = cleanText(body?.phone, 30);
   const message = cleanText(body?.message, 3000);
   if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !message) {
-    return NextResponse.json({ error: "Попълни име, имейл и съобщение." }, { status: 400 });
+    return NextResponse.json({ error: tr("Попълни име, имейл и съобщение.", "Please fill in your name, email and message.") }, { status: 400 });
   }
 
   try {
@@ -26,7 +28,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("CONTACT", error);
     return NextResponse.json(
-      { error: "Не успяхме да изпратим. Пиши ни на handycraftshelp@gmail.com." },
+      { error: tr("Не успяхме да изпратим. Пиши ни на handycraftshelp@gmail.com.", "We couldn't send it. Please email handycraftshelp@gmail.com.") },
       { status: 500 }
     );
   }

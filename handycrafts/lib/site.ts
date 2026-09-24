@@ -20,13 +20,6 @@ export const business = {
   country: "BG",
 };
 
-/** Pages written for the searches people actually type. */
-export const landings = [
-  { href: "/figurka-po-snimka", label: "Фигурка по снимка" },
-  { href: "/figurka-na-domashen-lyubimets", label: "Фигурка на домашен любимец" },
-  { href: "/klyuchodarzhatel-po-snimka", label: "Ключодържател по снимка" },
-  { href: "/personaliziran-podarak", label: "Персонализиран подарък" },
-] as const;
 
 export function productJsonLd(input: { product: ProductId; name: string; description: string; image: string; url: string }) {
   const prices = catalog[input.product].sizes.map((size) => size.price);

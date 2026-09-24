@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { faqItems } from "@/lib/faq";
+import { useLang } from "./lang";
 
 type Item = { q: string; a: string };
 
-export default function FaqList({ items = faqItems }: { items?: readonly Item[] }) {
+export default function FaqList({ items: given }: { items?: readonly Item[] }) {
+  const { t } = useLang();
+  const items = given || t.faq;
   const [open, setOpen] = useState(0);
 
   return (

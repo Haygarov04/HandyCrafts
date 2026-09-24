@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { money } from "@/lib/catalog";
 import { deliveryLabel, type Order } from "@/lib/order-types";
+import { dict } from "@/lib/i18n";
 import { escapeHtml } from "@/lib/security";
 
 function transport() {
@@ -59,7 +60,25 @@ export async function sendOrderMails(order: Order, siteUrl: string) {
       })
     );
   }
-  if (c.email) {
+  if (c.email && order.lang === "en") {
+    const itemsEn = order.items
+      .map((item) => `<li>${escapeHtml(dict.en.itemLabel(item.product, item.subject))} ${item.cm} cm × ${item.qty} — €${item.price * item.qty}</li>`)
+      .join("");
+    jobs.push(
+      mailer.sendMail({
+        from,
+        to: c.email,
+        subject: `Order ${order.number} received — HandyCrafts`,
+        html: `<div style="font-family:Arial,sans-serif;line-height:1.6">
+<p>Hi ${escapeHtml(c.name)},</p>
+<p>We've received order <b>${order.number}</b>. We'll call you on ${escapeHtml(c.phone)} to confirm it before we start making it.</p>
+<ul>${itemsEn}</ul>
+<p>Total: <b>€${order.total}</b> + delivery. Cash on delivery when the parcel arrives.</p>
+<p>Delivery: ${escapeHtml(`${dict.en.delivery[c.delivery]}, ${c.city}, ${c.address}`)}</p>
+<p>HandyCrafts · Ruse, Bulgaria</p></div>`,
+      })
+    );
+  } else if (c.email) {
     jobs.push(
       mailer.sendMail({
         from,

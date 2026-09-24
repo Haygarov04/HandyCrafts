@@ -25,7 +25,7 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
     name: siteName,
     url: absolute(lang === "en" ? "/en" : "/"),
     logo: absolute("/icon.png"),
-    image: absolute("/opengraph-image.jpg"),
+    image: absolute("/og.jpg"),
     email: business.email,
     description: t.meta.storeDescription,
     address: {

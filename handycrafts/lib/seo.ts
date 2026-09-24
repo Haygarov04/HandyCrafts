@@ -2,6 +2,17 @@ import type { Metadata } from "next";
 import { alternates, dict, type Lang } from "@/lib/i18n";
 import { siteName, siteUrl } from "@/lib/site";
 
+/** One stable share image for every page and chat app (Instagram, Viber, Messenger). */
+function shareImage(lang: Lang) {
+  return {
+    url: "/og.jpg",
+    width: 1200,
+    height: 630,
+    type: "image/jpeg",
+    alt: lang === "en" ? "Figurine next to the photo it was made from — HandyCrafts" : "Фигурка до снимката, по която е направена — HandyCrafts",
+  };
+}
+
 /** Shared metadata for the root layout of one language. */
 export function rootMetadata(lang: Lang): Metadata {
   const t = dict[lang].meta;
@@ -17,8 +28,9 @@ export function rootMetadata(lang: Lang): Metadata {
       alternateLocale: lang === "en" ? ["bg_BG"] : ["en_US"],
       type: "website",
       siteName,
+      images: [shareImage(lang)],
     },
-    twitter: { card: "summary_large_image" },
+    twitter: { card: "summary_large_image", images: [shareImage(lang)] },
     verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
       ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
       : undefined,
@@ -45,7 +57,9 @@ export function pageMetadata(
             locale: dict[lang].ogLocale,
             type: "website",
             siteName,
+            images: [shareImage(lang)],
           },
+          twitter: { card: "summary_large_image", title: input.title, description: input.description, images: [shareImage(lang)] },
         }
       : {}),
   };

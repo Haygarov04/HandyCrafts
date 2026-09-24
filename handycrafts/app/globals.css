@@ -2,12 +2,16 @@
 
 @theme inline {
   --color-ink: #161513;
-  --color-paper: #f3efe7;
-  --color-sand: #e6dfd2;
+  --color-paper: #f6f1e8;
+  --color-sand: #ebe3d5;
+  --color-cream: #fbf8f2;
+  --color-blush: #f8d9c4;
+  --color-sage: #dfe6d3;
+  --color-sky: #d8e4ee;
   --color-ember: #ff7a00;
   --color-ember-deep: #d96500;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-literata), Georgia, "Times New Roman", serif;
+  --font-display: var(--font-unbounded), var(--font-manrope), ui-sans-serif, sans-serif;
 }
 
 html {
@@ -27,9 +31,11 @@ body {
 
 h1,
 h2,
+h3,
 .font-display {
   font-family: var(--font-display);
-  font-optical-sizing: auto;
+  font-weight: 500;
+  letter-spacing: -0.02em;
 }
 
 .lift-card {

@@ -1,9 +1,9 @@
 export const orderStatuses = [
   "new",
-  "review",
-  "approved",
+  "confirmed",
   "printing",
-  "done",
+  "shipped",
+  "delivered",
   "cancelled",
 ] as const;
 
@@ -11,30 +11,64 @@ export type OrderStatus = (typeof orderStatuses)[number];
 
 export const statusLabel: Record<OrderStatus, string> = {
   new: "Нова",
-  review: "Преглед",
-  approved: "Одобрена",
-  printing: "В печат",
-  done: "Готова",
+  confirmed: "Потвърдена",
+  printing: "В изработка",
+  shipped: "Изпратена",
+  delivered: "Получена",
   cancelled: "Отказана",
 };
 
-export type OrderFileKind = "photo" | "preview" | "glb" | "stl";
+export const statusTone: Record<OrderStatus, string> = {
+  new: "bg-ember/15 text-ember-deep",
+  confirmed: "bg-sky-100 text-sky-800",
+  printing: "bg-violet-100 text-violet-800",
+  shipped: "bg-amber-100 text-amber-900",
+  delivered: "bg-emerald-100 text-emerald-800",
+  cancelled: "bg-ink/10 text-ink/60",
+};
+
+export const deliveryLabel = {
+  econt: "Офис на Еконт",
+  speedy: "Офис на Спиди",
+  address: "До адрес",
+} as const;
+
+export type Delivery = keyof typeof deliveryLabel;
+
+export function isStatus(value: unknown): value is OrderStatus {
+  return (orderStatuses as readonly unknown[]).includes(value);
+}
+
+export type OrderItem = {
+  draftId: string;
+  product: "figurine" | "keychain";
+  label: string;
+  cm: number;
+  price: number;
+  qty: number;
+  clothes: string;
+  pose: string;
+  photo?: string;
+  preview?: string;
+};
 
 export type Order = {
   id: string;
+  number: string;
   createdAt: string;
   updatedAt: string;
   status: OrderStatus;
-  name: string;
-  email: string;
-  phone: string;
-  product: string;
-  size: string;
-  people: number;
-  clothes: string;
-  pose: string;
-  box: "standard" | "premium";
-  rush: boolean;
-  secondCopy: boolean;
-  files: Partial<Record<OrderFileKind, string>>;
+  payment: "cod";
+  customer: {
+    name: string;
+    phone: string;
+    email: string;
+    city: string;
+    delivery: Delivery;
+    address: string;
+  };
+  note: string;
+  internalNote: string;
+  items: OrderItem[];
+  total: number;
 };

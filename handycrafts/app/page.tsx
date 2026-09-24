@@ -1,266 +1,301 @@
 import Image from "next/image";
 import Link from "next/link";
 import FaqList from "./components/FaqList";
+import { catalog, fromPrice, money, productionDays } from "@/lib/catalog";
+
+const perks = [
+  { icon: "◎", title: "Виждаш я веднага", text: "Визуализация за около минута" },
+  { icon: "€", title: "Наложен платеж", text: "Плащаш, когато я получиш" },
+  { icon: "✦", title: "Ръчно довършена", text: "Всяка фигурка минава през ръце" },
+  { icon: "➜", title: "Еконт и Спиди", text: `Изпращаме за ${productionDays}` },
+];
+
+const steps = [
+  {
+    n: "1",
+    title: "Качи снимка",
+    text: "Една ясна снимка, лицето отпред. Опиши дрехите и позата, ако искаш промени.",
+    image: "/shop/step-1.webp",
+    tone: "bg-blush",
+  },
+  {
+    n: "2",
+    title: "Виж фигурката си",
+    text: "За около минута получаваш визуализация. Не харесваш нещо? Промени и опитай пак.",
+    image: "/shop/step-2.webp",
+    tone: "bg-sky",
+  },
+  {
+    n: "3",
+    title: "Поръчай и чакай куриера",
+    text: "Добавяш в количката, ние потвърждаваме по телефона и изпращаме. Плащаш при получаване.",
+    image: "/shop/step-3.webp",
+    tone: "bg-sage",
+  },
+];
+
+const occasions = ["Рожден ден", "Годишнина", "Сватба", "Свети Валентин", "Коледа", "Абитуриент", "За колега", "За баба и дядо"];
+
+const gallery = [1, 2, 3, 4, 5, 6].map((n) => `/shop/gallery-${n}.webp`);
 
 const products = [
   {
-    title: "Фигурка",
-    text: "Цял човек, любимец или сцена. Стои на рафт.",
-    image: "/portfolio/p20.PNG",
-    href: "/studio?product=figurine",
+    id: "figurine" as const,
+    image: "/shop/figurine.webp",
+    tone: "bg-blush",
+    badge: "Най-поръчвана",
   },
   {
-    title: "Ключодържател",
-    text: "Същият човек, в джоба. Малък и плътен.",
-    image: "/portfolio/p35.jpg",
-    href: "/studio?product=keychain",
-  },
-  {
-    title: "Бюст",
-    text: "Лицето отблизо. Повече място за чертите.",
-    image: "/portfolio/p36.jpg",
-    href: "/studio?product=bust",
-  },
-];
-
-const gallery = [
-  { src: "/portfolio/p3.jpg", alt: "Фигура", className: "sm:row-span-2" },
-  { src: "/portfolio/p24.PNG", alt: "Персонализиран подарък", className: "" },
-  { src: "/portfolio/p28.PNG", alt: "Печат в работилницата", className: "" },
-  { src: "/portfolio/p25.PNG", alt: "Кутия за подарък", className: "sm:row-span-2" },
-  { src: "/portfolio/p32.jpg", alt: "Мини постановка", className: "" },
-  { src: "/portfolio/p19.PNG", alt: "Декоративна форма", className: "" },
-];
-
-const services = [
-  {
-    n: "01",
-    title: "3D принтиране",
-    text: "PLA, PETG, ABS, TPU и resin. Прототип, част или серия.",
-    href: "/services/printing",
-  },
-  {
-    n: "02",
-    title: "3D сканиране",
-    text: "Реален обект става модел, който може да се повтори.",
-    href: "/services/scanning",
-  },
-  {
-    n: "03",
-    title: "3D моделиране",
-    text: "От скица, снимка или файл до готов модел за печат.",
-    href: "/services/modeling",
+    id: "keychain" as const,
+    image: "/shop/keychain.webp",
+    tone: "bg-sky",
+    badge: "Малък подарък",
   },
 ];
 
 export default function Home() {
   return (
     <>
-      <section className="px-4 pb-8 pt-28 sm:px-6 sm:pt-32">
-        <div className="mx-auto grid max-w-6xl items-end gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+      <section className="relative overflow-hidden px-4 pb-14 pt-32 sm:px-6 sm:pt-36">
+        <div className="pointer-events-none absolute -right-40 top-10 h-[34rem] w-[34rem] rounded-full bg-blush/60 blur-3xl" />
+        <div className="pointer-events-none absolute -left-40 bottom-0 h-80 w-80 rounded-full bg-sky/70 blur-3xl" />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-ember-deep">
-              Работилница в Русе
-            </p>
-            <h1 className="mt-4 max-w-xl text-[3.1rem] leading-[0.92] text-ink sm:text-7xl">
-              Фигурка по снимка.
-              <span className="block text-ink/80">Детайл по идея.</span>
+            <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium shadow-sm">
+              <span className="h-2 w-2 rounded-full bg-ember" /> Фигурки по снимка · Русе
+            </span>
+            <h1 className="mt-6 text-[2.5rem] leading-[1.05] sm:text-6xl">
+              Твоята мини версия.
+              <span className="block text-ember-deep">От една снимка.</span>
             </h1>
-            <p className="mt-6 max-w-md text-lg leading-8 text-ink/70">
-              Качваш ясна снимка, описваш дрехите и позата и виждаш
-              визуализацията преди да я отпечатаме. За файлове и технически
-              части работим по същия начин: първо ясно, после изработка.
+            <p className="mt-6 max-w-lg text-lg leading-8 text-ink/70">
+              Качваш снимка и след минута виждаш как ще изглежда фигурката. Харесваш я —
+              добавяш в количката и плащаш с наложен платеж, когато пристигне.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/studio"
-                className="rounded-full bg-ember px-6 py-3.5 text-center font-semibold text-ink transition hover:bg-ember-deep"
+                href="/studio?product=figurine"
+                className="rounded-full bg-ink px-7 py-4 text-center font-semibold text-paper shadow-[0_12px_30px_rgba(22,21,19,0.25)] transition hover:bg-ember hover:text-ink"
               >
-                Създай фигурка
+                Създай фигурка — от {money(fromPrice("figurine"))}
               </Link>
               <Link
-                href="/portfolio"
-                className="rounded-full border border-ink/15 px-6 py-3.5 text-center font-semibold transition hover:bg-sand"
+                href="/studio?product=keychain"
+                className="rounded-full border border-ink/15 bg-white px-7 py-4 text-center font-semibold transition hover:border-ink/40"
               >
-                Виж изработеното
+                Ключодържател — от {money(fromPrice("keychain"))}
               </Link>
             </div>
-            <dl className="mt-10 grid max-w-lg grid-cols-3 gap-4 border-t border-ink/10 pt-6 text-sm">
-              <div>
-                <dt className="text-ink/45">Преглед</dt>
-                <dd className="mt-1 font-medium">преди печат</dd>
-              </div>
-              <div>
-                <dt className="text-ink/45">Форми</dt>
-                <dd className="mt-1 font-medium">фигура, бюст, ключ</dd>
-              </div>
-              <div>
-                <dt className="text-ink/45">Място</dt>
-                <dd className="mt-1 font-medium">Русе</dd>
-              </div>
-            </dl>
-          </div>
-
-          <div className="relative">
-            <div className="overflow-hidden rounded-[2rem] bg-ink shadow-[0_30px_80px_rgba(22,21,19,0.18)]">
-              <video
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="aspect-[4/5] w-full object-cover sm:aspect-[5/6]"
-                poster="/portfolio/p28.PNG"
-              >
-                <source src="/video.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div className="absolute -left-3 bottom-6 max-w-[15rem] rounded-2xl border border-ink/10 bg-paper/95 p-4 shadow-[0_16px_40px_rgba(22,21,19,0.12)] backdrop-blur sm:left-[-1.5rem]">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ember-deep">
-                Преди да печатаме
-              </p>
-              <p className="mt-2 text-sm leading-6">
-                Одобряваш визуализацията. После моделът влиза в печат.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 flex items-end justify-between gap-6">
-            <h2 className="max-w-md text-4xl leading-none sm:text-5xl">
-              Три начина да запазиш човека.
-            </h2>
-            <Link href="/studio" className="hidden text-sm font-semibold underline decoration-ember underline-offset-4 sm:inline">
-              Отвори студиото
-            </Link>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {products.map((product, index) => (
-              <Link
-                key={product.title}
-                href={product.href}
-                className="lift-card group overflow-hidden rounded-[1.6rem] bg-white"
-              >
-                <div className="relative aspect-[4/5] overflow-hidden bg-sand">
-                  <Image
-                    src={product.image}
-                    alt={product.title}
-                    fill
-                    className="object-cover transition duration-500 group-hover:scale-[1.03]"
-                    sizes="(min-width: 768px) 30vw, 100vw"
-                  />
-                  <span className="absolute left-4 top-4 rounded-full bg-paper/90 px-3 py-1 text-xs font-semibold">
-                    0{index + 1}
-                  </span>
-                </div>
-                <div className="p-5">
-                  <h3 className="text-3xl">{product.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-ink/65">{product.text}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-ink px-4 py-16 text-paper sm:px-6 sm:py-24">
-        <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-ember">
-              Как става
+            <p className="mt-5 text-sm text-ink/55">
+              Визуализацията е безплатна. Поръчваш само ако ти хареса.
             </p>
-            <h2 className="mt-4 text-4xl leading-none sm:text-5xl">
-              Малка процедура. Голям контрол.
-            </h2>
           </div>
-          <ol className="divide-y divide-white/10">
-            {[
-              ["01", "Качваш снимка", "Една ясна снимка. Лицето да се вижда, краката да не са отрязани, ако правим цяла фигура."],
-              ["02", "Описваш дрехите", "Поза, цвят, предмет в ръката, надпис върху основата. Колкото по-конкретно, толкова по-близо е картинката."],
-              ["03", "Одобряваш и печатаме", "Клиентът одобрява картинката. Ние преглеждаме модела и печатаме фигурката в Русе."],
-            ].map(([n, title, text]) => (
-              <li key={n} className="grid grid-cols-[auto_1fr] gap-5 py-6">
-                <span className="font-display text-3xl text-ember">{n}</span>
-                <div>
-                  <h3 className="text-3xl">{title}</h3>
-                  <p className="mt-2 max-w-xl leading-7 text-paper/70">{text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
 
-      <section className="px-4 py-16 sm:px-6 sm:py-24">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 flex items-end justify-between gap-6">
-            <h2 className="text-4xl leading-none sm:text-5xl">От масата.</h2>
-            <Link href="/portfolio" className="text-sm font-semibold underline decoration-ember underline-offset-4">
-              Цялото портфолио
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-            {gallery.map((item) => (
-              <div
-                key={item.src}
-                className={`relative min-h-44 overflow-hidden rounded-[1.4rem] bg-sand ${item.className}`}
-              >
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(min-width: 640px) 25vw, 50vw"
-                />
-              </div>
-            ))}
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-sand shadow-[0_40px_90px_rgba(22,21,19,0.18)]">
+              <Image
+                src="/shop/hero.webp"
+                alt="Фигурка на двойка, изработена по снимка"
+                fill
+                priority
+                className="object-cover"
+                sizes="(min-width: 1024px) 45vw, 90vw"
+              />
+            </div>
+            <div className="absolute -left-4 top-8 rounded-3xl bg-white px-5 py-4 shadow-[0_20px_40px_rgba(22,21,19,0.12)] sm:-left-8">
+              <p className="text-xs text-ink/50">Фигурка 10 см</p>
+              <p className="font-display text-2xl">{money(catalog.figurine.sizes[0].price)}</p>
+            </div>
+            <div className="absolute -right-2 bottom-8 max-w-[13rem] rounded-3xl bg-ink px-5 py-4 text-paper shadow-[0_20px_40px_rgba(22,21,19,0.2)] sm:-right-6">
+              <p className="text-xs uppercase tracking-[0.18em] text-ember">Преди поръчка</p>
+              <p className="mt-1 text-sm leading-6">Виждаш визуализацията и решаваш.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="px-4 pb-16 sm:px-6 sm:pb-24">
-        <div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-3">
-          {services.map((service) => (
-            <Link
-              key={service.href}
-              href={service.href}
-              className="lift-card rounded-[1.6rem] border border-ink/10 bg-white p-6 sm:p-8"
-            >
-              <p className="text-xs font-semibold tracking-[0.22em] text-ember-deep">
-                {service.n}
-              </p>
-              <h3 className="mt-6 text-4xl">{service.title}</h3>
-              <p className="mt-3 leading-7 text-ink/65">{service.text}</p>
-            </Link>
+      <section className="px-4 sm:px-6">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3 rounded-[2rem] bg-white p-4 sm:p-6 lg:grid-cols-4">
+          {perks.map((perk) => (
+            <div key={perk.title} className="flex items-center gap-3 rounded-2xl p-2">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-paper text-lg text-ember-deep">
+                {perk.icon}
+              </span>
+              <span>
+                <span className="block text-sm font-semibold">{perk.title}</span>
+                <span className="block text-xs text-ink/55">{perk.text}</span>
+              </span>
+            </div>
           ))}
         </div>
       </section>
 
-      <section className="px-4 pb-20 sm:px-6">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.7fr_1.3fr]">
-          <h2 className="text-4xl leading-none sm:text-5xl">Малки въпроси.</h2>
-          <FaqList />
+      <section id="products" className="scroll-mt-28 px-4 py-20 sm:px-6 sm:py-28">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember-deep">Избери формата</p>
+            <h2 className="mt-3 text-3xl leading-tight sm:text-5xl">Фигурка или ключодържател</h2>
+            <p className="mt-4 text-ink/65">Една снимка, два начина да я запазиш. Цената е крайна за изработката.</p>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {products.map((product) => {
+              const item = catalog[product.id];
+              return (
+                <article key={product.id} className="lift-card group overflow-hidden rounded-[2rem] bg-white">
+                  <Link href={`/studio?product=${product.id}`} className={`relative block aspect-[5/4] overflow-hidden ${product.tone}`}>
+                    <Image
+                      src={product.image}
+                      alt={item.label}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                      sizes="(min-width: 768px) 45vw, 100vw"
+                    />
+                    <span className="absolute left-5 top-5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold">
+                      {product.badge}
+                    </span>
+                  </Link>
+                  <div className="p-6 sm:p-8">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h3 className="text-2xl sm:text-3xl">{item.label}</h3>
+                        <p className="mt-2 max-w-sm text-sm leading-6 text-ink/60">{item.line}</p>
+                      </div>
+                      <p className="shrink-0 text-right text-sm text-ink/50">
+                        от<span className="block font-display text-2xl text-ink">{money(fromPrice(product.id))}</span>
+                      </p>
+                    </div>
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {item.sizes.map((size) => (
+                        <Link
+                          key={size.cm}
+                          href={`/studio?product=${product.id}&cm=${size.cm}`}
+                          className="rounded-2xl border border-ink/10 px-4 py-3 text-center transition hover:border-ember hover:bg-ember/5"
+                        >
+                          <span className="block text-sm font-semibold">{size.cm} см</span>
+                          <span className="block text-xs text-ink/55">{money(size.price)}</span>
+                        </Link>
+                      ))}
+                    </div>
+                    <Link
+                      href={`/studio?product=${product.id}`}
+                      className="mt-6 block rounded-full bg-ember py-3.5 text-center font-semibold text-ink transition hover:bg-ember-deep"
+                    >
+                      Качи снимка
+                    </Link>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 rounded-[2rem] bg-white p-6 sm:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-sm font-semibold">Колко голяма е?</p>
+              <p className="flex gap-4 text-xs text-ink/55">
+                <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-ink/70" /> ключодържател</span>
+                <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-ember" /> фигурка</span>
+              </p>
+            </div>
+            <div className="mt-6 flex items-end justify-around gap-2 border-b border-ink/15 sm:gap-4">
+              {[...catalog.keychain.sizes.map((s) => ({ ...s, kind: "ключодържател" })), ...catalog.figurine.sizes.map((s) => ({ ...s, kind: "фигурка" }))].map((size) => (
+                <div key={`${size.kind}-${size.cm}`} className="flex flex-col items-center">
+                  <span className="mb-2 text-xs text-ink/50">{money(size.price)}</span>
+                  <span
+                    className={`block w-8 rounded-t-full sm:w-12 ${size.kind === "фигурка" ? "bg-ember" : "bg-ink/70"}`}
+                    style={{ height: `${size.cm * 7}px` }}
+                  />
+                  <span className="mt-2 pb-2 text-sm font-semibold">{size.cm} см</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" className="scroll-mt-28 bg-white px-4 py-20 sm:px-6 sm:py-28">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember-deep">Как работи</p>
+            <h2 className="mt-3 text-3xl leading-tight sm:text-5xl">Три стъпки до твоята фигурка</h2>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {steps.map((step) => (
+              <div key={step.n} className="overflow-hidden rounded-[2rem] bg-paper">
+                <div className={`relative aspect-[4/3] ${step.tone}`}>
+                  <Image src={step.image} alt="" fill className="object-cover" sizes="(min-width: 768px) 30vw, 100vw" />
+                  <span className="absolute left-5 top-5 grid h-11 w-11 place-items-center rounded-full bg-white font-display text-lg">
+                    {step.n}
+                  </span>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-ink/65">{step.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 text-center">
+            <Link
+              href="/studio"
+              className="inline-block rounded-full bg-ink px-8 py-4 font-semibold text-paper transition hover:bg-ember hover:text-ink"
+            >
+              Започни със снимка
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 py-20 sm:px-6 sm:py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 className="text-3xl leading-tight sm:text-5xl">От нашата работилница</h2>
+            <Link href="/portfolio" className="text-sm font-semibold underline decoration-ember decoration-2 underline-offset-4">
+              Виж още
+            </Link>
+          </div>
+          <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
+            {gallery.map((src) => (
+              <div key={src} className="relative aspect-square overflow-hidden rounded-[1.6rem] bg-sand">
+                <Image src={src} alt="Изработена фигурка" fill className="object-cover transition duration-700 hover:scale-[1.04]" sizes="(min-width: 768px) 33vw, 50vw" />
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="px-4 pb-20 sm:px-6">
-        <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 rounded-[2rem] bg-sand px-6 py-10 sm:px-10 sm:py-14 md:flex-row md:items-end">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-ember-deep">
-              Следващата фигурка
-            </p>
-            <h2 className="mt-3 max-w-lg text-4xl leading-none sm:text-6xl">
-              Една снимка е достатъчна за начало.
-            </h2>
+        <div className="mx-auto max-w-6xl rounded-[2rem] bg-ink px-6 py-12 text-paper sm:px-12 sm:py-16">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember">Подарък, който не се забравя</p>
+          <h2 className="mt-3 max-w-2xl text-3xl leading-tight sm:text-5xl">За всеки повод, в който искаш да изненадаш някого.</h2>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {occasions.map((item) => (
+              <span key={item} className="rounded-full border border-white/15 px-4 py-2 text-sm text-paper/85">
+                {item}
+              </span>
+            ))}
           </div>
           <Link
             href="/studio"
-            className="rounded-full bg-ink px-6 py-3.5 font-semibold text-paper transition hover:bg-ember hover:text-ink"
+            className="mt-10 inline-block rounded-full bg-ember px-8 py-4 font-semibold text-ink transition hover:bg-paper"
           >
-            Влез в студиото
+            Направи подаръка
           </Link>
+        </div>
+      </section>
+
+      <section className="px-4 pb-24 sm:px-6">
+        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember-deep">Въпроси</p>
+            <h2 className="mt-3 text-3xl leading-tight sm:text-5xl">Често питат</h2>
+            <p className="mt-4 max-w-sm text-ink/60">
+              Друго? Пиши ни на{" "}
+              <a href="mailto:handycraftshelp@gmail.com" className="font-semibold underline decoration-ember underline-offset-4">
+                handycraftshelp@gmail.com
+              </a>
+            </p>
+          </div>
+          <FaqList />
         </div>
       </section>
     </>

@@ -1,8 +1,14 @@
+import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { figurinePrompt, isProductId, sizes } from "@/lib/figurine";
+import { isProductId, priceFor } from "@/lib/catalog";
+import { figurinePrompt } from "@/lib/figurine";
+import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
+import { incr } from "@/lib/kv";
+import { getDraft, saveDraft } from "@/lib/orders";
+import { allow, cleanText } from "@/lib/security";
 
 export const runtime = "nodejs";
-export const maxDuration = 60;
+export const maxDuration = 90;
 
 const MAX_BYTES = 8 * 1024 * 1024;
 
@@ -17,86 +23,121 @@ function imageFromResponse(payload: unknown): string | null {
   const url = data.url || data.image?.url || data.data?.[0]?.url;
   if (url) return url;
   const b64 = data.b64_json || data.image?.b64_json || data.data?.[0]?.b64_json;
-  if (b64) return `data:image/png;base64,${b64}`;
-  return null;
+  return b64 ? `data:image/png;base64,${b64}` : null;
+}
+
+async function streamToBuffer(body: BodyInit) {
+  return Buffer.from(await new Response(body).arrayBuffer());
 }
 
 export async function POST(req: Request) {
   try {
-    const form = await req.formData();
-    const product = String(form.get("product") || "");
-    const size = String(form.get("size") || "");
-    const clothes = String(form.get("clothes") || "").slice(0, 600);
-    const pose = String(form.get("pose") || "").slice(0, 400);
-    const file = form.get("photo");
-
-    if (!isProductId(product) || !sizes.includes(size as (typeof sizes)[number])) {
-      return NextResponse.json({ error: "Избери продукт и размер." }, { status: 400 });
-    }
-
-    if (!(file instanceof File)) {
-      return NextResponse.json({ error: "Качи снимка." }, { status: 400 });
-    }
-
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "Файлът трябва да е снимка." }, { status: 400 });
-    }
-
-    if (file.size > MAX_BYTES) {
-      return NextResponse.json({ error: "Снимката е над 8 MB." }, { status: 400 });
-    }
-
     const key = process.env.XAI_API_KEY;
     if (!key) {
       return NextResponse.json(
-        {
-          connected: false,
-          error:
-            "Grok още не е свързан. Сложи XAI_API_KEY в handycrafts/.env.local и рестартирай сайта.",
-        },
-        { status: 200 }
+        { error: "Визуализациите още не са включени (липсва XAI_API_KEY)." },
+        { status: 503 }
       );
     }
 
-    const bytes = Buffer.from(await file.arrayBuffer());
-    const mime = file.type === "image/png" ? "image/png" : "image/jpeg";
-    const dataUri = `data:${mime};base64,${bytes.toString("base64")}`;
+    if (!(await allow("preview", req, Number(process.env.PREVIEW_HOURLY_LIMIT || 8), 3600))) {
+      return NextResponse.json(
+        { error: "Направи много визуализации за кратко. Опитай пак след около час." },
+        { status: 429 }
+      );
+    }
+    const day = new Date().toISOString().slice(0, 10);
+    if ((await incr(`previews:${day}`, 60 * 60 * 26)) > Number(process.env.PREVIEW_DAILY_LIMIT || 300)) {
+      return NextResponse.json(
+        { error: "За днес визуализациите свършиха. Пиши ни и ще я направим ръчно." },
+        { status: 429 }
+      );
+    }
+
+    const form = await req.formData();
+    const product = String(form.get("product") || "");
+    const cm = Number(form.get("cm"));
+    const clothes = cleanText(form.get("clothes"), 500);
+    const pose = cleanText(form.get("pose"), 300);
+
+    if (!isProductId(product) || priceFor(product, cm) === null) {
+      return NextResponse.json({ error: "Избери продукт и размер." }, { status: 400 });
+    }
+
+    // A new photo, or the photo from an earlier try when the customer only regenerates.
+    let photoRef = "";
+    let photo: { bytes: Buffer; contentType: string } | null = null;
+    const file = form.get("photo");
+    const previous = await getDraft(String(form.get("draftId") || ""));
+
+    if (file instanceof File && file.size > 0) {
+      if (file.size > MAX_BYTES) {
+        return NextResponse.json({ error: "Снимката е над 8 MB." }, { status: 400 });
+      }
+      const bytes = Buffer.from(await file.arrayBuffer());
+      const contentType = sniffImage(bytes);
+      if (!contentType) {
+        return NextResponse.json({ error: "Качи снимка в JPG, PNG или WEBP." }, { status: 400 });
+      }
+      photo = { bytes, contentType };
+    } else if (previous) {
+      const stored = await readStoredFile(previous.photo);
+      if (stored) {
+        photo = { bytes: await streamToBuffer(stored.body), contentType: stored.contentType };
+        photoRef = previous.photo;
+      }
+    }
+    if (!photo) {
+      return NextResponse.json({ error: "Качи снимка." }, { status: 400 });
+    }
 
     const response = await fetch("https://api.x.ai/v1/images/edits", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "grok-imagine-image-2.0",
-        prompt: figurinePrompt({ product, size, clothes, pose }),
-        image: { url: dataUri, type: "image_url" },
+        model: process.env.XAI_IMAGE_MODEL || "grok-imagine-image-2.0",
+        prompt: figurinePrompt({ product, cm, clothes, pose }),
+        image: {
+          url: `data:${photo.contentType};base64,${photo.bytes.toString("base64")}`,
+          type: "image_url",
+        },
         aspect_ratio: "1:1",
         resolution: "2k",
       }),
+      signal: AbortSignal.timeout(80_000),
     });
-
     const payload = await response.json().catch(() => null);
-    if (!response.ok) {
-      const message =
-        payload && typeof payload === "object" && "error" in payload
-          ? JSON.stringify((payload as { error: unknown }).error)
-          : "Grok не върна визуализация.";
-      return NextResponse.json({ error: message }, { status: 502 });
-    }
-
-    const imageUrl = imageFromResponse(payload);
-    if (!imageUrl) {
+    const source = response.ok ? imageFromResponse(payload) : null;
+    if (!source) {
+      console.error("XAI_PREVIEW", response.status, JSON.stringify(payload).slice(0, 500));
       return NextResponse.json(
-        { error: "Grok отговори, но без картинка. Провери модела и ключа." },
+        { error: "Визуализацията не се получи. Опитай с друга снимка след малко." },
         { status: 502 }
       );
     }
+    const preview = await pullImage(source);
+    if (!preview) {
+      return NextResponse.json({ error: "Визуализацията не се зареди. Опитай пак." }, { status: 502 });
+    }
 
-    return NextResponse.json({ connected: true, imageUrl });
+    const id = randomUUID();
+    if (!photoRef) photoRef = await saveFile(`drafts/${id}`, "photo", photo.bytes, photo.contentType);
+    const previewRef = await saveFile(`drafts/${id}`, "preview", preview.bytes, preview.contentType);
+
+    await saveDraft({
+      id,
+      createdAt: new Date().toISOString(),
+      product,
+      cm,
+      clothes,
+      pose,
+      photo: photoRef,
+      preview: previewRef,
+    });
+
+    return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}` });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Грешка при визуализацията.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("PREVIEW", error);
+    return NextResponse.json({ error: "Нещо се обърка. Опитай пак." }, { status: 500 });
   }
 }

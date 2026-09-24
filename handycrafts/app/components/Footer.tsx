@@ -5,10 +5,10 @@ export default function Footer() {
     <footer className="bg-ink px-4 py-14 text-paper sm:px-6">
       <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
         <div>
-          <p className="font-display text-3xl">HandyCrafts 3D</p>
+          <p className="font-display text-2xl">HandyCrafts</p>
           <p className="mt-4 max-w-xs text-sm leading-7 text-paper/65">
-            Работилница в Русе за фигурки по снимка, 3D печат, сканиране и
-            моделиране. Първо визуализация, после изработка.
+            Фигурки и ключодържатели по снимка, изработени в Русе. Виждаш
+            визуализацията веднага и плащаш с наложен платеж.
           </p>
         </div>
         <div>
@@ -16,8 +16,11 @@ export default function Footer() {
             Студио
           </p>
           <div className="mt-4 space-y-2 text-sm text-paper/75">
-            <Link href="/studio" className="block hover:text-paper">
+            <Link href="/studio?product=figurine" className="block hover:text-paper">
               Фигурка по снимка
+            </Link>
+            <Link href="/studio?product=keychain" className="block hover:text-paper">
+              Ключодържател
             </Link>
             <Link href="/upload" className="block hover:text-paper">
               Качи файл
@@ -55,15 +58,12 @@ export default function Footer() {
             <Link href="/terms" className="block hover:text-paper">
               Общи условия
             </Link>
-            <Link href="/crm" className="block hover:text-paper">
-              Поръчки
-            </Link>
           </div>
         </div>
       </div>
       <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-2 border-t border-white/10 pt-6 text-xs text-paper/40 sm:flex-row sm:justify-between">
         <p>© {new Date().getFullYear()} HandyCrafts 3D</p>
-        <p>Визуализацията се одобрява преди печат.</p>
+        <p>Наложен платеж · Еконт и Спиди</p>
       </div>
     </footer>
   );

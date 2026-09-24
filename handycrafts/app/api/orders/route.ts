@@ -6,6 +6,7 @@ import { sendCustomerEmail, sendNewOrderToShop } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
 import { deliveryLabel, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
 import { createOrder, getDraft, listOrders, logEmail, nextOrderNumber } from "@/lib/orders";
+import { subscribe } from "@/lib/newsletter";
 import { notifyAll } from "@/lib/push";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
 
@@ -110,6 +111,9 @@ export async function POST(req: Request) {
     };
 
     await createOrder(order);
+    if (body.newsletter === true && email) {
+      await subscribe(email.toLowerCase(), order.lang === "en" ? "en" : "bg", "order").catch(() => false);
+    }
 
     await Promise.allSettled([
       notifyAll({

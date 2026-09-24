@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import type { Order, OrderStatus } from "@/lib/order-types";
 import { escapeHtml } from "@/lib/security";
+import { unsubscribeToken } from "@/lib/newsletter";
 import { absolute } from "@/lib/site";
 
 // Emails go out through Resend (RESEND_API_KEY). SMTP_* is kept as a fallback.
@@ -277,4 +278,29 @@ export async function sendContactMail(input: { name: string; email: string; phon
     replyTo: input.email,
   });
   if (!ok) throw new Error("mail failed");
+}
+
+/* ---------- newsletter ---------- */
+
+export function unsubscribeUrl(email: string, lang: Lang) {
+  return absolute(localize(lang, `/unsubscribe?e=${encodeURIComponent(email)}&t=${unsubscribeToken(email)}`));
+}
+
+export async function sendWelcomeEmail(email: string, lang: Lang) {
+  const en = lang === "en";
+  const body = `<h1 style="margin:0 0 14px;font-size:24px;line-height:1.25">${en ? "You're on the list ♡" : "Записа се ♡"}</h1>
+<p style="margin:0">${
+    en
+      ? "Thanks for joining! About once a month we'll send gift ideas before the holidays and new pieces from the workshop. Nothing more."
+      : "Благодарим! Около веднъж в месеца ще ти пращаме идеи за подаръци преди празниците и нови неща от работилницата. Нищо повече."
+  }</p>
+${button(en ? "Create a figurine" : "Създай фигурка", absolute(localize(lang, "/studio")))}
+<p style="margin:18px 0 0;font-size:12px;color:#8a847b">${
+    en ? "Changed your mind?" : "Размисли?"
+  } <a href="${unsubscribeUrl(email, lang)}" style="color:#8a847b">${en ? "Unsubscribe" : "Отпиши се"}</a></p>`;
+  return sendEmail({
+    to: email,
+    subject: en ? "Welcome to HandyCrafts" : "Добре дошъл в HandyCrafts",
+    html: layout(lang, en ? "Gift ideas about once a month." : "Идеи за подаръци около веднъж в месеца.", body),
+  });
 }

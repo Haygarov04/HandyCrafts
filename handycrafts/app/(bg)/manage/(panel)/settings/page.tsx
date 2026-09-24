@@ -1,5 +1,6 @@
 import { hasBlob } from "@/lib/files";
 import { hasRedis } from "@/lib/kv";
+import { listSubscribers } from "@/lib/newsletter";
 import { pushReady, subscriptionCount } from "@/lib/push";
 import PushToggle from "../../PushToggle";
 import LogoutButton from "../logout-button";
@@ -8,6 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function SettingsPage() {
   const devices = pushReady() ? await subscriptionCount() : 0;
+  const subscribers = await listSubscribers();
   const checks = [
     { label: "База за поръчки (Redis)", ok: hasRedis() },
     { label: "Снимки (Blob, private)", ok: hasBlob() },
@@ -29,6 +31,33 @@ export default async function SettingsPage() {
         <p className="px-1 text-xs text-ink/50">
           Абонирани устройства: {devices}. Включи известията на всеки телефон, на който искаш да ги получаваш.
         </p>
+      </section>
+
+      <section className="rounded-3xl bg-white p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h2 className="text-base">Бюлетин</h2>
+            <p className="text-sm text-ink/55">
+              {subscribers.length} абонати · {subscribers.filter((s) => s.lang === "en").length} на английски
+            </p>
+          </div>
+          <a href="/api/manage/newsletter" className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-paper">
+            Свали CSV
+          </a>
+        </div>
+        {subscribers.length ? (
+          <ul className="mt-4 divide-y divide-ink/5 text-sm">
+            {subscribers.slice(0, 8).map((s) => (
+              <li key={s.email} className="flex justify-between gap-3 py-2">
+                <span className="truncate">{s.email}</span>
+                <span className="shrink-0 text-ink/45">
+                  {s.source === "order" ? "поръчка" : "сайт"} · {s.lang.toUpperCase()}
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        <p className="mt-3 text-xs text-ink/50">CSV-то се отваря в Excel или се качва в Resend → Audiences за изпращане на кампании.</p>
       </section>
 
       <section className="rounded-3xl bg-white p-5">

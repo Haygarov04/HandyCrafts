@@ -27,6 +27,7 @@ export default function CartPage() {
     website: "",
   });
   const [agree, setAgree] = useState(false);
+  const [newsletter, setNewsletter] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
@@ -50,6 +51,7 @@ export default function CartPage() {
           customer: form,
           note: form.note,
           website: form.website,
+          newsletter,
           items: cart.items.map((item) => ({ draftId: item.draftId, qty: item.qty, cm: item.cm })),
         }),
       });
@@ -162,6 +164,15 @@ export default function CartPage() {
                 </Link>{" "}
                 {c.agree[2]}
               </span>
+            </label>
+            <label className="mt-3 flex items-start gap-3 text-sm text-ink/70">
+              <input
+                type="checkbox"
+                checked={newsletter}
+                onChange={(event) => setNewsletter(event.target.checked)}
+                className="mt-1 h-4 w-4 accent-[#ff7a00]"
+              />
+              <span>{c.newsletter}</span>
             </label>
             {error ? <p className="mt-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-800">{error}</p> : null}
             <button

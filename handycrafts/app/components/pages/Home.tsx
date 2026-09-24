@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FaqList from "../FaqList";
 import JsonLd from "../JsonLd";
+import NewsletterBox from "../NewsletterBox";
 import { catalog, fromPrice } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
@@ -322,6 +323,8 @@ export default function Home({ lang }: { lang: Lang }) {
           </div>
         </div>
       </section>
+
+      <NewsletterBox />
 
       <section id="faq" className="scroll-mt-28 px-4 pb-24 sm:px-6">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">

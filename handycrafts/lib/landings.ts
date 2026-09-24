@@ -15,7 +15,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
     path: "/figurka-po-snimka",
     crumb: "Фигурка по снимка",
     kicker: "3D фигурка по снимка",
-    title: "Фигурка по снимка — твоята мини версия",
+    title: "Фигурка по снимка на човек",
     lead: "Персонализирана 3D фигурка на човек по една снимка. Виждаш визуализацията за минута, а готовата фигурка се изработва на ръка в Русе.",
     cta: { label: "Създай фигурка", href: "/studio?product=figurine" },
     image: { src: "/shop/figurine.webp", alt: "Фигурка на двойка, изработена по снимка", ratio: "aspect-[9/16] max-h-[36rem]" },
@@ -54,7 +54,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       path: "/figurka-po-snimka",
       crumb: "Custom figurine from a photo",
       kicker: "3D figurine from a photo",
-      title: "A figurine from your photo — your mini you",
+      title: "A figurine made from your photo",
       lead: "A custom 3D figurine of a person made from a single photo. See the preview in a minute; the finished figurine is made by hand in Ruse, Bulgaria.",
       cta: { label: "Create a figurine", href: "/studio?product=figurine" },
       image: { src: "/shop/figurine.webp", alt: "Figurine of a couple made from a photo", ratio: "aspect-[9/16] max-h-[36rem]" },
@@ -173,7 +173,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
     path: "/klyuchodarzhatel-po-snimka",
     crumb: "Ключодържател по снимка",
     kicker: "Мини фигурка с халка",
-    title: "Ключодържател по снимка — винаги с теб",
+    title: "Ключодържател по снимка",
     lead: "Персонализиран 3D ключодържател на човек или домашен любимец, направен по твоя снимка. 5 или 6 см, с метална халка, от 30 €.",
     cta: { label: "Създай ключодържател", href: "/studio?product=keychain" },
     image: { src: "/shop/keychain.webp", alt: "Ключодържател фигурка на мъж по снимка", ratio: "aspect-[9/16] max-h-[36rem]" },
@@ -181,7 +181,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
     productName: "Персонализиран 3D ключодържател по снимка",
     sections: [
       {
-        title: "Малък подарък с голяма реакция",
+        title: "Малък подарък, който се ползва всеки ден",
         text: [
           "Ключодържателят е мини фигурка в цял ръст с метална халка отгоре. Малък е, но запазва прическата, дрехите и изражението от снимката. Подходящ е за колеги, приятели, половинката или като сувенир за група.",
         ],
@@ -208,7 +208,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       path: "/klyuchodarzhatel-po-snimka",
       crumb: "Custom keychain from a photo",
       kicker: "Mini figure with a ring",
-      title: "A keychain from your photo — always with you",
+      title: "A keychain made from your photo",
       lead: "A custom 3D keychain of a person or pet made from your photo. 5 or 6 cm with a metal ring, from €30.",
       cta: { label: "Create a keychain", href: "/studio?product=keychain" },
       image: { src: "/shop/keychain.webp", alt: "Keychain figure of a man made from a photo", ratio: "aspect-[9/16] max-h-[36rem]" },
@@ -216,7 +216,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       productName: "Custom 3D keychain from a photo",
       sections: [
         {
-          title: "A small gift with a big reaction",
+          title: "A small gift used every day",
           text: [
             "The keychain is a full-body mini figure with a metal ring on top. It's small but keeps the hairstyle, clothes and expression from the photo. Great for colleagues, friends, your partner or as a keepsake for a group.",
           ],

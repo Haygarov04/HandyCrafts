@@ -45,7 +45,7 @@ export default function BottomNav() {
       : pathname.startsWith(href);
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur">
+    <nav className="shrink-0 border-t border-ink/10 bg-white pb-[env(safe-area-inset-bottom)]">
       <ul className="mx-auto grid max-w-lg grid-cols-4">
         {tabs.map((tab) => {
           const on = active(tab.href);

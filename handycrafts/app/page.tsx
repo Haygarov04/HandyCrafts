@@ -11,27 +11,9 @@ const perks = [
 ];
 
 const steps = [
-  {
-    n: "1",
-    title: "Качи снимка",
-    text: "Една ясна снимка, лицето отпред. Опиши дрехите и позата, ако искаш промени.",
-    image: "/shop/step-1.webp",
-    tone: "bg-blush",
-  },
-  {
-    n: "2",
-    title: "Виж фигурката си",
-    text: "За около минута получаваш визуализация. Не харесваш нещо? Промени и опитай пак.",
-    image: "/shop/step-2.webp",
-    tone: "bg-sky",
-  },
-  {
-    n: "3",
-    title: "Поръчай и чакай куриера",
-    text: "Добавяш в количката, ние потвърждаваме по телефона и изпращаме. Плащаш при получаване.",
-    image: "/shop/step-3.webp",
-    tone: "bg-sage",
-  },
+  { n: "01", title: "Качи снимка", text: "Една ясна снимка на човека или любимеца." },
+  { n: "02", title: "Виж фигурката", text: "Визуализация за минута. Одобряваш, преди да поръчаш." },
+  { n: "03", title: "Получи своето мини", text: "Изработваме я на ръка и я пращаме с куриер." },
 ];
 
 const occasions = ["Рожден ден", "Годишнина", "Сватба", "Свети Валентин", "Коледа", "Абитуриент", "За колега", "За баба и дядо"];
@@ -218,33 +200,61 @@ export default function Home() {
       </section>
 
       <section id="how" className="scroll-mt-28 bg-white px-4 py-20 sm:px-6 sm:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember-deep">Как работи</p>
-            <h2 className="mt-3 text-3xl leading-tight sm:text-5xl">Три стъпки до твоята фигурка</h2>
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
+          <div>
+            <h2 className="text-[2.3rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+              Всичко започва
+              <span className="block">с една снимка.</span>
+            </h2>
+            <div className="relative mt-8 aspect-[16/10] overflow-hidden rounded-[2rem] bg-sand shadow-[0_30px_70px_rgba(22,21,19,0.12)]">
+              <Image
+                src="/shop/process.webp"
+                alt="Снимка на човек и готовата му фигурка една до друга"
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 55vw, 100vw"
+              />
+            </div>
           </div>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {steps.map((step) => (
-              <div key={step.n} className="overflow-hidden rounded-[2rem] bg-paper">
-                <div className={`relative aspect-[4/3] ${step.tone}`}>
-                  <Image src={step.image} alt="" fill className="object-cover" sizes="(min-width: 768px) 30vw, 100vw" />
-                  <span className="absolute left-5 top-5 grid h-11 w-11 place-items-center rounded-full bg-white font-display text-lg">
+
+          <div>
+            <ol className="divide-y divide-ink/10">
+              {steps.map((step) => (
+                <li key={step.n} className="flex items-center gap-5 py-6 first:pt-0">
+                  <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-2 border-ember font-display text-xl text-ember-deep sm:h-[4.5rem] sm:w-[4.5rem] sm:text-2xl">
                     {step.n}
                   </span>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-ink/65">{step.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-10 text-center">
+                  <span>
+                    <span className="block font-display text-xl sm:text-2xl">{step.title}</span>
+                    <span className="mt-1 block leading-7 text-ink/65">{step.text}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+
+            <div className="mt-6 flex items-center gap-5 rounded-[1.8rem] border border-ink/10 bg-paper p-5 sm:p-6">
+              <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-white shadow-sm">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="#ff7a00" />
+                  <circle cx="12" cy="10" r="2.6" fill="#fff" />
+                </svg>
+              </span>
+              <span>
+                <span className="block font-display text-lg sm:text-xl">Изработено в Русе.</span>
+                <span className="mt-1 block text-sm leading-6 text-ink/65">
+                  Всяка фигурка минава през нашите ръце, преди да тръгне към теб.
+                </span>
+              </span>
+            </div>
+
             <Link
               href="/studio"
-              className="inline-block rounded-full bg-ink px-8 py-4 font-semibold text-paper transition hover:bg-ember hover:text-ink"
+              className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-ember px-7 py-4 text-lg font-bold text-ink shadow-[0_14px_30px_rgba(255,122,0,0.3),inset_0_-3px_0_rgba(0,0,0,0.12)] transition hover:-translate-y-0.5 hover:bg-ember-deep"
             >
               Започни със снимка
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
             </Link>
           </div>
         </div>
@@ -265,23 +275,46 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-4 pb-20 sm:px-6">
-        <div className="mx-auto max-w-6xl rounded-[2rem] bg-ink px-6 py-12 text-paper sm:px-12 sm:py-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember">Подарък, който не се забравя</p>
-          <h2 className="mt-3 max-w-2xl text-3xl leading-tight sm:text-5xl">За всеки повод, в който искаш да изненадаш някого.</h2>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {occasions.map((item) => (
-              <span key={item} className="rounded-full border border-white/15 px-4 py-2 text-sm text-paper/85">
-                {item}
-              </span>
-            ))}
+      <section className="relative mb-20 overflow-hidden bg-[#fde7c7] px-4 py-16 sm:px-6 sm:py-24">
+        <svg className="absolute inset-x-0 top-0 h-8 w-full text-paper sm:h-12" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 0h1440v28c-240 26-480 32-720 16S240 10 0 30V0Z" fill="currentColor" />
+        </svg>
+        <svg className="absolute inset-x-0 bottom-0 h-8 w-full rotate-180 text-paper sm:h-12" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 0h1440v28c-240 26-480 32-720 16S240 10 0 30V0Z" fill="currentColor" />
+        </svg>
+        <span className="pointer-events-none absolute -bottom-10 right-[6%] h-28 w-28 rounded-full bg-[radial-gradient(circle_at_30%_30%,#6aa8ff,#1f5fe0_60%,#133d9e)] shadow-[0_25px_50px_rgba(31,95,224,0.35)] sm:h-36 sm:w-36" />
+
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-[1.2fr_0.8fr]">
+          <div>
+            <p className="-rotate-2 font-display text-lg italic text-ember-deep sm:text-xl">
+              Малък подарък. Голяма реакция. ♡
+            </p>
+            <h2 className="mt-4 text-[2.3rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+              Следващата фигурка
+              <span className="block">е твоята.</span>
+            </h2>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {occasions.map((item) => (
+                <span key={item} className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm">
+                  {item}
+                </span>
+              ))}
+            </div>
+            <Link
+              href="/studio"
+              className="mt-8 inline-flex items-center gap-3 rounded-2xl bg-ink px-7 py-4 text-lg font-bold text-paper transition hover:-translate-y-0.5 hover:bg-ember hover:text-ink"
+            >
+              Създай своето мини
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </Link>
           </div>
-          <Link
-            href="/studio"
-            className="mt-10 inline-block rounded-full bg-ember px-8 py-4 font-semibold text-ink transition hover:bg-paper"
-          >
-            Направи подаръка
-          </Link>
+          <div className="relative mx-auto w-56 rotate-3 sm:w-72">
+            <div className="relative aspect-[9/16] overflow-hidden rounded-[2rem] shadow-[0_30px_60px_rgba(22,21,19,0.2)] ring-8 ring-white">
+              <Image src="/shop/keychain.webp" alt="Ключодържател по снимка" fill className="object-cover" sizes="300px" />
+            </div>
+          </div>
         </div>
       </section>
 

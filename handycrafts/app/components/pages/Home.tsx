@@ -6,6 +6,32 @@ import { catalog, fromPrice } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
 
+const perkIcons = [
+  // eye — see the preview
+  <>
+    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+    <circle cx="12" cy="12" r="3" />
+  </>,
+  // banknote — cash on delivery
+  <>
+    <rect x="2.5" y="6" width="19" height="12" rx="2.5" />
+    <circle cx="12" cy="12" r="2.6" />
+    <path d="M6 9.5v5M18 9.5v5" />
+  </>,
+  // sparkle — finished by hand
+  <>
+    <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z" />
+    <path d="M19 16l.7 1.8L21.5 18.5l-1.8.7L19 21l-.7-1.8-1.8-.7 1.8-.7L19 16Z" />
+  </>,
+  // truck — courier
+  <>
+    <path d="M2.5 6.5h11v9h-11z" />
+    <path d="M13.5 9.5h4l3 3.2v2.8h-7" />
+    <circle cx="7" cy="17.5" r="1.8" />
+    <circle cx="17" cy="17.5" r="1.8" />
+  </>,
+];
+
 const productCards = [
   { image: "/shop/figurine.webp", position: "50% 50%", href: "/studio?product=figurine", product: "figurine" as const },
   { image: "/shop/pet.webp", position: "40% 50%", href: "/studio?product=figurine&subject=pet", product: "figurine" as const },
@@ -95,15 +121,17 @@ export default function Home({ lang }: { lang: Lang }) {
       </section>
 
       <section className="px-4 pt-6 sm:px-6">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3 rounded-[2rem] bg-white p-4 sm:p-6 lg:grid-cols-4">
-          {h.perks.map((perk) => (
-            <div key={perk.title} className="flex items-center gap-3 rounded-2xl p-2">
-              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-paper text-lg text-ember-deep">
-                {perk.icon}
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-3 gap-y-5 rounded-[2rem] bg-white p-5 sm:p-6 lg:grid-cols-4">
+          {h.perks.map((perk, index) => (
+            <div key={perk.title} className="flex flex-col items-center gap-2.5 rounded-2xl px-1 py-2 text-center lg:flex-row lg:items-center lg:gap-3 lg:text-left">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-ember/12 text-ember-deep">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  {perkIcons[index]}
+                </svg>
               </span>
               <span>
-                <span className="block text-sm font-semibold">{perk.title}</span>
-                <span className="block text-xs text-ink/55">{perk.text}</span>
+                <span className="block text-[15px] font-semibold leading-snug">{perk.title}</span>
+                <span className="mt-0.5 block text-[13px] leading-snug text-ink/55">{perk.text}</span>
               </span>
             </div>
           ))}

@@ -227,16 +227,13 @@ export default function StudioPage() {
                     product === id ? "border-ember shadow-[0_16px_40px_rgba(255,122,0,0.18)]" : "border-transparent hover:border-ink/15"
                   }`}
                 >
-                  <span className="relative block aspect-[4/5] overflow-hidden bg-sand">
-                    {subject === "person" && id === "keychain" ? (
-                      <Image src="/shop/keychain.webp" alt="" fill aria-hidden className="scale-125 object-cover opacity-80 blur-2xl" sizes="10vw" />
-                    ) : null}
+                  <span className="relative block aspect-[9/16] overflow-hidden bg-sand">
                     <Image
                       src={`/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
                       alt=""
                       fill
-                      style={{ objectPosition: subject === "pet" ? "48% 50%" : "50% 55%" }}
-                      className={subject === "person" && id === "keychain" ? "object-contain" : "object-cover"}
+                      style={{ objectPosition: subject === "pet" ? "40% 50%" : "50% 50%" }}
+                      className="object-cover"
                       sizes="(min-width: 640px) 360px, 50vw"
                     />
                   </span>

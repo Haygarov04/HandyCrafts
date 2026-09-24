@@ -44,7 +44,7 @@ const products = [
     title: "Фигурки по снимка",
     text: "Ти, половинката ти или цялото семейство — на рафта.",
     image: "/shop/figurine.webp",
-    position: "50% 55%",
+    position: "50% 50%",
     href: "/studio?product=figurine",
     product: "figurine" as const,
   },
@@ -53,7 +53,7 @@ const products = [
     title: "Любимци",
     text: "Кучето или котката ти, с всяко петно на козината.",
     image: "/shop/pet.webp",
-    position: "48% 50%",
+    position: "40% 50%",
     href: "/studio?product=figurine&subject=pet",
     product: "figurine" as const,
   },
@@ -63,7 +63,6 @@ const products = [
     text: "Винаги с теб. Човек или любимец, в джоба.",
     image: "/shop/keychain.webp",
     position: "50% 50%",
-    whole: true,
     href: "/studio?product=keychain",
     product: "keychain" as const,
   },
@@ -158,16 +157,13 @@ export default function Home() {
                 href={item.href}
                 className="lift-card group flex flex-col overflow-hidden rounded-[2rem] border border-ink/10 bg-white"
               >
-                <span className="relative block aspect-[4/5] overflow-hidden bg-sand">
-                  {"whole" in item ? (
-                    <Image src={item.image} alt="" fill aria-hidden className="scale-125 object-cover opacity-80 blur-2xl" sizes="10vw" />
-                  ) : null}
+                <span className="relative block aspect-[9/16] overflow-hidden bg-sand">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
                     style={{ objectPosition: item.position }}
-                    className={`${"whole" in item ? "object-contain" : "object-cover"} transition duration-700 group-hover:scale-[1.04]`}
+                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
                     sizes="(min-width: 768px) 33vw, 100vw"
                   />
                   <span className="absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold">

@@ -71,38 +71,38 @@ const products = [
 export default function Home() {
   return (
     <>
-      <section className="relative overflow-hidden px-4 pb-12 pt-28 sm:px-6 sm:pt-36">
-        <span className="pointer-events-none absolute -left-28 top-56 h-48 w-48 rounded-full bg-gradient-to-br from-[#ff9a7a] to-[#f06a4f] opacity-90 shadow-[0_30px_60px_rgba(240,106,79,0.35)] sm:-left-16 sm:h-72 sm:w-72" />
-        <span className="pointer-events-none absolute -right-12 top-24 h-28 w-28 rounded-full bg-[radial-gradient(circle_at_30%_30%,#6aa8ff,#1f5fe0_60%,#133d9e)] shadow-[0_25px_50px_rgba(31,95,224,0.35)] sm:right-10 sm:top-36 sm:h-40 sm:w-40" />
+      <section className="relative overflow-hidden px-4 pb-12 pt-[6.5rem] sm:px-6 sm:pt-36">
+        <span className="pointer-events-none absolute -left-24 top-36 h-40 w-40 rounded-full bg-gradient-to-br from-[#ff9a7a] to-[#f06a4f] opacity-90 shadow-[0_30px_60px_rgba(240,106,79,0.35)] sm:-left-16 sm:h-72 sm:w-72" />
+        <span className="pointer-events-none absolute -right-10 top-24 h-24 w-24 rounded-full bg-[radial-gradient(circle_at_30%_30%,#6aa8ff,#1f5fe0_60%,#133d9e)] shadow-[0_25px_50px_rgba(31,95,224,0.35)] sm:right-10 sm:top-36 sm:h-40 sm:w-40" />
         <span className="pointer-events-none absolute bottom-40 right-[8%] hidden h-16 w-16 rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffe08a,#ffb800_65%)] shadow-[0_18px_36px_rgba(255,184,0,0.35)] lg:block" />
 
         <div className="relative mx-auto max-w-4xl text-center">
-          <h1 className="text-[2.9rem] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-7xl lg:text-[5.5rem]">
+          <h1 className="text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-7xl lg:text-[5.5rem]">
             3D фигурки
             <span className="block">по снимка.</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-ink/75 sm:text-xl sm:leading-9">
+          <p className="mx-auto mt-4 max-w-xl text-[17px] leading-7 text-ink/75 sm:mt-6 sm:text-xl sm:leading-9">
             Персонализирани фигурки и ключодържатели по твоя снимка. Оригинален подарък за рожден
             ден, годишнина или любим човек.
           </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <div className="mt-6 flex justify-center gap-2.5 sm:mt-8 sm:gap-3">
             <Link
               href="/studio?product=figurine"
-              className="rounded-2xl bg-ember px-8 py-4 text-center text-lg font-bold text-ink shadow-[0_14px_30px_rgba(255,122,0,0.35),inset_0_-3px_0_rgba(0,0,0,0.12)] transition hover:-translate-y-0.5 hover:bg-ember-deep"
+              className="rounded-2xl bg-ember px-5 py-3.5 text-center text-base font-bold sm:px-8 sm:py-4 sm:text-lg text-ink shadow-[0_14px_30px_rgba(255,122,0,0.35),inset_0_-3px_0_rgba(0,0,0,0.12)] transition hover:-translate-y-0.5 hover:bg-ember-deep"
             >
               Създай фигурка
             </Link>
             <Link
               href="/#products"
-              className="rounded-2xl bg-white px-8 py-4 text-center text-lg font-semibold shadow-[0_10px_30px_rgba(22,21,19,0.08)] transition hover:-translate-y-0.5"
+              className="rounded-2xl bg-white px-5 py-3.5 text-center text-base font-semibold sm:px-8 sm:py-4 sm:text-lg shadow-[0_10px_30px_rgba(22,21,19,0.08)] transition hover:-translate-y-0.5"
             >
               Цени от {money(fromPrice("keychain"))}
             </Link>
           </div>
         </div>
 
-        <div className="relative mx-auto mt-12 max-w-5xl">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-[2.2rem] bg-sand shadow-[0_40px_90px_rgba(22,21,19,0.18)] sm:aspect-[16/9]">
+        <div className="relative -mx-4 mt-7 max-w-5xl sm:mx-auto sm:mt-12">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[1.8rem] bg-sand sm:rounded-[2.2rem] shadow-[0_40px_90px_rgba(22,21,19,0.18)] sm:aspect-[16/9]">
             <Image
               src="/shop/hero-mobile.webp"
               alt="Фигурка на момиче с къдрава коса до снимката, по която е направена"

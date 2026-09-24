@@ -4,7 +4,6 @@ import { hasBlob } from "@/lib/files";
 import { hasRedis } from "@/lib/kv";
 import { isStatus, orderStatuses, statusLabel, statusTone } from "@/lib/order-types";
 import { listOrders } from "@/lib/orders";
-import PushToggle from "../PushToggle";
 
 export const dynamic = "force-dynamic";
 
@@ -44,8 +43,6 @@ export default async function ManagePage({ searchParams }: Props) {
           </div>
         ))}
       </div>
-
-      <PushToggle />
 
       <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         <Link href="/manage" className={`shrink-0 rounded-full px-4 py-2 text-sm ${!filter ? "bg-ink text-paper" : "bg-white"}`}>

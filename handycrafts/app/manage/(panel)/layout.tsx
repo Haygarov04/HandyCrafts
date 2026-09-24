@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { manageAllowed, manageOpenInDev } from "@/lib/manage-auth";
-import LogoutButton from "./logout-button";
+import BottomNav from "./bottom-nav";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   if (!(await manageAllowed())) redirect("/manage/login");
@@ -13,13 +13,12 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
           <Link href="/manage" className="flex items-center gap-2">
             <Image src="/logo-remove.png" alt="" width={36} height={36} className="h-9 w-9" />
-            <span className="font-display font-semibold">Поръчки</span>
+            <span className="font-display font-semibold">HandyCrafts</span>
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <Link href="/" className="text-ink/55 hover:text-ink">
               Сайт
             </Link>
-            <LogoutButton />
           </div>
         </div>
       </header>
@@ -28,7 +27,8 @@ export default async function PanelLayout({ children }: { children: React.ReactN
           Локално /manage е отворено без парола. Във Vercel задължително има CRM_PASSWORD.
         </p>
       ) : null}
-      <div className="mx-auto max-w-5xl px-4 pb-[calc(3rem+env(safe-area-inset-bottom))] pt-6">{children}</div>
+      <div className="mx-auto max-w-5xl px-4 pb-[calc(6.5rem+env(safe-area-inset-bottom))] pt-6">{children}</div>
+      <BottomNav />
     </>
   );
 }

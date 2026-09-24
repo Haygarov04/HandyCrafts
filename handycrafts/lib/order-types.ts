@@ -73,3 +73,13 @@ export type Order = {
   items: OrderItem[];
   total: number;
 };
+
+/** The stage an order normally moves to next; null at the end of the line. */
+export const nextStatus: Record<OrderStatus, OrderStatus | null> = {
+  new: "confirmed",
+  confirmed: "printing",
+  printing: "shipped",
+  shipped: "delivered",
+  delivered: null,
+  cancelled: null,
+};

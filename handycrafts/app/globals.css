@@ -11,7 +11,7 @@
   --color-ember: #ff7a00;
   --color-ember-deep: #d96500;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-unbounded), var(--font-manrope), ui-sans-serif, sans-serif;
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
 }
 
 html {
@@ -34,8 +34,8 @@ h2,
 h3,
 .font-display {
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .lift-card {
@@ -48,4 +48,10 @@ h3,
 .lift-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 24px 60px rgba(22, 21, 19, 0.1);
+}
+
+/* Dotted "print bed" grid used behind the hero. */
+.bed-grid {
+  background-image: radial-gradient(rgba(22, 21, 19, 0.13) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
 }

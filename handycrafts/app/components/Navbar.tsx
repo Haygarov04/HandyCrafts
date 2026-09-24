@@ -16,7 +16,7 @@ export function CartButton({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={() => cart.setOpen(true)}
-      className={`relative grid h-11 w-11 place-items-center rounded-full transition hover:bg-paper ${className}`}
+      className={`relative grid h-11 w-11 place-items-center rounded-full transition hover:bg-sand ${className}`}
       aria-label={t.nav.cart(cart.count)}
     >
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -41,7 +41,7 @@ export function LangSwitch({ className = "" }: { className?: string }) {
       href={switchPath(pathname)}
       hrefLang={t.nav.switchTo.toLowerCase()}
       aria-label={t.nav.switchLabel}
-      className={`grid h-11 min-w-11 place-items-center rounded-full px-2 text-sm font-bold transition hover:bg-paper ${className}`}
+      className={`grid h-11 min-w-11 place-items-center rounded-full px-2 text-sm font-bold transition hover:bg-sand ${className}`}
     >
       {t.nav.switchTo}
     </a>
@@ -69,36 +69,39 @@ export default function Navbar() {
     };
   }, [open]);
 
-  const pill = "rounded-[1.6rem] bg-white/95 shadow-[0_10px_30px_rgba(22,21,19,0.08)] backdrop-blur";
-
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
-        <Link href={href("/")} onClick={() => setOpen(false)} className={`${pill} flex h-16 shrink-0 items-center gap-2.5 px-2.5 sm:px-4`}>
-          <Image src="/logo-remove.png" alt="" width={44} height={44} className="h-11 w-11" priority />
-          <span className="hidden font-display text-[17px] font-semibold tracking-tight sm:inline">HandyCrafts</span>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-paper/95 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:h-[4.5rem] sm:px-6">
+        <Link href={href("/")} onClick={() => setOpen(false)} className="flex shrink-0 items-center gap-2.5">
+          <Image src="/logo-remove.png" alt="" width={40} height={40} className="h-10 w-10" priority />
+          <span className="leading-none">
+            <span className="block font-display text-[19px] font-semibold">HandyCrafts</span>
+            <span className="mt-1 hidden text-[11px] uppercase tracking-[0.18em] text-ink/50 sm:block">
+              {lang === "en" ? "Figurine workshop" : "Работилница за фигурки"}
+            </span>
+          </span>
         </Link>
 
-        <nav className={`${pill} hidden h-16 items-center gap-6 px-7 text-[15px] lg:flex`}>
+        <nav className="hidden items-center gap-6 text-[15px] lg:flex">
           {links.filter((item) => !item.mobileOnly).map((item) => (
-            <Link key={item.href} href={item.href} className="transition hover:text-ember-deep">
+            <Link key={item.href} href={item.href} className="relative py-1 transition after:absolute after:inset-x-0 after:-bottom-0.5 after:h-[2px] after:origin-left after:scale-x-0 after:bg-ember after:transition hover:after:scale-x-100">
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className={`${pill} flex h-16 shrink-0 items-center gap-0.5 pl-2.5 pr-1.5 sm:gap-1 sm:pr-2`}>
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <LangSwitch className="hidden sm:grid" />
+          <CartButton />
           <Link
             href={href("/studio")}
-            className="rounded-2xl bg-ember px-4 py-3 text-sm font-bold text-ink shadow-[inset_0_-2px_0_rgba(0,0,0,0.12)] transition hover:bg-ember-deep sm:px-5"
+            className="hidden rounded-xl bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition hover:bg-ember hover:text-ink sm:inline-flex"
           >
             {t.nav.order}
           </Link>
-          <CartButton />
           <button
             type="button"
-            className="grid h-11 w-11 place-items-center rounded-full hover:bg-paper lg:hidden"
+            className="grid h-11 w-11 place-items-center rounded-full hover:bg-sand lg:hidden"
             aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
@@ -113,23 +116,27 @@ export default function Navbar() {
       </div>
 
       {open ? (
-        <div className={`${pill} mx-auto mt-3 max-w-6xl p-3 lg:hidden`}>
+        <div className="max-h-[calc(100vh-4rem)] overflow-y-auto border-t border-ink/10 bg-paper px-4 pb-6 pt-2 lg:hidden">
           {links.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="block rounded-2xl px-4 py-3.5 text-lg hover:bg-paper"
+              className="block border-b border-ink/10 py-4 font-display text-2xl"
             >
               {item.label}
             </Link>
           ))}
-          <a
-            href={switchPath(pathname)}
-            className="block rounded-2xl px-4 py-3.5 text-lg font-semibold hover:bg-paper"
-          >
+          <a href={switchPath(pathname)} className="block py-4 text-sm font-semibold text-ink/60">
             {t.nav.switchLabel} · {t.nav.switchTo}
           </a>
+          <Link
+            href={href("/studio")}
+            onClick={() => setOpen(false)}
+            className="mt-2 block rounded-xl bg-ink py-4 text-center font-semibold text-paper"
+          >
+            {t.nav.order}
+          </Link>
         </div>
       ) : null}
     </header>

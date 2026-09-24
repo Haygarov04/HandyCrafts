@@ -49,9 +49,6 @@ export default function Footer({ sellerLine }: { sellerLine?: string }) {
                 {page.label[lang]}
               </Link>
             ))}
-            <a href="https://kzp.bg" target="_blank" rel="noreferrer" className="block hover:text-paper">
-              {lang === "en" ? "Consumer protection (KZP)" : "Комисия за защита на потребителите"}
-            </a>
           </div>
         </div>
       </div>

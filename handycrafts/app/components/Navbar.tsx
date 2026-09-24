@@ -50,12 +50,13 @@ export function LangSwitch({ className = "" }: { className?: string }) {
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const { t, href } = useLang();
+  const { lang, t, href } = useLang();
   const pathname = usePathname() || "/";
   const links = [
     { href: href("/studio?product=figurine"), label: t.nav.figurines },
     { href: href("/studio?product=figurine&subject=pet"), label: t.nav.pets },
     { href: href("/studio?product=keychain"), label: t.nav.keychains },
+    { href: href("/idei"), label: lang === "en" ? "Ideas" : "Идеи" },
     { href: href("/#how"), label: t.nav.how },
     { href: href("/#faq"), label: t.nav.faq },
     { href: href("/contact"), label: t.nav.contact, mobileOnly: true },

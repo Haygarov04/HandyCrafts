@@ -1,4 +1,5 @@
 import type { ProductId, SubjectId } from "@/lib/catalog";
+import { topicSlugs } from "@/lib/topic-slugs";
 
 export type Lang = "bg" | "en";
 export const langs: Lang[] = ["bg", "en"];
@@ -10,6 +11,9 @@ const enPaths: Record<string, string> = {
   "/figurka-na-domashen-lyubimets": "/en/pet-figurine-from-photo",
   "/klyuchodarzhatel-po-snimka": "/en/custom-keychain-from-photo",
   "/personaliziran-podarak": "/en/personalized-gift",
+  "/poveritelnost": "/en/privacy",
+  "/vrashtane": "/en/returns",
+  "/dostavka": "/en/delivery",
 };
 
 const bgPaths = Object.fromEntries(Object.entries(enPaths).map(([bg, en]) => [en, bg]));
@@ -25,13 +29,23 @@ export function localize(lang: Lang, href: string) {
   const path = match?.[1] || "/";
   const rest = match?.[2] || "";
   if (enPaths[path]) return path === "/" && rest.startsWith("#") ? `/en${rest}` : `${enPaths[path]}${rest}`;
+  if (path === "/idei") return `/en/ideas${rest}`;
+  const topic = path.match(/^\/idei\/([^/]+)$/);
+  if (topic && topicSlugs[topic[1]]) return `/en/ideas/${topicSlugs[topic[1]]}${rest}`;
+  // City pages exist only in Bulgarian.
+  if (path.startsWith("/figurka-po-snimka/")) return "/en/custom-figurine-from-photo";
   return `/en${path}${rest}`;
 }
+
+const bgTopics = Object.fromEntries(Object.entries(topicSlugs).map(([bg, en]) => [en, bg]));
 
 /** The same page in the other language, for the BG/EN switch. */
 export function switchPath(pathname: string) {
   if (langFromPath(pathname) === "en") {
     if (bgPaths[pathname]) return bgPaths[pathname];
+    if (pathname === "/en/ideas") return "/idei";
+    const topic = pathname.match(/^\/en\/ideas\/([^/]+)$/);
+    if (topic && bgTopics[topic[1]]) return `/idei/${bgTopics[topic[1]]}`;
     return pathname.replace(/^\/en/, "") || "/";
   }
   return localize("en", pathname);
@@ -268,11 +282,11 @@ const bg = {
     payment: "Плащане",
     cod: "Наложен платеж",
     codText: "Плащаш на куриера при получаване",
-    agree: ["Съгласен съм с", "общите условия", "и разбирам, че фигурката се изработва по моя снимка."],
+    agree: ["Приемам", "общите условия", "и", "политиката за поверителност", "и разбирам, че фигурката се изработва по моя снимка и не подлежи на връщане без причина."],
     newsletter: "Искам да получавам идеи за подаръци по имейл (около веднъж в месеца).",
     mustAgree: "Потвърди общите условия.",
     sending: "Изпращаме…",
-    submit: "Поръчай —",
+    submit: "Поръчка със задължение за плащане ·",
     failed: "Поръчката не мина.",
     inCart: "В количката",
     remove: "Махни",
@@ -308,54 +322,6 @@ const bg = {
     send: "Изпрати",
     sent: "Съобщението е изпратено. Ще ти отговорим скоро.",
     failed: "Грешка при изпращане.",
-  },
-  terms: {
-    kicker: "Правна информация",
-    title: "Общи условия",
-    questions: "Въпроси?",
-    write: "Пиши ни",
-    sections: [
-      {
-        title: "Обща информация",
-        text: "Тези общи условия уреждат поръчките на персонализирани фигурки и ключодържатели през сайта HandyCrafts. С поръчката потвърждаваш, че си ги прочел и приемаш.",
-      },
-      {
-        title: "Визуализация",
-        text: "След качване на снимка сайтът създава визуализация с изкуствен интелект. Тя показва стила, позата и дрехите и служи като ориентир. Готовото изделие се моделира и довършва на ръка по нея и по оригиналната снимка, затова малки разлики в детайлите са нормални.",
-      },
-      {
-        title: "Цени и плащане",
-        text: "Цените са посочени в евро и са крайни за изработката. Плащането е с наложен платеж при получаване на пратката. Доставката се заплаща по тарифата на избрания куриер.",
-      },
-      {
-        title: "Потвърждение и срок",
-        text: "Всяка поръчка се потвърждава по телефона, преди да започне изработката. Обичайният срок е 7–12 работни дни от потвърждението. Ако ти трябва за конкретна дата, напиши го в бележката към поръчката.",
-      },
-      {
-        title: "Право на отказ",
-        text: "Фигурките и ключодържателите се изработват по снимка и указания на клиента и са ясно персонализирани. Съгласно чл. 57, т. 3 от Закона за защита на потребителите за тях не се прилага правото на отказ в 14-дневен срок. Можеш да откажеш поръчката без разходи, докато не сме я потвърдили по телефона.",
-      },
-      {
-        title: "Повредена пратка",
-        text: "Прегледай пратката пред куриера. Ако фигурката пристигне счупена, пиши ни до 48 часа от получаването със снимки и ще я изработим отново без заплащане.",
-      },
-      {
-        title: "Снимки и лични данни",
-        text: "Качените снимки се използват само за визуализацията и изработката на поръчката. Пазят се в затворено хранилище и не се публикуват без изрично съгласие. Името, телефонът и адресът се използват само за доставката. Можеш да поискаш изтриване на данните си по имейл.",
-      },
-      {
-        title: "Права върху снимката",
-        text: "С качването на снимка декларираш, че имаш право да я използваш и съгласието на хората на нея. Не приемаме снимки с обидно, незаконно или защитено с авторско право съдържание.",
-      },
-      {
-        title: "Бюлетин",
-        text: "Ако се запишеш за бюлетина, пазим само имейла ти и езика, на който си се записал, и ти пишем около веднъж в месеца. Всяко писмо има връзка за отписване, след която изтриваме адреса от списъка.",
-      },
-      {
-        title: "Промени",
-        text: "Можем да обновяваме тези условия. За всяка поръчка важи версията, публикувана към момента на поръчването.",
-      },
-    ],
   },
   landing: {
     home: "Начало",
@@ -597,11 +563,11 @@ const en: Dict = {
     payment: "Payment",
     cod: "Cash on delivery",
     codText: "Pay the courier when it arrives",
-    agree: ["I agree to the", "terms and conditions", "and understand that the figurine is made from my photo."],
+    agree: ["I accept the", "terms and conditions", "and the", "privacy policy", "and understand that the figurine is made from my photo and can't be returned without a reason."],
     newsletter: "Send me gift ideas by email (about once a month).",
     mustAgree: "Please accept the terms and conditions.",
     sending: "Sending…",
-    submit: "Place order —",
+    submit: "Order with obligation to pay ·",
     failed: "The order didn't go through.",
     inCart: "In your cart",
     remove: "Remove",
@@ -637,54 +603,6 @@ const en: Dict = {
     send: "Send",
     sent: "Message sent. We'll get back to you soon.",
     failed: "Sending failed.",
-  },
-  terms: {
-    kicker: "Legal",
-    title: "Terms and conditions",
-    questions: "Questions?",
-    write: "Write to us",
-    sections: [
-      {
-        title: "General",
-        text: "These terms cover orders of custom figurines and keychains through the HandyCrafts website. By placing an order you confirm that you have read and accept them.",
-      },
-      {
-        title: "Preview",
-        text: "After you upload a photo, the site creates a preview with artificial intelligence. It shows the style, pose and clothes and serves as a guide. The finished piece is modelled and finished by hand from it and from the original photo, so small differences in detail are normal.",
-      },
-      {
-        title: "Prices and payment",
-        text: "Prices are in euro and cover the whole piece. Payment is cash on delivery when the parcel arrives. Delivery is charged at the rate of the chosen courier.",
-      },
-      {
-        title: "Confirmation and timing",
-        text: "Every order is confirmed by phone before work starts. The usual time is 7–12 working days from confirmation. If you need it by a certain date, add it to the order note.",
-      },
-      {
-        title: "Right of withdrawal",
-        text: "Figurines and keychains are made from the customer's photo and instructions and are clearly personalised. Under Art. 57(3) of the Bulgarian Consumer Protection Act, the 14-day right of withdrawal does not apply to them. You can cancel free of charge until we have confirmed the order by phone.",
-      },
-      {
-        title: "Damaged parcel",
-        text: "Check the parcel in front of the courier. If the figurine arrives broken, write to us within 48 hours of receipt with photos and we'll make it again free of charge.",
-      },
-      {
-        title: "Photos and personal data",
-        text: "Uploaded photos are used only for the preview and making the order. They are kept in private storage and never published without explicit consent. Your name, phone and address are used only for delivery. You can ask us by email to delete your data.",
-      },
-      {
-        title: "Rights to the photo",
-        text: "By uploading a photo you confirm that you have the right to use it and the consent of the people in it. We don't accept photos with offensive, illegal or copyrighted content.",
-      },
-      {
-        title: "Newsletter",
-        text: "If you sign up for the newsletter, we keep only your email and the language you signed up in and write about once a month. Every email has an unsubscribe link, after which we remove your address from the list.",
-      },
-      {
-        title: "Changes",
-        text: "We may update these terms. Each order is governed by the version published at the time it was placed.",
-      },
-    ],
   },
   landing: {
     home: "Home",

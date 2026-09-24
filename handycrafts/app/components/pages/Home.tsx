@@ -33,6 +33,18 @@ const perkIcons = [
   </>,
 ];
 
+// Same order as the occasions in lib/i18n.ts.
+const occasionSlugs = [
+  "podarak-za-rozhden-den",
+  "podarak-za-godishnina",
+  "figurka-za-svatbena-torta",
+  "podarak-za-sveti-valentin",
+  "koleden-podarak",
+  "podarak-za-abiturient",
+  "podarak-za-kolega",
+  "podarak-za-baba-i-dyado",
+];
+
 const productCards = [
   { image: "/shop/figurine.webp", position: "50% 50%", href: "/studio?product=figurine", product: "figurine" as const },
   { image: "/shop/pet.webp", position: "40% 50%", href: "/studio?product=figurine&subject=pet", product: "figurine" as const },
@@ -300,11 +312,18 @@ export default function Home({ lang }: { lang: Lang }) {
               <span className="block">{h.giftTitle[1]}</span>
             </h2>
             <div className="mt-6 flex flex-wrap gap-2">
-              {h.occasions.map((item) => (
-                <span key={item} className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm">
+              {h.occasions.map((item, index) => (
+                <Link
+                  key={item}
+                  href={href(`/idei/${occasionSlugs[index]}`)}
+                  className="rounded-full bg-white/70 px-3.5 py-1.5 text-sm transition hover:bg-white"
+                >
                   {item}
-                </span>
+                </Link>
               ))}
+              <Link href={href("/idei")} className="rounded-full bg-ink px-3.5 py-1.5 text-sm font-semibold text-paper">
+                {lang === "en" ? "All ideas →" : "Всички идеи →"}
+              </Link>
             </div>
             <Link
               href={href("/studio")}

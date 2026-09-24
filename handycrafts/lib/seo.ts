@@ -29,9 +29,9 @@ export function rootMetadata(lang: Lang): Metadata {
 export function pageMetadata(
   lang: Lang,
   bgPath: string,
-  input: { title?: string; description?: string; noindex?: boolean }
+  input: { title?: string; description?: string; noindex?: boolean; bgOnly?: boolean }
 ): Metadata {
-  const links = alternates(bgPath, lang);
+  const links = input.bgOnly ? { canonical: bgPath } : alternates(bgPath, lang);
   return {
     ...(input.title ? { title: input.title } : {}),
     ...(input.description ? { description: input.description } : {}),

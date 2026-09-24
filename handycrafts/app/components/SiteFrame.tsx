@@ -6,7 +6,7 @@ import { CartProvider } from "./cart";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
-export default function SiteFrame({ children }: { children: React.ReactNode }) {
+export default function SiteFrame({ children, sellerLine }: { children: React.ReactNode; sellerLine?: string }) {
   const pathname = (usePathname() || "/").replace(/^\/en(?=\/|$)/, "") || "/";
   const manage = pathname.startsWith("/manage");
   const bare = pathname.startsWith("/studio") || manage;
@@ -18,7 +18,7 @@ export default function SiteFrame({ children }: { children: React.ReactNode }) {
         <>
           <Navbar />
           <main>{children}</main>
-          <Footer />
+          <Footer sellerLine={sellerLine} />
         </>
       )}
       {manage ? null : <CartDrawer />}

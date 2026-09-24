@@ -162,7 +162,11 @@ export default function CartPage() {
                 <Link href={href("/terms")} target="_blank" className="underline decoration-ember underline-offset-4">
                   {c.agree[1]}
                 </Link>{" "}
-                {c.agree[2]}
+                {c.agree[2]}{" "}
+                <Link href={href("/poveritelnost")} target="_blank" className="underline decoration-ember underline-offset-4">
+                  {c.agree[3]}
+                </Link>{" "}
+                {c.agree[4]}
               </span>
             </label>
             <label className="mt-3 flex items-start gap-3 text-sm text-ink/70">

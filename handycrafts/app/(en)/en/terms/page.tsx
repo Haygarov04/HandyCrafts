@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import Terms from "@/app/components/pages/Terms";
-import { dict } from "@/lib/i18n";
+import Legal from "@/app/components/pages/Legal";
+import { legalDoc } from "@/lib/legal";
 import { pageMetadata } from "@/lib/seo";
 
-const t = dict["en"].meta;
+const doc = legalDoc("terms", "en");
 
-export const metadata: Metadata = pageMetadata("en", "/terms", { title: t.termsTitle, description: t.termsDescription });
+export const metadata: Metadata = pageMetadata("en", "/terms", { title: doc.title, description: doc.description });
 
 export default function Page() {
-  return <Terms lang={"en"} />;
+  return <Legal id="terms" lang="en" />;
 }

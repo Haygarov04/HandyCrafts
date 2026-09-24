@@ -1,6 +1,7 @@
 import { Manrope, Unbounded } from "next/font/google";
 import "../globals.css";
 import { dict, type Lang } from "@/lib/i18n";
+import { seller, sellerComplete } from "@/lib/legal";
 import { absolute, business, siteName } from "@/lib/site";
 import JsonLd from "./JsonLd";
 import SiteFrame from "./SiteFrame";
@@ -41,7 +42,7 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
     <html lang={t.htmlLang} className={`${manrope.variable} ${unbounded.variable}`}>
       <body className="relative overflow-x-hidden antialiased">
         <JsonLd data={store} />
-        <SiteFrame>{children}</SiteFrame>
+        <SiteFrame sellerLine={sellerComplete() ? `${seller.name}, ${lang === "en" ? "EIK" : "ЕИК"} ${seller.eik}` : undefined}>{children}</SiteFrame>
       </body>
     </html>
   );

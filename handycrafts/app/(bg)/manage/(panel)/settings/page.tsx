@@ -1,4 +1,5 @@
 import { hasBlob } from "@/lib/files";
+import { sellerComplete } from "@/lib/legal";
 import { hasRedis } from "@/lib/kv";
 import { listSubscribers } from "@/lib/newsletter";
 import { pushReady, subscriptionCount } from "@/lib/push";
@@ -11,6 +12,7 @@ export default async function SettingsPage() {
   const devices = pushReady() ? await subscriptionCount() : 0;
   const subscribers = await listSubscribers();
   const checks = [
+    { label: "Данни на търговеца (LEGAL_NAME, LEGAL_EIK, LEGAL_ADDRESS)", ok: sellerComplete() },
     { label: "База за поръчки (Redis)", ok: hasRedis() },
     { label: "Снимки (Blob, private)", ok: hasBlob() },
     { label: "Визуализации (XAI_API_KEY)", ok: Boolean(process.env.XAI_API_KEY) },

@@ -7,6 +7,7 @@ export const langs: Lang[] = ["bg", "en"];
 /** Bulgarian path → English path. Everything else under /en is the same path with the prefix. */
 const enPaths: Record<string, string> = {
   "/": "/en",
+  "/personalizirani-figurki": "/en/personalised-figurines",
   "/figurka-po-snimka": "/en/custom-figurine-from-photo",
   "/figurka-na-domashen-lyubimets": "/en/pet-figurine-from-photo",
   "/klyuchodarzhatel-po-snimka": "/en/custom-keychain-from-photo",
@@ -74,9 +75,9 @@ const bg = {
   } as Record<ProductId, { label: string; short: string }>,
   delivery: { econt: "Офис на Еконт", speedy: "Офис на Спиди", address: "До адрес" },
   meta: {
-    title: "Фигурки и ключодържатели по снимка от 30 € | HandyCrafts",
+    title: "Персонализирани фигурки и ключодържатели по снимка от 30 € | HandyCrafts",
     description:
-      "3D фигурка или ключодържател по твоя снимка от 30 €. Виждаш визуализацията за минута, плащаш с наложен платеж. Изработено на ръка в Русе, доставка в цяла България.",
+      "Персонализирана 3D фигурка или ключодържател по твоя снимка от 30 €. Виждаш визуализацията за минута, плащаш с наложен платеж. Изработено на ръка в Русе, доставка в цяла България.",
     ogTitle: "HandyCrafts — фигурка по снимка",
     ogDescription: "Качи снимка, виж фигурката си веднага и я поръчай с наложен платеж.",
     studioTitle: "Създай фигурка по снимка",
@@ -137,7 +138,7 @@ const bg = {
     create: "Създай фигурка",
     pricesFrom: "Цени от",
     heroAlt: "Фигурка на момиче с къдрава коса до снимката, по която е направена",
-    heroBadge: "Виждаш фигурката преди да поръчаш",
+    heroBadge: "Персонализирани 3D фигурки по снимка",
     perks: [
       { icon: "◎", title: "Виждаш я веднага", text: "Визуализация за около минута" },
       { icon: "€", title: "Наложен платеж", text: "Плащаш, когато я получиш" },
@@ -356,7 +357,7 @@ const en: Dict = {
   },
   delivery: { econt: "Econt office", speedy: "Speedy office", address: "To an address" },
   meta: {
-    title: "Custom figurines and keychains from a photo, from €30 | HandyCrafts",
+    title: "Personalised figurines and keychains from a photo, from €30 | HandyCrafts",
     description:
       "A 3D figurine or keychain made from your photo, from €30. See the preview in a minute and pay cash on delivery. Handmade in Ruse, Bulgaria.",
     ogTitle: "HandyCrafts — a figurine from your photo",
@@ -418,7 +419,7 @@ const en: Dict = {
     create: "Create a figurine",
     pricesFrom: "Prices from",
     heroAlt: "Figurine of a girl with curly hair next to the photo it was made from",
-    heroBadge: "See the figurine before you order",
+    heroBadge: "Personalised 3D figurines from a photo",
     perks: [
       { icon: "◎", title: "See it right away", text: "A preview in about a minute" },
       { icon: "€", title: "Cash on delivery", text: "Pay when it arrives" },

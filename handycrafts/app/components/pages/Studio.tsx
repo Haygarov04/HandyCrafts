@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { trackEvent } from "@/app/components/Analytics";
 import { CartButton } from "@/app/components/Navbar";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
@@ -150,6 +151,7 @@ export default function StudioPage() {
         img.src = data.previewUrl;
       });
       setProgress(100);
+      trackEvent("generate_preview", { product, subject });
       setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject });
     } catch (issue) {
       setError(issue instanceof Error ? issue.message : s.wrong);
@@ -172,6 +174,7 @@ export default function StudioPage() {
       previewUrl: preview.url,
     });
     setAdded(true);
+    trackEvent("add_to_cart", { currency: "EUR", value: price, items: [{ item_id: preview.product, item_name: t.itemLabel(preview.product, preview.subject), price }] });
   }
 
   function next() {

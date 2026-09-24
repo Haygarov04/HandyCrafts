@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Analytics from "./Analytics";
 import CartDrawer from "./CartDrawer";
 import { CartProvider } from "./cart";
 import Footer from "./Footer";
@@ -22,6 +23,7 @@ export default function SiteFrame({ children, sellerLine }: { children: React.Re
         </>
       )}
       {manage ? null : <CartDrawer />}
+      {manage ? null : <Analytics />}
     </CartProvider>
   );
 }

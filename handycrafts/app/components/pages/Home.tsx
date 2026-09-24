@@ -107,7 +107,7 @@ export default function Home({ lang }: { lang: Lang }) {
       <section className="hero-glow relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:pb-20">
         <div className="relative mx-auto grid max-w-6xl items-center gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
           <div>
-            <p className="hidden items-center gap-2 rounded-full border border-ink/15 bg-paper px-3 py-1.5 text-[13px] font-semibold text-ink/70 sm:inline-flex">
+            <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-ink/15 bg-paper/80 px-3 py-1 text-xs font-semibold text-ink/70 sm:mb-0 sm:py-1.5 sm:text-[13px]">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
               {h.heroBadge}
             </p>

@@ -4,11 +4,123 @@ import type { LandingContent } from "@/app/components/Landing";
 
 const productionDaysEn = "7–12 working days";
 
-export type LandingId = "figurine" | "pet" | "keychain" | "gift";
+export type LandingId = "custom" | "figurine" | "pet" | "keychain" | "gift";
 
-export const landingIds: LandingId[] = ["figurine", "pet", "keychain", "gift"];
+export const landingIds: LandingId[] = ["custom", "figurine", "pet", "keychain", "gift"];
 
 export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
+  custom: {
+    bg: {
+      metaTitle: "Персонализирани фигурки по снимка — 3D фигурки от 30 €",
+      path: "/personalizirani-figurki",
+      crumb: "Персонализирани фигурки",
+      kicker: "Персонализирани 3D фигурки",
+      title: "Персонализирани фигурки по твоя снимка",
+      lead: "Персонализирана 3D фигурка на човек, двойка или домашен любимец — направена по една снимка. Виждаш визуализацията за минута, поръчваш само ако ти харесва и плащаш с наложен платеж. Ключодържатели от 30 €, фигурки от 50 €.",
+      cta: { label: "Създай своята фигурка", href: "/studio" },
+      image: { src: "/shop/hero-mobile.webp", alt: "Персонализирана фигурка на момиче до снимката, по която е направена", ratio: "aspect-[9/16] max-h-[36rem]" },
+      product: "figurine",
+      productName: "Персонализирана 3D фигурка по снимка",
+      sections: [
+        {
+          title: "Какво е персонализирана фигурка",
+          text: [
+            "Персонализираната фигурка е малка 3D фигурка, направена точно по конкретен човек или любимец — с неговата прическа, дрехи, цвят на очите и характерни детайли. Не е готов модел от магазин, а е изработена само за теб.",
+            "При нас всичко започва от една снимка. Качваш я в сайта, след около минута виждаш как ще изглежда фигурката и чак тогава решаваш дали да я поръчаш.",
+          ],
+        },
+        {
+          title: "Фигурки на хора, двойки и домашни любимци",
+          text: [
+            "Правим персонализирани фигурки на един човек, на двойки (две фигурки една до друга), на деца, на баба и дядо, на колеги и по професия — лекар, готвач, футболист, музикант.",
+            "Правим и фигурки на кучета и котки — с петната по козината, нашийника и типичната поза. Често ги поръчват и в памет на любимец.",
+          ],
+        },
+        {
+          title: "Размери и цени",
+          text: [
+            "Фигурките са 10 см за 50 €, 15 см за 80 € и 20 см за 100 €. Ако искаш нещо по-малко, персонализираният ключодържател е 5 см за 30 € или 6 см за 40 €.",
+            "Цената е крайна за фигурката. Плащаш с наложен платеж, когато получиш пратката от Еконт или Спиди — без предплащане и без карта.",
+          ],
+        },
+        {
+          title: "Как се изработва",
+          text: [
+            `След като потвърдим поръчката по телефона, фигурката се изработва на ръка в Русе и се оцветява и довършва детайл по детайл. Изработката отнема ${productionDays}, след което изпращаме до офис или до адрес в цяла България.`,
+            "Всяка фигурка пътува в защитена кутия. Ако е подарък, напиши го в бележката и няма да слагаме цена вътре.",
+          ],
+        },
+        {
+          title: "Подарък за всеки повод",
+          text: [
+            "Персонализираните фигурки са любим подарък за рожден ден, годишнина, сватба (включително като фигурка за торта), Свети Валентин, Коледа, абитуриентски бал и пенсиониране.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "Колко струва персонализирана фигурка?", a: "Фигурка 10 см е 50 €, 15 см — 80 €, 20 см — 100 €. Персонализиран ключодържател е от 30 €. Плащаш с наложен платеж." },
+        { q: "Каква снимка ми трябва?", a: "Една ясна снимка на светло, на която лицето се вижда добре. За фигурка в цял ръст е най-добре човекът да е целият в кадър." },
+        { q: "Ще видя ли фигурката преди да поръчам?", a: "Да. След като качиш снимката, за около минута виждаш визуализация. Поръчваш само ако ти харесва." },
+        { q: "Колко време отнема?", a: `Изработката е ${productionDays}. Доставката с Еконт или Спиди е обикновено 1–2 работни дни след това.` },
+        { q: "Доставяте ли в цяла България?", a: "Да — до офис или адрес на Еконт или Спиди навсякъде в България, с наложен платеж." },
+      ],
+    },
+    en: {
+      metaTitle: "Personalised figurines from a photo — 3D figurines from €30",
+      path: "/personalizirani-figurki",
+      crumb: "Personalised figurines",
+      kicker: "Personalised 3D figurines",
+      title: "Personalised figurines from your photo",
+      lead: "A personalised 3D figurine of a person, a couple or a pet — made from one photo. See the preview in a minute, order only if you like it and pay cash on delivery. Keychains from €30, figurines from €50.",
+      cta: { label: "Create your figurine", href: "/studio" },
+      image: { src: "/shop/hero-mobile.webp", alt: "Personalised figurine of a girl next to the photo it was made from", ratio: "aspect-[9/16] max-h-[36rem]" },
+      product: "figurine",
+      productName: "Personalised 3D figurine from a photo",
+      sections: [
+        {
+          title: "What is a personalised figurine",
+          text: [
+            "A personalised figurine is a small 3D figurine made after one specific person or pet — their hairstyle, clothes, eye colour and little details. It isn't a stock model from a shop; it's made only for you.",
+            "It all starts with one photo. Upload it, see what the figurine will look like in about a minute, and only then decide whether to order.",
+          ],
+        },
+        {
+          title: "Figurines of people, couples and pets",
+          text: [
+            "We make personalised figurines of one person, couples (two figurines side by side), children, grandparents, colleagues and by profession — doctor, chef, footballer, musician.",
+            "We also make figurines of dogs and cats — with the spots on their coat, the collar and their typical pose. People often order them in memory of a pet.",
+          ],
+        },
+        {
+          title: "Sizes and prices",
+          text: [
+            "Figurines are 10 cm for €50, 15 cm for €80 and 20 cm for €100. For something smaller, a personalised keychain is 5 cm for €30 or 6 cm for €40.",
+            "The price is final for the figurine. You pay cash on delivery when the parcel arrives with Econt or Speedy — no prepayment and no card.",
+          ],
+        },
+        {
+          title: "How it's made",
+          text: [
+            `Once we confirm the order by phone, the figurine is made by hand in Ruse and painted and finished detail by detail. Making it takes ${productionDaysEn}, then we ship to an office or an address anywhere in Bulgaria.`,
+            "Every figurine travels in a padded box. If it's a gift, say so in the note and we won't put the price inside.",
+          ],
+        },
+        {
+          title: "A gift for every occasion",
+          text: [
+            "Personalised figurines are a favourite gift for birthdays, anniversaries, weddings (including as a cake topper), Valentine's Day, Christmas, graduations and retirements.",
+          ],
+        },
+      ],
+      faq: [
+        { q: "How much is a personalised figurine?", a: "A 10 cm figurine is €50, 15 cm is €80 and 20 cm is €100. A personalised keychain is from €30. You pay cash on delivery." },
+        { q: "What photo do I need?", a: "One clear, well-lit photo where the face is easy to see. For a full-body figurine the person should be fully in the shot." },
+        { q: "Will I see the figurine before I order?", a: "Yes. After you upload the photo you see a preview in about a minute. You order only if you like it." },
+        { q: "How long does it take?", a: `Making it takes ${productionDaysEn}. Delivery with Econt or Speedy usually takes 1–2 working days after that.` },
+        { q: "Do you deliver across Bulgaria?", a: "Yes — to any Econt or Speedy office or address in Bulgaria, cash on delivery." },
+      ],
+    },
+  },
   figurine: {
     bg: {
     metaTitle: "Фигурка по снимка — 3D фигурка на човек от 50 €",

@@ -1,5 +1,6 @@
 "use client";
 
+import { trackPurchase } from "@/app/components/Analytics";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -57,6 +58,7 @@ export default function CartPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || c.failed);
+      trackPurchase({ number: data.number, total: cart.items.reduce((sum, item) => sum + item.price * item.qty, 0) });
       cart.clear();
       router.push(href(`/thanks?n=${encodeURIComponent(data.number)}`));
     } catch (issue) {

@@ -1,75 +1,33 @@
-import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
+import { sendContactMail } from "@/lib/mail";
+import { allow, cleanText, sameOrigin } from "@/lib/security";
+
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
+  if (!sameOrigin(req)) return NextResponse.json({ error: "Невалидна заявка." }, { status: 403 });
+  if (!(await allow("contact", req, 5, 3600))) {
+    return NextResponse.json({ error: "Много съобщения за кратко. Опитай след малко." }, { status: 429 });
+  }
+  const body = await req.json().catch(() => null);
+  if (cleanText(body?.website, 100)) return NextResponse.json({ success: true });
+
+  const name = cleanText(body?.name, 80);
+  const email = cleanText(body?.email, 120);
+  const phone = cleanText(body?.phone, 30);
+  const message = cleanText(body?.message, 3000);
+  if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !message) {
+    return NextResponse.json({ error: "Попълни име, имейл и съобщение." }, { status: 400 });
+  }
+
   try {
-    const body = await req.json();
-
-    const name = String(body.name || "").trim();
-    const email = String(body.email || "").trim();
-    const phone = String(body.phone || "").trim();
-    const message = String(body.message || "").trim();
-
-    if (!name || !email || !message) {
-      return NextResponse.json(
-        { error: "Моля, попълнете име, имейл и съобщение." },
-        { status: 400 }
-      );
-    }
-
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT || 587),
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    const to = process.env.CONTACT_TO;
-
-    if (!to) {
-      return NextResponse.json(
-        { error: "Липсва CONTACT_TO в env." },
-        { status: 500 }
-      );
-    }
-
-    await transporter.sendMail({
-      from: `"HandyCrafts 3D Website" <${process.env.SMTP_USER}>`,
-      to,
-      replyTo: email,
-      subject: `Ново запитване от сайта - ${name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h2>Ново запитване от contact form</h2>
-          <p><strong>Име:</strong> ${escapeHtml(name)}</p>
-          <p><strong>Имейл:</strong> ${escapeHtml(email)}</p>
-          <p><strong>Телефон:</strong> ${escapeHtml(phone || "-")}</p>
-          <p><strong>Съобщение:</strong></p>
-          <div style="padding:12px; background:#f6f6f6; border-radius:8px; white-space:pre-wrap;">
-            ${escapeHtml(message)}
-          </div>
-        </div>
-      `,
-    });
-
+    await sendContactMail({ name, email, phone, message });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("CONTACT_API_ERROR:", error);
+    console.error("CONTACT", error);
     return NextResponse.json(
-      { error: "Възникна проблем при изпращането." },
+      { error: "Не успяхме да изпратим. Пиши ни на handycraftshelp@gmail.com." },
       { status: 500 }
     );
   }
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
 }

@@ -23,6 +23,20 @@ function itemsHtml(order: Order) {
     .join("");
 }
 
+export async function sendContactMail(input: { name: string; email: string; phone: string; message: string }) {
+  const mailer = transport();
+  const to = process.env.CONTACT_TO;
+  if (!mailer || !to) throw new Error("mail not configured");
+  await mailer.sendMail({
+    from: `"HandyCrafts 3D" <${process.env.SMTP_USER}>`,
+    to,
+    replyTo: input.email,
+    subject: `Съобщение от сайта — ${input.name}`,
+    html: `<p><b>${escapeHtml(input.name)}</b> · ${escapeHtml(input.email)} · ${escapeHtml(input.phone || "-")}</p>
+<div style="white-space:pre-wrap">${escapeHtml(input.message)}</div>`,
+  });
+}
+
 export async function sendOrderMails(order: Order, siteUrl: string) {
   const mailer = transport();
   if (!mailer) return;

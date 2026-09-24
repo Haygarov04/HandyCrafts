@@ -2,152 +2,79 @@
 
 import { useState } from "react";
 
-export default function ContactPage() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
+const field = "w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 outline-none transition focus:border-ember";
 
+export default function ContactPage() {
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "", website: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
-  function updateField(
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  }
+  const set = (key: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm({ ...form, [key]: event.target.value });
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
     setLoading(true);
     setSuccess("");
     setError("");
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Грешка при изпращане.");
-      }
-
-      setSuccess("Запитването беше изпратено успешно.");
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Нещо се обърка.");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Грешка при изпращане.");
+      setSuccess("Съобщението е изпратено. Ще ти отговорим скоро.");
+      setForm({ name: "", email: "", phone: "", message: "", website: "" });
+    } catch (issue) {
+      setError(issue instanceof Error ? issue.message : "Нещо се обърка.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen bg-white px-6 pb-20 pt-36">
-      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+    <div className="px-4 pb-24 pt-32 sm:px-6 sm:pt-40">
+      <div className="mx-auto grid max-w-5xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-orange-500">
-            Контакти
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember-deep">Контакти</p>
+          <h1 className="mt-3 text-4xl sm:text-5xl">Пиши ни</h1>
+          <p className="mt-5 leading-7 text-ink/65">
+            Въпрос за поръчка, фигурка на няколко души или по-голям размер? Пиши ни и ще отговорим
+            в рамките на работния ден.
           </p>
-
-          <h1 className="mb-6 text-4xl font-bold text-neutral-900 md:text-5xl">
-            Свържете се с нас
-          </h1>
-
-          <p className="mb-8 text-lg leading-8 text-neutral-700">
-            Ако имате идея, файл, въпрос или нужда от консултация, изпратете
-            запитване и ще се свържем с вас.
-          </p>
-
-          <div className="space-y-4 rounded-[28px] bg-neutral-50 p-8">
-            <p><strong>Имейл:</strong> handycraftshelp@gmail.com</p>
-            <p><strong>Локация:</strong> Русе, България</p>
-            <p><strong>Услуги:</strong> 3D принтиране, 3D сканиране, 3D моделиране</p>
+          <div className="mt-8 space-y-3 rounded-[2rem] bg-white p-6 text-sm">
+            <p>
+              <span className="text-ink/50">Имейл: </span>
+              <a href="mailto:handycraftshelp@gmail.com" className="font-semibold">
+                handycraftshelp@gmail.com
+              </a>
+            </p>
+            <p>
+              <span className="text-ink/50">Работилница: </span>Русе, България
+            </p>
           </div>
         </div>
 
-        <div className="rounded-[32px] border border-black/5 bg-neutral-50 p-8 shadow-[0_20px_60px_rgba(0,0,0,0.05)]">
-          <h2 className="mb-6 text-2xl font-bold text-neutral-900">
-            Изпрати съобщение
-          </h2>
-
-          <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
-            <input
-              name="name"
-              type="text"
-              value={form.name}
-              onChange={updateField}
-              placeholder="Име"
-              className="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none focus:border-orange-500"
-              required
-            />
-
-            <input
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={updateField}
-              placeholder="Имейл"
-              className="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none focus:border-orange-500"
-              required
-            />
-
-            <input
-              name="phone"
-              type="text"
-              value={form.phone}
-              onChange={updateField}
-              placeholder="Телефон"
-              className="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none focus:border-orange-500 md:col-span-2"
-            />
-
-            <textarea
-              name="message"
-              value={form.message}
-              onChange={updateField}
-              placeholder="Вашето съобщение"
-              className="min-h-[180px] rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none focus:border-orange-500 md:col-span-2"
-              required
-            />
-
-            {success ? (
-              <div className="rounded-2xl bg-green-50 px-4 py-3 text-green-700 md:col-span-2">
-                {success}
-              </div>
-            ) : null}
-
-            {error ? (
-              <div className="rounded-2xl bg-red-50 px-4 py-3 text-red-700 md:col-span-2">
-                {error}
-              </div>
-            ) : null}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-2 rounded-full bg-orange-500 px-6 py-4 font-semibold text-white transition hover:bg-orange-600 disabled:opacity-60 md:col-span-2"
-            >
-              {loading ? "Изпращане..." : "Изпрати запитване"}
-            </button>
-          </form>
-        </div>
+        <form onSubmit={submit} className="grid gap-3 rounded-[2rem] bg-white p-6 sm:grid-cols-2 sm:p-8">
+          <input required value={form.name} onChange={set("name")} placeholder="Име" autoComplete="name" className={field} />
+          <input required type="email" value={form.email} onChange={set("email")} placeholder="Имейл" autoComplete="email" className={field} />
+          <input type="tel" value={form.phone} onChange={set("phone")} placeholder="Телефон (по желание)" autoComplete="tel" className={`${field} sm:col-span-2`} />
+          <textarea required value={form.message} onChange={set("message")} placeholder="Съобщение" maxLength={3000} className={`${field} min-h-44 sm:col-span-2`} />
+          <input tabIndex={-1} aria-hidden autoComplete="off" value={form.website} onChange={set("website")} className="absolute -left-[9999px] h-0 w-0 opacity-0" />
+          {success ? <p className="rounded-2xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800 sm:col-span-2">{success}</p> : null}
+          {error ? <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-800 sm:col-span-2">{error}</p> : null}
+          <button
+            type="submit"
+            disabled={loading}
+            className="rounded-full bg-ink py-4 font-semibold text-paper transition hover:bg-ember hover:text-ink disabled:opacity-60 sm:col-span-2"
+          >
+            {loading ? "Изпращане…" : "Изпрати"}
+          </button>
+        </form>
       </div>
-    </main>
+    </div>
   );
 }

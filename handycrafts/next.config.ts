@@ -30,6 +30,9 @@ const nextConfig: NextConfig = {
     return [
       { source: "/crm", destination: "/manage", permanent: true },
       { source: "/crm/:path*", destination: "/manage", permanent: true },
+      { source: "/services/:path*", destination: "/", permanent: true },
+      { source: "/portfolio", destination: "/", permanent: true },
+      { source: "/upload", destination: "/studio", permanent: true },
     ];
   },
 };

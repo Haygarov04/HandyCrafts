@@ -56,65 +56,63 @@ const products = [
 export default function Home() {
   return (
     <>
-      <section className="relative overflow-hidden px-4 pb-14 pt-32 sm:px-6 sm:pt-36">
-        <div className="pointer-events-none absolute -right-40 top-10 h-[34rem] w-[34rem] rounded-full bg-blush/60 blur-3xl" />
-        <div className="pointer-events-none absolute -left-40 bottom-0 h-80 w-80 rounded-full bg-sky/70 blur-3xl" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-ember" /> Фигурки по снимка · Русе
-            </span>
-            <h1 className="mt-6 text-[2.5rem] leading-[1.05] sm:text-6xl">
-              Твоята мини версия.
-              <span className="block text-ember-deep">От една снимка.</span>
-            </h1>
-            <p className="mt-6 max-w-lg text-lg leading-8 text-ink/70">
-              Качваш снимка и след минута виждаш как ще изглежда фигурката. Харесваш я —
-              добавяш в количката и плащаш с наложен платеж, когато пристигне.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/studio?product=figurine"
-                className="rounded-full bg-ink px-7 py-4 text-center font-semibold text-paper shadow-[0_12px_30px_rgba(22,21,19,0.25)] transition hover:bg-ember hover:text-ink"
-              >
-                Създай фигурка — от {money(fromPrice("figurine"))}
-              </Link>
-              <Link
-                href="/studio?product=keychain"
-                className="rounded-full border border-ink/15 bg-white px-7 py-4 text-center font-semibold transition hover:border-ink/40"
-              >
-                Ключодържател — от {money(fromPrice("keychain"))}
-              </Link>
-            </div>
-            <p className="mt-5 text-sm text-ink/55">
-              Визуализацията е безплатна. Поръчваш само ако ти хареса.
-            </p>
-          </div>
+      <section className="relative overflow-hidden px-4 pb-12 pt-28 sm:px-6 sm:pt-36">
+        <span className="pointer-events-none absolute -left-28 top-56 h-48 w-48 rounded-full bg-gradient-to-br from-[#ff9a7a] to-[#f06a4f] opacity-90 shadow-[0_30px_60px_rgba(240,106,79,0.35)] sm:-left-16 sm:h-72 sm:w-72" />
+        <span className="pointer-events-none absolute -right-12 top-24 h-28 w-28 rounded-full bg-[radial-gradient(circle_at_30%_30%,#6aa8ff,#1f5fe0_60%,#133d9e)] shadow-[0_25px_50px_rgba(31,95,224,0.35)] sm:right-10 sm:top-36 sm:h-40 sm:w-40" />
+        <span className="pointer-events-none absolute bottom-40 right-[8%] hidden h-16 w-16 rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffe08a,#ffb800_65%)] shadow-[0_18px_36px_rgba(255,184,0,0.35)] lg:block" />
 
-          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-sand shadow-[0_40px_90px_rgba(22,21,19,0.18)]">
-              <Image
-                src="/shop/hero.webp"
-                alt="Фигурка на двойка, изработена по снимка"
-                fill
-                priority
-                className="object-cover"
-                sizes="(min-width: 1024px) 45vw, 90vw"
-              />
-            </div>
-            <div className="absolute -left-4 top-8 rounded-3xl bg-white px-5 py-4 shadow-[0_20px_40px_rgba(22,21,19,0.12)] sm:-left-8">
-              <p className="text-xs text-ink/50">Фигурка 10 см</p>
-              <p className="font-display text-2xl">{money(catalog.figurine.sizes[0].price)}</p>
-            </div>
-            <div className="absolute -right-2 bottom-8 max-w-[13rem] rounded-3xl bg-ink px-5 py-4 text-paper shadow-[0_20px_40px_rgba(22,21,19,0.2)] sm:-right-6">
-              <p className="text-xs uppercase tracking-[0.18em] text-ember">Преди поръчка</p>
-              <p className="mt-1 text-sm leading-6">Виждаш визуализацията и решаваш.</p>
-            </div>
+        <div className="relative mx-auto max-w-4xl text-center">
+          <h1 className="text-[2.9rem] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-7xl lg:text-[5.5rem]">
+            3D фигурки
+            <span className="block">по снимка.</span>
+          </h1>
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-ink/75 sm:text-xl sm:leading-9">
+            Персонализирани фигурки и ключодържатели по твоя снимка. Оригинален подарък за рожден
+            ден, годишнина или любим човек.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              href="/studio?product=figurine"
+              className="rounded-2xl bg-ember px-8 py-4 text-center text-lg font-bold text-ink shadow-[0_14px_30px_rgba(255,122,0,0.35),inset_0_-3px_0_rgba(0,0,0,0.12)] transition hover:-translate-y-0.5 hover:bg-ember-deep"
+            >
+              Създай фигурка
+            </Link>
+            <Link
+              href="/#products"
+              className="rounded-2xl bg-white px-8 py-4 text-center text-lg font-semibold shadow-[0_10px_30px_rgba(22,21,19,0.08)] transition hover:-translate-y-0.5"
+            >
+              Цени от {money(fromPrice("keychain"))}
+            </Link>
+          </div>
+        </div>
+
+        <div className="relative mx-auto mt-12 max-w-5xl">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[2.2rem] bg-sand shadow-[0_40px_90px_rgba(22,21,19,0.18)] sm:aspect-[16/10]">
+            <Image
+              src="/shop/hero-mobile.webp"
+              alt="Снимка на жена и нейната фигурка, изработена по снимката"
+              fill
+              priority
+              className="object-cover sm:hidden"
+              sizes="100vw"
+            />
+            <Image
+              src="/shop/hero.webp"
+              alt="Снимка на жена и нейната фигурка, изработена по снимката"
+              fill
+              priority
+              className="hidden object-cover sm:block"
+              sizes="(min-width: 1024px) 1024px, 100vw"
+            />
+          </div>
+          <div className="absolute -bottom-5 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 py-3 text-sm font-semibold shadow-[0_16px_40px_rgba(22,21,19,0.14)]">
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+            Виждаш фигурката преди да поръчаш
           </div>
         </div>
       </section>
 
-      <section className="px-4 sm:px-6">
+      <section className="px-4 pt-6 sm:px-6">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3 rounded-[2rem] bg-white p-4 sm:p-6 lg:grid-cols-4">
           {perks.map((perk) => (
             <div key={perk.title} className="flex items-center gap-3 rounded-2xl p-2">
@@ -249,9 +247,6 @@ export default function Home() {
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h2 className="text-3xl leading-tight sm:text-5xl">От нашата работилница</h2>
-            <Link href="/portfolio" className="text-sm font-semibold underline decoration-ember decoration-2 underline-offset-4">
-              Виж още
-            </Link>
           </div>
           <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
             {gallery.map((src) => (
@@ -283,7 +278,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="px-4 pb-24 sm:px-6">
+      <section id="faq" className="scroll-mt-28 px-4 pb-24 sm:px-6">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-ember-deep">Въпроси</p>

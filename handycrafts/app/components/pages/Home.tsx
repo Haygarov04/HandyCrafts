@@ -104,14 +104,29 @@ export default function Home({ lang }: { lang: Lang }) {
           url: href("/klyuchodarzhatel-po-snimka"),
         })}
       />
-      <section className="hero-glow relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:pb-20">
-        <div className="relative mx-auto grid max-w-6xl items-center gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
-          <div>
+      <section className="hero-glow relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:flex lg:min-h-[max(40rem,min(92vh,52rem))] lg:items-center lg:pb-16 lg:pt-28">
+        {/* Desktop: the wide photo fills the right side and fades into the page behind the text. */}
+        <div className="absolute inset-y-0 right-0 hidden w-[58%] lg:block xl:w-[64%]">
+          <Image
+            src="/shop/hero.webp"
+            alt={h.heroAlt}
+            fill
+            priority
+            className="object-cover [mask-image:linear-gradient(to_right,transparent,black_38%)]"
+            style={{ objectPosition: "35% 50%" }}
+            sizes="64vw"
+          />
+          <div className="absolute bottom-10 right-10 -rotate-6 rounded-xl bg-ink px-5 py-2.5 font-display text-2xl text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)]">
+            {t.from} {t.money(fromPrice("keychain"))}
+          </div>
+        </div>
+        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-6">
+          <div className="lg:max-w-[33rem]">
             <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-ink/15 bg-paper/80 px-3 py-1 text-xs font-semibold text-ink/70 sm:mb-0 sm:py-1.5 sm:text-[13px]">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
               {h.heroBadge}
             </p>
-            <h1 className="text-[2.15rem] leading-[1.08] tracking-[-0.03em] sm:mt-6 sm:text-6xl lg:text-[4.4rem]">
+            <h1 className="text-[2.15rem] leading-[1.08] tracking-[-0.03em] sm:mt-6 sm:text-6xl lg:text-[4rem]">
               {h.heroTitle[0]}
               <span className="relative block text-ember-deep">
                 <span className="relative">
@@ -142,10 +157,10 @@ export default function Home({ lang }: { lang: Lang }) {
             </div>
           </div>
 
-          <div className="relative -mx-1 sm:mx-auto sm:w-full sm:max-w-md lg:max-w-none">
+          <div className="relative -mx-1 sm:mx-auto sm:w-full sm:max-w-md lg:hidden">
             <div className="relative rounded-[1.4rem] bg-white p-2 shadow-[0_30px_70px_rgba(22,21,19,0.16)] sm:p-3">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-sand">
-                <Image src="/shop/hero-mobile.webp" alt={h.heroAlt} fill priority className="object-cover" sizes="(min-width: 1024px) 480px, 90vw" />
+                <Image src="/shop/hero-mobile.webp" alt={h.heroAlt} fill priority className="object-cover" sizes="(min-width: 640px) 448px, 95vw" />
               </div>
             </div>
             <div className="absolute -left-1 top-5 -rotate-6 rounded-xl bg-ink px-4 py-2 font-display text-lg text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:-left-6 sm:text-xl">

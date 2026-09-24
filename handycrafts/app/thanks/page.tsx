@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { productionDays } from "@/lib/catalog";
 
-export const metadata = { title: "Благодарим! — HandyCrafts", robots: { index: false } };
+export const metadata = { title: "Благодарим!", robots: { index: false, follow: false } };
 
 type Props = { searchParams: Promise<{ n?: string }> };
 

@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope, Unbounded } from "next/font/google";
 import "./globals.css";
+import JsonLd from "./components/JsonLd";
 import SiteFrame from "./components/SiteFrame";
+import { absolute, business, siteName, siteUrl } from "@/lib/site";
 
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],
@@ -14,17 +16,12 @@ const unbounded = Unbounded({
   weight: ["400", "500", "600"],
 });
 
-// Absolute URLs for link previews (Instagram, Viber, Facebook). On Vercel the
-// production domain is known even when NEXT_PUBLIC_SITE_URL is not set.
-function siteUrl() {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
-  return "http://localhost:3000";
-}
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: "HandyCrafts — фигурка по снимка",
+  title: {
+    default: "3D фигурки и ключодържатели по снимка | HandyCrafts",
+    template: "%s | HandyCrafts",
+  },
   description:
     "Мини фигурка или ключодържател по твоя снимка. Виждаш визуализацията веднага, плащаш с наложен платеж. Изработено в Русе.",
   openGraph: {
@@ -35,6 +32,36 @@ export const metadata: Metadata = {
     siteName: "HandyCrafts",
   },
   twitter: { card: "summary_large_image" },
+  applicationName: siteName,
+  keywords: [
+    "фигурка по снимка",
+    "3D фигурка",
+    "персонализирана фигурка",
+    "ключодържател по снимка",
+    "фигурка на куче",
+    "фигурка на домашен любимец",
+    "персонализиран подарък",
+    "подарък за годишнина",
+    "мини фигурка",
+  ],
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
+};
+
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Store",
+  name: siteName,
+  url: siteUrl(),
+  logo: absolute("/icon.png"),
+  image: absolute("/opengraph-image.jpg"),
+  email: business.email,
+  description: "3D фигурки и ключодържатели по снимка на хора и домашни любимци, изработени на ръка.",
+  address: { "@type": "PostalAddress", addressLocality: business.city, addressCountry: business.country },
+  areaServed: { "@type": "Country", name: "България" },
+  paymentAccepted: "Наложен платеж",
+  currenciesAccepted: "EUR",
 };
 
 export const viewport: Viewport = {
@@ -45,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="bg" className={`${manrope.variable} ${unbounded.variable}`}>
       <body className="relative overflow-x-hidden antialiased">
+        <JsonLd data={organization} />
         <SiteFrame>{children}</SiteFrame>
       </body>
     </html>

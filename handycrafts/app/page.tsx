@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import FaqList from "./components/FaqList";
+import JsonLd from "./components/JsonLd";
+import { faqItems } from "@/lib/faq";
+import { faqJsonLd, productJsonLd } from "@/lib/site";
 import { catalog, fromPrice, money, productionDays } from "@/lib/catalog";
 
 const perks = [
@@ -48,9 +52,32 @@ const products = [
   },
 ];
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <>
+      <JsonLd data={faqJsonLd(faqItems)} />
+      <JsonLd
+        data={productJsonLd({
+          product: "figurine",
+          name: "Персонализирана 3D фигурка по снимка",
+          description: "3D фигурка на човек или домашен любимец по снимка, 10, 15 или 20 см.",
+          image: "/shop/figurine.webp",
+          url: "/figurka-po-snimka",
+        })}
+      />
+      <JsonLd
+        data={productJsonLd({
+          product: "keychain",
+          name: "Персонализиран 3D ключодържател по снимка",
+          description: "Мини фигурка с метална халка по снимка на човек или любимец, 5 или 6 см.",
+          image: "/shop/keychain.webp",
+          url: "/klyuchodarzhatel-po-snimka",
+        })}
+      />
       <section className="relative overflow-hidden px-4 pb-12 pt-[6.5rem] sm:px-6 sm:pt-36">
         <span className="pointer-events-none absolute -left-24 top-36 h-40 w-40 rounded-full bg-gradient-to-br from-[#ff9a7a] to-[#f06a4f] opacity-90 shadow-[0_30px_60px_rgba(240,106,79,0.35)] sm:-left-16 sm:h-72 sm:w-72" />
         <span className="pointer-events-none absolute -right-10 top-24 h-24 w-24 rounded-full bg-[radial-gradient(circle_at_30%_30%,#6aa8ff,#1f5fe0_60%,#133d9e)] shadow-[0_25px_50px_rgba(31,95,224,0.35)] sm:right-10 sm:top-36 sm:h-40 sm:w-40" />

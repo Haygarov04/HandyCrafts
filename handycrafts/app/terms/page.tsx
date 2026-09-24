@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { productionDays } from "@/lib/catalog";
 
-export const metadata = { title: "Общи условия — HandyCrafts" };
+export const metadata = {
+  title: "Общи условия",
+  description: "Условия за поръчка на персонализирани фигурки и ключодържатели: цени, наложен платеж, срокове, снимки и лични данни.",
+  alternates: { canonical: "/terms" },
+};
 
 const sections = [
   {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { landings } from "@/lib/site";
 
 export default function Footer() {
   return (
@@ -14,10 +15,12 @@ export default function Footer() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-paper/45">Магазин</p>
           <div className="mt-4 space-y-2 text-sm text-paper/75">
-            <Link href="/studio?product=figurine" className="block hover:text-paper">Фигурка по снимка</Link>
-            <Link href="/studio?product=figurine&subject=pet" className="block hover:text-paper">Фигурка на любимец</Link>
-            <Link href="/studio?product=keychain" className="block hover:text-paper">Ключодържател</Link>
             <Link href="/#how" className="block hover:text-paper">Как работи</Link>
+            {landings.map((page) => (
+              <Link key={page.href} href={page.href} className="block hover:text-paper">
+                {page.label}
+              </Link>
+            ))}
             <Link href="/#faq" className="block hover:text-paper">Въпроси</Link>
           </div>
         </div>

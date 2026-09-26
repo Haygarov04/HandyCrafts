@@ -29,9 +29,7 @@ export function cityContent(slug: string): LandingContent | null {
   const local = slug === "ruse";
   const where = inCity(n);
   return {
-    metaTitle: local
-      ? "Фигурки по снимка в Русе — от 30 €, изработени на ръка"
-      : `Фигурка по снимка ${where} — доставка с наложен платеж`,
+    metaTitle: local ? "Фигурки по снимка в Русе — ръчна изработка" : `Фигурки по снимка ${where} — от 30 €`,
     path: `/figurka-po-snimka/${slug}`,
     crumb: `Фигурка по снимка — ${n}`,
     kicker: local ? "Работилницата ни е тук" : `Доставка до ${n}`,

@@ -37,6 +37,22 @@ export function rootMetadata(lang: Lang): Metadata {
   };
 }
 
+const BRAND = ` | ${siteName}`;
+
+/** Search results show about 60 characters of a title: keep the brand only when it fits. */
+function fitTitle(title: string): Metadata["title"] {
+  return title.length + BRAND.length <= 60 ? title : { absolute: title };
+}
+
+/** Descriptions over ~155 characters get cut off; end on a whole sentence or word instead. */
+export function fitDescription(text: string, max = 155) {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const sentence = cut.lastIndexOf(". ");
+  if (sentence > max * 0.55) return cut.slice(0, sentence + 1);
+  return cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:—–-]+$/, "") + "…";
+}
+
 /** Title, description, canonical and hreflang for one page. `bgPath` is the page's Bulgarian URL. */
 export function pageMetadata(
   lang: Lang,
@@ -44,22 +60,23 @@ export function pageMetadata(
   input: { title?: string; description?: string; noindex?: boolean; bgOnly?: boolean }
 ): Metadata {
   const links = input.bgOnly ? { canonical: bgPath } : alternates(bgPath, lang);
+  const description = input.description ? fitDescription(input.description) : undefined;
   return {
-    ...(input.title ? { title: input.title } : {}),
-    ...(input.description ? { description: input.description } : {}),
+    ...(input.title ? { title: fitTitle(input.title) } : {}),
+    ...(description ? { description } : {}),
     ...(input.noindex ? { robots: { index: false, follow: false } } : { alternates: links }),
     ...(input.title
       ? {
           openGraph: {
             title: input.title,
-            description: input.description,
+            description,
             url: links.canonical,
             locale: dict[lang].ogLocale,
             type: "website",
             siteName,
             images: [shareImage(lang)],
           },
-          twitter: { card: "summary_large_image", title: input.title, description: input.description, images: [shareImage(lang)] },
+          twitter: { card: "summary_large_image", title: input.title, description, images: [shareImage(lang)] },
         }
       : {}),
   };

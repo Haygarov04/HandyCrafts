@@ -215,7 +215,7 @@ const topics: Topic[] = [
     image: "keychain",
     bg: {
       crumb: "Подарък за Свети Валентин",
-      metaTitle: "Подарък за Свети Валентин — фигурка или ключодържател по снимка",
+      metaTitle: "Подарък за Свети Валентин — фигурка по снимка",
       kicker: "14 февруари",
       title: "Подарък за Свети Валентин по снимка",
       lead: "Ключодържател с мини версията ти, за да си винаги с него/нея, или фигурка на двама ви за рафта.",
@@ -395,7 +395,7 @@ const topics: Topic[] = [
     },
     en: {
       crumb: "Gift for grandparents",
-      metaTitle: "Gift for grandparents — a figurine of the grandkids from a photo",
+      metaTitle: "Gift for grandparents — a figurine of the grandkids",
       kicker: "Family",
       title: "A gift for grandparents",
       lead: "A figurine of the grandchild, of them, or of the whole family — a gift grandparents will show every guest.",
@@ -601,7 +601,7 @@ const topics: Topic[] = [
     },
     en: {
       crumb: "Profession figurine",
-      metaTitle: "Figurine of a doctor, teacher, chef or any profession from a photo",
+      metaTitle: "Profession figurine from a photo — doctor, chef, teacher",
       kicker: "Professions",
       title: "A figurine of a doctor, teacher or chef",
       lead: "A figurine from a photo in work clothes — a doctor in a coat, a teacher with a book, a chef in a hat, a firefighter, a pilot.",
@@ -624,7 +624,7 @@ const topics: Topic[] = [
     image: "process",
     bg: {
       crumb: "Подарък за мъж",
-      metaTitle: "Оригинален подарък за мъж — фигурка или ключодържател по снимка",
+      metaTitle: "Оригинален подарък за мъж — фигурка по снимка",
       kicker: "За него",
       title: "Оригинален подарък за мъж",
       lead: "Фигурка на него с любимия екип, китарата или кучето. Или ключодържател за ключовете от колата.",

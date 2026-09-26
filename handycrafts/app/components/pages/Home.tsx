@@ -181,7 +181,7 @@ export default function Home({ lang }: { lang: Lang }) {
                 {perkIcons[index]}
               </svg>
               <span>
-                <span className="block text-[15px] font-semibold leading-snug">{perk.title}</span>
+                <strong className="block text-[15px] font-semibold leading-snug">{perk.title}</strong>
                 <span className="mt-0.5 block text-[13px] leading-snug text-ink/55">{perk.text}</span>
               </span>
             </div>

@@ -162,7 +162,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
     ],
     },
     en: {
-      metaTitle: "Custom figurine from a photo — 3D figurine of a person from €50",
+      metaTitle: "Custom figurine from a photo — a 3D figurine from €50",
       path: "/figurka-po-snimka",
       crumb: "Custom figurine from a photo",
       kicker: "3D figurine from a photo",

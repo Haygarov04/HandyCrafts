@@ -6,6 +6,8 @@ export const siteName = "HandyCrafts";
 // production domain is known even when NEXT_PUBLIC_SITE_URL is not set.
 export function siteUrl() {
   if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  // Canonical links, the sitemap and structured data must always point at the real domain in production.
+  if (process.env.VERCEL_ENV === "production") return "https://handy-crafts.digital";
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   return "http://localhost:3000";
 }

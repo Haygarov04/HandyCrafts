@@ -117,7 +117,7 @@ export default function Home({ lang }: { lang: Lang }) {
             sizes="64vw"
           />
           <div className="absolute bottom-10 right-10 -rotate-6 rounded-xl bg-ink px-5 py-2.5 font-display text-2xl text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)]">
-            {t.from} {t.money(fromPrice("keychain"))}
+            {h.heroSticker}
           </div>
         </div>
         <div className="relative mx-auto grid w-full max-w-6xl items-center gap-6">
@@ -152,7 +152,7 @@ export default function Home({ lang }: { lang: Lang }) {
                 href={href("/#products")}
                 className="hidden rounded-xl border-2 border-ink/15 bg-paper px-4 py-3.5 text-base sm:inline-block font-semibold transition hover:border-ink sm:px-7 sm:text-lg"
               >
-                {h.pricesFrom} {t.money(fromPrice("keychain"))}
+                {h.heroSecondary}
               </Link>
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function Home({ lang }: { lang: Lang }) {
               </div>
             </div>
             <div className="absolute -left-1 top-5 -rotate-6 rounded-xl bg-ink px-4 py-2 font-display text-lg text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:-left-6 sm:text-xl">
-              {t.from} {t.money(fromPrice("keychain"))}
+              {h.heroSticker}
             </div>
           </div>
         </div>
@@ -263,7 +263,7 @@ export default function Home({ lang }: { lang: Lang }) {
             <h2 className="text-[2rem] leading-[1.1] tracking-[-0.03em] sm:text-5xl lg:text-6xl">
               {h.howTitle[0]} <span className="text-ember-deep">{h.howTitle[1]}</span>
             </h2>
-            <p className="max-w-md text-lg text-ink/65 lg:justify-self-end">{h.heroText}</p>
+            <p className="max-w-md text-lg text-ink/65 lg:justify-self-end">{h.howText}</p>
           </div>
 
           <ol className="relative mt-12 grid gap-8 md:grid-cols-3 md:gap-6">

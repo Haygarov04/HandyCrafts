@@ -271,17 +271,17 @@ export default function StudioPage() {
                 >
                   <span className="relative block aspect-[9/16] overflow-hidden bg-sand">
                     <Image
-                      src={`/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
+                      src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
                       alt=""
                       fill
                       style={{ objectPosition: subject === "pet" ? "40% 50%" : "50% 50%" }}
-                      className="object-cover"
+                      className="object-cover transition-opacity duration-300"
                       sizes="(min-width: 640px) 360px, 50vw"
                     />
                   </span>
                   <span className="block p-3.5 sm:p-5">
                     <span className="block truncate text-base font-bold sm:font-display sm:text-xl sm:font-medium">{t.product[id].label}</span>
-                    <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(Math.min(...catalog[id].sizes.map((size) => size.price)))}</span>
+                    <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, id === "figurine" ? people : 1) ?? 0)}</span>
                     <span className="mt-1 hidden text-sm text-ink/60 sm:block">{t.product[id].short}</span>
                   </span>
                 </button>

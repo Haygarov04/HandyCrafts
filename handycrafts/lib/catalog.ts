@@ -35,8 +35,21 @@ export function isSubjectId(value: unknown): value is SubjectId {
   return typeof value === "string" && value in subjects;
 }
 
-/** "Фигурка", "Фигурка на любимец", "Ключодържател на любимец"… */
-export function itemLabel(product: ProductId, subject: SubjectId = "person") {
+/** Figurines of people can show up to three people on one base. */
+export const maxPeople = 3;
+/** Each extra person costs a little less than a whole figurine: 2 people ≈ 1.8×, 3 people ≈ 2.6×. */
+const peopleFactor: Record<number, number> = { 1: 1, 2: 1.8, 3: 2.6 };
+
+/** How many people a piece can have: only person figurines go above one. */
+export function normalizePeople(product: ProductId, subject: SubjectId, value: unknown) {
+  if (product !== "figurine" || subject !== "person") return 1;
+  const n = Math.floor(Number(value) || 1);
+  return Math.min(maxPeople, Math.max(1, n));
+}
+
+/** "Фигурка", "Фигурка на любимец", "Фигурка на 2 души"… */
+export function itemLabel(product: ProductId, subject: SubjectId = "person", people = 1) {
+  if (people > 1) return `${catalog[product].label} на ${people} души`;
   return [catalog[product].label, subjects[subject].of].filter(Boolean).join(" ");
 }
 
@@ -46,9 +59,11 @@ export function isProductId(value: unknown): value is ProductId {
   return typeof value === "string" && value in catalog;
 }
 
-export function priceFor(product: ProductId, cm: number) {
+export function priceFor(product: ProductId, cm: number, people = 1) {
   const size = catalog[product].sizes.find((item) => item.cm === cm);
-  return size ? size.price : null;
+  if (!size) return null;
+  const factor = peopleFactor[people] ?? 1;
+  return factor === 1 ? size.price : Math.round((size.price * factor) / 5) * 5;
 }
 
 export function fromPrice(product: ProductId) {

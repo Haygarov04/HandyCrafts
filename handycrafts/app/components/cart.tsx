@@ -7,6 +7,7 @@ export type CartItem = {
   draftId: string;
   product: ProductId;
   subject?: "person" | "pet";
+  people?: number;
   label: string;
   cm: number;
   price: number;

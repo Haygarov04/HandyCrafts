@@ -11,6 +11,7 @@ const framing =
 export function figurinePrompt(input: {
   product: ProductId;
   subject: SubjectId;
+  people?: number;
   cm: number;
   clothes: string;
   pose: string;
@@ -25,6 +26,19 @@ export function figurinePrompt(input: {
       extras ? `Accessories: ${extras}.` : "No clothes, only a collar if one is visible in the photo.",
       `Pose: ${pose}. Whole animal visible, nothing cropped.`,
       "Style: premium hand-painted stylized resin miniature, cute but faithful proportions, slightly larger head and big bright eyes, fur sculpted in soft clean clumps, smooth matte finish.",
+      framing,
+    ].join(" ");
+  }
+
+  const people = input.people ?? 1;
+  if (people > 1) {
+    const pose = input.pose.trim() || "standing close together, natural and friendly";
+    return [
+      `Turn this photo into a studio product photo of one physical ${kinds[input.product].replace("a low plain round base", "one shared low plain round base")} showing exactly ${people} people from the photo together, about ${input.cm} cm tall.`,
+      "Keep every person recognizable: face shape, age, hairstyle, glasses, skin tone and distinguishing features.",
+      `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
+      `Pose: ${pose}. All ${people} people fully visible, nothing cropped.`,
+      "Style: premium hand-painted stylized resin miniature, soft matte finish, clean sculpted hair, slightly larger heads, friendly expressions, eyes sharp.",
       framing,
     ].join(" ");
   }

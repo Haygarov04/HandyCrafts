@@ -123,7 +123,7 @@ function itemsTable(order: Order, lang: Lang) {
     .map(
       (item) => `<tr>
 <td width="72" style="padding:10px 12px 10px 0;vertical-align:top"><img src="${absolute(`/api/studio/draft/${item.draftId}`)}" width="64" height="64" alt="" style="display:block;border-radius:12px;object-fit:cover;background:${paper}"></td>
-<td style="padding:10px 0;vertical-align:top"><b>${escapeHtml(t.itemLabel(item.product, item.subject))}</b><br><span style="color:#8a847b">${item.cm} ${t.cm} · ${item.qty} × ${t.money(item.price)}</span></td>
+<td style="padding:10px 0;vertical-align:top"><b>${escapeHtml(t.itemLabel(item.product, item.subject, item.people))}</b><br><span style="color:#8a847b">${item.cm} ${t.cm} · ${item.qty} × ${t.money(item.price)}</span></td>
 <td align="right" style="padding:10px 0;vertical-align:top;font-weight:700;white-space:nowrap">${t.money(item.price * item.qty)}</td></tr>`
     )
     .join("");

@@ -7,10 +7,11 @@ export type StudioSaved = {
   step: number;
   product: ProductId;
   subject: SubjectId;
+  people?: number;
   cm: number;
   clothes: string;
   pose: string;
-  preview: { draftId: string; url: string; product: ProductId; subject: SubjectId } | null;
+  preview: { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number } | null;
   added: boolean;
 };
 

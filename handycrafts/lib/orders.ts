@@ -6,6 +6,8 @@ export type Draft = {
   createdAt: string;
   product: "figurine" | "keychain";
   subject?: "person" | "pet";
+  /** People on one base; missing means 1. */
+  people?: number;
   cm: number;
   clothes: string;
   pose: string;

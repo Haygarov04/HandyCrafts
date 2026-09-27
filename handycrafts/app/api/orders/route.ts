@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
-import { itemLabel, maxQty, priceFor } from "@/lib/catalog";
+import { itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
 import { sendCustomerEmail, sendNewOrderToShop } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
 import { deliveryLabel, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
@@ -76,14 +76,16 @@ export async function POST(req: Request) {
       }
       // The size can change after the preview, the product cannot.
       const cm = Number(entry.cm) || draft.cm;
-      const price = priceFor(draft.product, cm);
+      const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
+      const price = priceFor(draft.product, cm, people);
       if (price === null) return NextResponse.json({ error: tr("Непознат размер.", "Unknown size.") }, { status: 400 });
       const qty = Math.min(maxQty, Math.max(1, Math.floor(Number(entry.qty) || 1)));
       items.push({
         draftId: draft.id,
         product: draft.product,
         subject: draft.subject || "person",
-        label: itemLabel(draft.product, draft.subject),
+        people,
+        label: itemLabel(draft.product, draft.subject, people),
         cm,
         price,
         qty,

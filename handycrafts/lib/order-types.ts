@@ -43,6 +43,7 @@ export type OrderItem = {
   draftId: string;
   product: "figurine" | "keychain";
   subject: "person" | "pet";
+  people?: number;
   label: string;
   cm: number;
   price: number;

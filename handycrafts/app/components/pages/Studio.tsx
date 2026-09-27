@@ -13,13 +13,15 @@ import {
   catalog,
   isProductId,
   isSubjectId,
+  maxPeople,
+  normalizePeople,
   priceFor,
   productIds,
   type ProductId,
   type SubjectId,
 } from "@/lib/catalog";
 
-type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId };
+type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number };
 
 export default function StudioPage() {
   const cart = useCart();
@@ -31,6 +33,7 @@ export default function StudioPage() {
   const [step, setStep] = useState(0);
   const [product, setProduct] = useState<ProductId>("figurine");
   const [subject, setSubject] = useState<SubjectId>("person");
+  const [peopleChoice, setPeopleChoice] = useState(1);
   const [cm, setCm] = useState<number>(catalog.figurine.sizes[0].cm);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoUrl, setPhotoUrl] = useState("");
@@ -56,6 +59,7 @@ export default function StudioPage() {
       setStep(saved.step === 3 && !saved.preview ? 2 : saved.step);
       setProduct(saved.product);
       setSubject(saved.subject);
+      setPeopleChoice(saved.people || 1);
       setCm(priceFor(saved.product, saved.cm) !== null ? saved.cm : catalog[saved.product].sizes[0].cm);
       setClothes(saved.clothes || "");
       setPose(saved.pose || "");
@@ -89,10 +93,17 @@ export default function StudioPage() {
 
   useEffect(() => {
     if (!restored) return;
-    saveState({ step, product, subject, cm, clothes, pose, preview, added });
-  }, [restored, step, product, subject, cm, clothes, pose, preview, added]);
+    saveState({ step, product, subject, people: peopleChoice, cm, clothes, pose, preview, added });
+  }, [restored, step, product, subject, peopleChoice, cm, clothes, pose, preview, added]);
 
-  const price = priceFor(product, cm) ?? 0;
+  // Only person figurines can have more than one person; other choices fall back to one.
+  const people = normalizePeople(product, subject, peopleChoice);
+  const price = priceFor(product, cm, people) ?? 0;
+
+  function choosePeople(n: number) {
+    setPeopleChoice(n);
+    if (preview && (preview.people || 1) !== n) setPreview(null);
+  }
 
   function chooseProduct(id: ProductId) {
     setProduct(id);
@@ -143,6 +154,7 @@ export default function StudioPage() {
       const body = new FormData();
       body.set("product", product);
       body.set("subject", subject);
+      body.set("people", String(people));
       body.set("cm", String(cm));
       body.set("clothes", clothes);
       body.set("pose", pose);
@@ -160,7 +172,7 @@ export default function StudioPage() {
       });
       setProgress(100);
       trackEvent("generate_preview", { product, subject });
-      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject });
+      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people });
     } catch (issue) {
       setError(issue instanceof Error ? issue.message : s.wrong);
     } finally {
@@ -175,14 +187,15 @@ export default function StudioPage() {
       draftId: preview.draftId,
       product: preview.product,
       subject: preview.subject,
-      label: t.itemLabel(preview.product, preview.subject),
+      people: preview.people || 1,
+      label: t.itemLabel(preview.product, preview.subject, preview.people || 1),
       cm,
       price,
       qty: 1,
       previewUrl: preview.url,
     });
     setAdded(true);
-    trackEvent("add_to_cart", { currency: "EUR", value: price, items: [{ item_id: preview.product, item_name: t.itemLabel(preview.product, preview.subject), price }] });
+    trackEvent("add_to_cart", { currency: "EUR", value: price, items: [{ item_id: preview.product, item_name: t.itemLabel(preview.product, preview.subject, preview.people || 1), price }] });
   }
 
   function next() {
@@ -274,7 +287,35 @@ export default function StudioPage() {
                 </button>
               ))}
             </div>
-            <SizePicker product={product} cm={cm} onChange={setCm} label={s.size} unit={t.cm} money={t.money} />
+            {product === "figurine" && subject === "person" ? (
+              <div className="mt-8">
+                <p className="text-sm font-semibold">{s.peopleTitle}</p>
+                <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">
+                  {Array.from({ length: maxPeople }, (_, index) => index + 1).map((n) => (
+                    <button
+                      key={n}
+                      type="button"
+                      onClick={() => choosePeople(n)}
+                      className={`rounded-2xl border-2 bg-white px-3 py-3 text-left transition ${
+                        people === n ? "border-ember" : "border-transparent hover:border-ink/15"
+                      }`}
+                    >
+                      <span className="flex items-end gap-0.5 text-ink/70" aria-hidden>
+                        {Array.from({ length: n }, (_, i) => (
+                          <svg key={i} width="16" height="18" viewBox="0 0 16 18" fill="currentColor">
+                            <circle cx="8" cy="4.5" r="3.5" />
+                            <path d="M1.5 17c0-4 2.9-7 6.5-7s6.5 3 6.5 7z" />
+                          </svg>
+                        ))}
+                      </span>
+                      <span className="mt-1.5 block text-sm font-semibold">{s.peopleOption(n)}</span>
+                      <span className="text-xs text-ink/55">{t.money(priceFor(product, cm, n) ?? 0)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            <SizePicker product={product} people={people} cm={cm} onChange={setCm} label={s.size} unit={t.cm} money={t.money} />
           </section>
         ) : null}
 
@@ -283,6 +324,7 @@ export default function StudioPage() {
             <h1 className="text-center text-3xl sm:text-4xl">{s.uploadTitle}</h1>
             <p className="mx-auto mt-3 max-w-md text-center text-ink/60">
               {copy[subject].photo}
+              {people > 1 ? <span className="mt-2 block font-semibold text-ink/80">{s.peoplePhoto(people)}</span> : null}
             </p>
             <button
               type="button"
@@ -405,7 +447,7 @@ export default function StudioPage() {
             {!busy ? (
               <div className="mx-auto mt-6 max-w-lg">
                 {error && preview ? <p className="mb-3 text-center text-sm text-red-700">{error}</p> : null}
-                {preview ? <SizePicker product={preview.product} cm={cm} onChange={setCm} compact label={s.size} unit={t.cm} money={t.money} /> : null}
+                {preview ? <SizePicker product={preview.product} people={preview.people || 1} cm={cm} onChange={setCm} compact label={s.size} unit={t.cm} money={t.money} /> : null}
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   <button type="button" onClick={() => setStep(2)} className="rounded-full border border-ink/15 bg-white px-5 py-3 font-semibold">
                     {s.editDetails}
@@ -460,7 +502,7 @@ export default function StudioPage() {
           </button>
           <p className="min-w-0 text-center text-xs leading-tight sm:text-sm">
             <span className="block truncate font-semibold">
-              {t.itemLabel(product, subject)} · {cm} {t.cm}
+              {t.itemLabel(product, subject, people)} · {cm} {t.cm}
             </span>
             <span className="font-display text-lg">{t.money(price)}</span>
           </p>
@@ -491,6 +533,7 @@ export default function StudioPage() {
 
 function SizePicker({
   product,
+  people = 1,
   cm,
   onChange,
   compact,
@@ -499,6 +542,7 @@ function SizePicker({
   money,
 }: {
   product: ProductId;
+  people?: number;
   cm: number;
   onChange: (cm: number) => void;
   compact?: boolean;
@@ -520,7 +564,7 @@ function SizePicker({
             }`}
           >
             <span className="block font-display text-xl">{size.cm} {unit}</span>
-            <span className="text-sm text-ink/60">{money(size.price)}</span>
+            <span className="text-sm text-ink/60">{money(priceFor(product, size.cm, people) ?? size.price)}</span>
           </button>
         ))}
       </div>

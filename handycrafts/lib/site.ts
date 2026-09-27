@@ -1,4 +1,4 @@
-import { catalog, currency, type ProductId } from "@/lib/catalog";
+import { catalog, currency, maxPeople, priceFor, type ProductId } from "@/lib/catalog";
 
 export const siteName = "HandyCrafts";
 
@@ -26,7 +26,10 @@ export const business = {
 /** `product: "all"` covers figurines and keychains together, so the lowest price shown is the keychain's. */
 export function productJsonLd(input: { product: ProductId | "all"; name: string; description: string; image: string; url: string }) {
   const products = input.product === "all" ? (Object.keys(catalog) as ProductId[]) : [input.product];
-  const prices = products.flatMap((id) => catalog[id].sizes.map((size) => size.price));
+  // Group figurines (up to three people) set the top of the price range.
+  const prices = products.flatMap((id) =>
+    catalog[id].sizes.flatMap((size) => [size.price, priceFor(id, size.cm, id === "figurine" ? maxPeople : 1) ?? size.price])
+  );
   return {
     "@context": "https://schema.org",
     "@type": "Product",

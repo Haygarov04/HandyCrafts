@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
-import { isProductId, isSubjectId, priceFor } from "@/lib/catalog";
+import { isProductId, isSubjectId, normalizePeople, priceFor } from "@/lib/catalog";
 import { figurinePrompt } from "@/lib/figurine";
 import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
 import { incr } from "@/lib/kv";
@@ -67,6 +67,7 @@ export async function POST(req: Request) {
     if (!isProductId(product) || priceFor(product, cm) === null) {
       return NextResponse.json({ error: tr("Избери продукт и размер.", "Choose a product and size.") }, { status: 400 });
     }
+    const people = normalizePeople(product, subject, form.get("people"));
 
     // A new photo, or the photo from an earlier try when the customer only regenerates.
     let photoRef = "";
@@ -100,7 +101,7 @@ export async function POST(req: Request) {
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         model: process.env.XAI_IMAGE_MODEL || "grok-imagine-image-2.0",
-        prompt: figurinePrompt({ product, subject, cm, clothes, pose }),
+        prompt: figurinePrompt({ product, subject, people, cm, clothes, pose }),
         image: {
           url: `data:${photo.contentType};base64,${photo.bytes.toString("base64")}`,
           type: "image_url",
@@ -133,6 +134,7 @@ export async function POST(req: Request) {
       createdAt: new Date().toISOString(),
       product,
       subject,
+      people,
       cm,
       clothes,
       pose,

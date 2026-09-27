@@ -67,8 +67,9 @@ const bg = {
   cm: "см",
   from: "от",
   money: (value: number) => `${value} €`,
-  itemLabel: (product: ProductId, subject: SubjectId = "person") =>
-    ({ figurine: "Фигурка", keychain: "Ключодържател" })[product] + (subject === "pet" ? " на любимец" : ""),
+  itemLabel: (product: ProductId, subject: SubjectId = "person", people = 1) =>
+    ({ figurine: "Фигурка", keychain: "Ключодържател" })[product] +
+    (people > 1 ? ` на ${people} души` : subject === "pet" ? " на любимец" : ""),
   product: {
     figurine: { label: "Фигурка", short: "Цяла фигура върху основа" },
     keychain: { label: "Ключодържател", short: "Мини фигура с халка" },
@@ -183,6 +184,10 @@ const bg = {
   },
   faq: [
     {
+      q: "Колко струва фигурка на двама или трима?",
+      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 90 € за двама и 130 € за трима, 15 см — 145 € / 210 €, 20 см — 180 € / 260 €.",
+    },
+    {
       q: "Каква снимка работи най-добре?",
       a: "Ясна снимка на дневна светлина, лицето гледа напред и се вижда цялото. За фигурка в цял ръст е добре да се виждат и краката. Без слънчеви очила и силни филтри.",
     },
@@ -219,6 +224,9 @@ const bg = {
     person: "Човек",
     pet: "Домашен любимец",
     size: "Размер",
+    peopleTitle: "Колко души на една основа?",
+    peopleOption: (n: number) => (n === 1 ? "1 човек" : `${n} души`),
+    peoplePhoto: (n: number) => `Качи една снимка, на която се виждат ${n === 2 ? "и двамата" : "и тримата"} — ще са заедно на една основа.`,
     uploadTitle: "Качи снимка",
     uploaded: "Качената снимка",
     pick: "Избери снимка",
@@ -351,8 +359,10 @@ const en: Dict = {
   cm: "cm",
   from: "from",
   money: (value: number) => `€${value}`,
-  itemLabel: (product, subject = "person") =>
-    subject === "pet"
+  itemLabel: (product, subject = "person", people = 1) =>
+    people > 1
+      ? `${({ figurine: "Figurine", keychain: "Keychain" })[product]} of ${people} people`
+      : subject === "pet"
       ? ({ figurine: "Pet figurine", keychain: "Pet keychain" })[product]
       : ({ figurine: "Figurine", keychain: "Keychain" })[product],
   product: {
@@ -468,6 +478,10 @@ const en: Dict = {
   },
   faq: [
     {
+      q: "How much is a figurine of two or three people?",
+      a: "Two or three people on one base cost less than separate figurines: 10 cm — €90 for two and €130 for three, 15 cm — €145 / €210, 20 cm — €180 / €260.",
+    },
+    {
       q: "What kind of photo works best?",
       a: "A clear photo in daylight with the face looking forward and fully visible. For a full-body figurine, the feet should be in the shot too. No sunglasses or heavy filters.",
     },
@@ -504,6 +518,9 @@ const en: Dict = {
     person: "Person",
     pet: "Pet",
     size: "Size",
+    peopleTitle: "How many people on one base?",
+    peopleOption: (n: number) => (n === 1 ? "1 person" : `${n} people`),
+    peoplePhoto: (n: number) => `Upload one photo that shows ${n === 2 ? "both of them" : "all three"} — they'll stand together on one base.`,
     uploadTitle: "Upload a photo",
     uploaded: "Your uploaded photo",
     pick: "Choose a photo",

@@ -18,7 +18,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       title: "Персонализирани фигурки по твоя снимка",
       lead: "Персонализирана 3D фигурка на човек, двойка или домашен любимец — направена по една снимка. Виждаш визуализацията за минута, поръчваш само ако ти харесва и плащаш с наложен платеж. Ключодържатели от 30 €, фигурки от 50 €.",
       cta: { label: "Създай своята фигурка", href: "/studio" },
-      image: { src: "/shop/hero-mobile.webp", alt: "Персонализирана фигурка на момиче до снимката, по която е направена", ratio: "aspect-[9/16] max-h-[36rem]" },
+      image: { src: "/shop/hero-mobile.webp", alt: "Семейство с персонализирани фигурки на всеки от тях и на кучето", ratio: "aspect-[9/16] max-h-[36rem]" },
       product: "figurine",
       productName: "Персонализирана 3D фигурка по снимка",
       sections: [
@@ -73,7 +73,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       title: "Personalised figurines from your photo",
       lead: "A personalised 3D figurine of a person, a couple or a pet — made from one photo. See the preview in a minute, order only if you like it and pay cash on delivery. Keychains from €30, figurines from €50.",
       cta: { label: "Create your figurine", href: "/studio" },
-      image: { src: "/shop/hero-mobile.webp", alt: "Personalised figurine of a girl next to the photo it was made from", ratio: "aspect-[9/16] max-h-[36rem]" },
+      image: { src: "/shop/hero-mobile.webp", alt: "A family holding personalised figurines of each of them and their dog", ratio: "aspect-[9/16] max-h-[36rem]" },
       product: "figurine",
       productName: "Personalised 3D figurine from a photo",
       sections: [
@@ -360,7 +360,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
     title: "Персонализиран подарък по снимка",
     lead: "Фигурка или ключодържател по снимка на човека, на когото подаряваш. За рожден ден, годишнина, сватба, Свети Валентин или Коледа — от 30 €, с наложен платеж.",
     cta: { label: "Направи подаръка", href: "/studio" },
-    image: { src: "/shop/hero-mobile.webp", alt: "Фигурка на момиче до снимката, по която е направена", ratio: "aspect-[9/16] max-h-[36rem]" },
+    image: { src: "/shop/hero-mobile.webp", alt: "Семейство с фигурки по снимка на всеки от тях и на кучето", ratio: "aspect-[9/16] max-h-[36rem]" },
     product: "figurine",
     productName: "Персонализиран подарък — 3D фигурка по снимка",
     sections: [
@@ -393,7 +393,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       title: "A personalised gift from a photo",
       lead: "A figurine or keychain made from a photo of the person you're giving it to. For birthdays, anniversaries, weddings, Valentine's Day or Christmas — from €30, cash on delivery.",
       cta: { label: "Make the gift", href: "/studio" },
-      image: { src: "/shop/hero-mobile.webp", alt: "Figurine of a girl next to the photo it was made from", ratio: "aspect-[9/16] max-h-[36rem]" },
+      image: { src: "/shop/hero-mobile.webp", alt: "A family with figurines made from photos of each of them and their dog", ratio: "aspect-[9/16] max-h-[36rem]" },
       product: "figurine",
       productName: "Personalised gift — 3D figurine from a photo",
       sections: [

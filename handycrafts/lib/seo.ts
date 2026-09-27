@@ -5,11 +5,11 @@ import { siteName, siteUrl } from "@/lib/site";
 /** One stable share image for every page and chat app (Instagram, Viber, Messenger). */
 function shareImage(lang: Lang) {
   return {
-    url: "/og.jpg",
+    url: "/og-family.jpg",
     width: 1200,
     height: 630,
     type: "image/jpeg",
-    alt: lang === "en" ? "Figurine next to the photo it was made from — HandyCrafts" : "Фигурка до снимката, по която е направена — HandyCrafts",
+    alt: lang === "en" ? "Figurines of a woman, a couple and a dog next to their photos — HandyCrafts" : "Фигурки на жена, двойка и куче до снимките им — HandyCrafts",
   };
 }
 

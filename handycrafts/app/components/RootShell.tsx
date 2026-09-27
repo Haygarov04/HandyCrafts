@@ -27,7 +27,7 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
     priceRange: "30 € – 100 €",
     url: absolute(lang === "en" ? "/en" : "/"),
     logo: absolute("/icon.png"),
-    image: absolute("/og.jpg"),
+    image: absolute("/og-family.jpg"),
     email: business.email,
     description: t.meta.storeDescription,
     address: {

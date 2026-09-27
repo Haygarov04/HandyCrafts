@@ -140,7 +140,7 @@ const bg = {
     howText: "Качваш снимка, за минута виждаш фигурката и я поръчваш с няколко клика.",
     create: "Създай фигурка",
     pricesFrom: "Цени от",
-    heroAlt: "Фигурка на момиче с къдрава коса до снимката, по която е направена",
+    heroAlt: "Семейство с куче държи фигурки, направени по техни снимки",
     heroBadge: "Персонализирани 3D фигурки по снимка",
     perks: [
       { icon: "◎", title: "Виждаш я веднага", text: "Визуализация за около минута" },
@@ -425,7 +425,7 @@ const en: Dict = {
     howText: "Upload a photo, see your figurine in a minute and order it in a few clicks.",
     create: "Create a figurine",
     pricesFrom: "Prices from",
-    heroAlt: "Figurine of a girl with curly hair next to the photo it was made from",
+    heroAlt: "A family with their dog holding figurines made from their photos",
     heroBadge: "Personalised 3D figurines from a photo",
     perks: [
       { icon: "◎", title: "See it right away", text: "A preview in about a minute" },

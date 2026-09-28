@@ -29,8 +29,8 @@ function sellerLines(lang: Lang) {
   if (!sellerComplete()) {
     return [
       en
-        ? `HandyCrafts is operated from Ruse, Bulgaria. Email: ${seller.email}${seller.phone ? `, phone: ${seller.phone}` : ""}. The full company details (name, company ID and registered address) are published here as soon as the business is registered.`
-        : `HandyCrafts се управлява от Русе, България. Имейл: ${seller.email}${seller.phone ? `, телефон: ${seller.phone}` : ""}. Пълните данни на търговеца (наименование, ЕИК и адрес на управление) се публикуват тук веднага след регистрацията на дейността.`,
+        ? `HandyCrafts is operated from Ruse, Bulgaria. Email: ${seller.email}${seller.phone ? `, phone: ${seller.phone}` : ""}. HandyCrafts does not yet carry out commercial activity: the company is being registered. Until then the site is a demonstration of how the shop will work — you can try the studio and see previews, but orders are not accepted as sales and nothing is charged. The full company details (name, company ID and registered address) will be published here as soon as the company is registered.`
+        : `HandyCrafts се управлява от Русе, България. Имейл: ${seller.email}${seller.phone ? `, телефон: ${seller.phone}` : ""}. В момента HandyCrafts все още не извършва търговска дейност — фирмата е в процес на регистрация. Дотогава сайтът служи като демонстрация как ще работи магазинът: можеш да разгледаш студиото и да видиш визуализации, но поръчки не се приемат като продажби и не се събира плащане. Пълните данни на търговеца (наименование, ЕИК и адрес на управление) ще бъдат публикувани тук веднага след регистрацията на фирмата.`,
     ];
   }
   return [

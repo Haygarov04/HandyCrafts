@@ -1,6 +1,7 @@
 import { money } from "@/lib/catalog";
 import { deliveryLabel, type Order } from "@/lib/order-types";
 import { listOrders } from "@/lib/orders";
+import { visitSourceLabel, visitSources, visitsByDay } from "@/lib/visits";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,7 @@ function tally(orders: Order[], key: (order: Order) => string[]) {
 }
 
 export default async function StatsPage() {
-  const all = await listOrders(1000);
+  const [all, visitDays] = await Promise.all([listOrders(1000), visitsByDay(30)]);
   const orders = all.filter((order) => order.status !== "cancelled");
   const now = new Date();
   const month = now.toISOString().slice(0, 7);
@@ -62,9 +63,61 @@ export default async function StatsPage() {
     { label: "Очаквани", value: money(pending), note: `отказани ${cancelRate}%` },
   ];
 
+  const sumVisits = (days: typeof visitDays) =>
+    visitSources.map((source) => [visitSourceLabel[source], days.reduce((sum, d) => sum + d.bySource[source], 0)] as [string, number]);
+  const visits30 = sumVisits(visitDays).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
+  const visitsToday = visitDays[visitDays.length - 1];
+  const last14 = visitDays.slice(-14);
+  const tiktokPeak = Math.max(1, ...last14.map((d) => d.bySource.tiktok));
+  const tiktok7 = visitDays.slice(-7).reduce((sum, d) => sum + d.bySource.tiktok, 0);
+  const total7 = visitDays.slice(-7).reduce((sum, d) => sum + d.total, 0);
+
   return (
     <div className="space-y-5">
       <h1 className="text-3xl">Статистика</h1>
+
+      <section className="rounded-3xl bg-white p-5">
+        <h2 className="text-base">Посещения</h2>
+        <p className="text-xs text-ink/50">Броят се веднъж на посещение, без лични данни</p>
+        <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+          <div className="rounded-2xl bg-paper p-3">
+            <p className="font-display text-2xl">{visitsToday?.total ?? 0}</p>
+            <p className="text-[11px] text-ink/55">днес</p>
+          </div>
+          <div className="rounded-2xl bg-paper p-3">
+            <p className="font-display text-2xl">{total7}</p>
+            <p className="text-[11px] text-ink/55">7 дни</p>
+          </div>
+          <div className="rounded-2xl bg-ember/15 p-3">
+            <p className="font-display text-2xl">{tiktok7}</p>
+            <p className="text-[11px] text-ink/55">от TikTok · 7 дни</p>
+          </div>
+        </div>
+
+        <p className="mt-6 text-sm font-semibold">TikTok по дни</p>
+        <div className="mt-3 flex h-28 items-end gap-1.5 border-b border-ink/15" role="img" aria-label="Посещения от TikTok по дни">
+          {last14.map((d) => (
+            <div key={d.day} className="group relative flex h-full flex-1 items-end justify-center">
+              <span className="pointer-events-none absolute -top-1 left-1/2 z-10 hidden -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg bg-ink px-2 py-1 text-[11px] text-paper group-hover:block">
+                {d.day.slice(8)}.{d.day.slice(5, 7)} · {d.bySource.tiktok}
+              </span>
+              <span
+                className="block w-full max-w-8 rounded-t-[4px] bg-ember"
+                style={{ height: `${d.bySource.tiktok ? Math.max(4, (d.bySource.tiktok / tiktokPeak) * 100) : 0}%` }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-1.5 flex gap-1.5 text-[10px] text-ink/45">
+          {last14.map((d, i) => (
+            <span key={d.day} className="flex-1 text-center">
+              {i % 2 === 0 || i === last14.length - 1 ? `${Number(d.day.slice(8))}.${Number(d.day.slice(5, 7))}` : ""}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      <Breakdown title="Откъде идват · 30 дни" rows={visits30} />
 
       <div className="grid grid-cols-2 gap-3">
         {tiles.map((tile) => (

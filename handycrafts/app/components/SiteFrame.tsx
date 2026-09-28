@@ -6,6 +6,7 @@ import CartDrawer from "./CartDrawer";
 import { CartProvider } from "./cart";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import VisitCounter from "./VisitCounter";
 
 export default function SiteFrame({ children, sellerLine }: { children: React.ReactNode; sellerLine?: string }) {
   const pathname = (usePathname() || "/").replace(/^\/en(?=\/|$)/, "") || "/";
@@ -24,6 +25,7 @@ export default function SiteFrame({ children, sellerLine }: { children: React.Re
       )}
       {manage ? null : <CartDrawer />}
       {manage ? null : <Analytics />}
+      {manage ? null : <VisitCounter />}
     </CartProvider>
   );
 }

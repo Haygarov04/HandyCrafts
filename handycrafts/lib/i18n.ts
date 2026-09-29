@@ -197,7 +197,7 @@ const bg = {
     },
     {
       q: "Колко струва и как се плаща?",
-      a: "Фигурка 10 см е 40 €, 15 см е 70 €, 20 см е 90 €. Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 50 € (6 см — 65 €), за трима — 70 € (6 см — 90 €). Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
+      a: "Фигурка 10 см е 40 €, 15 см е 70 €, 20 см е 90 €. Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 50 € (6 см — 65 €), за трима — 70 € (6 см — 80 €). Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
     },
     {
       q: "За колко време става?",
@@ -492,7 +492,7 @@ const en: Dict = {
     },
     {
       q: "How much does it cost and how do I pay?",
-      a: "A figurine is €40 for 10 cm, €70 for 15 cm and €90 for 20 cm. A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €50 (6 cm — €65), for three €70 (6 cm — €90). You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
+      a: "A figurine is €40 for 10 cm, €70 for 15 cm and €90 for 20 cm. A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €50 (6 cm — €65), for three €70 (6 cm — €80). You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
     },
     {
       q: "How long does it take?",

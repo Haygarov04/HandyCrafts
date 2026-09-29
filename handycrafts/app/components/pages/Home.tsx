@@ -251,7 +251,12 @@ export default async function Home({ lang }: { lang: Lang }) {
             <div className="mt-6 flex items-end justify-around gap-2 border-b-2 border-ink sm:gap-4">
               {[...catalog.keychain.sizes.map((s) => ({ ...s, kind: "keychain" })), ...catalog.figurine.sizes.map((s) => ({ ...s, kind: "figurine" }))].map((size) => (
                 <div key={`${size.kind}-${size.cm}`} className="flex flex-col items-center">
-                  <span className="mb-2 text-xs text-ink/50">{t.money(priceFor(size.kind === "figurine" ? "figurine" : "keychain", size.cm, 1, "person", on) ?? 0)}</span>
+                  <span className="mb-2 flex flex-col items-center text-center text-xs leading-tight text-ink/50 [&>s]:mr-0"><Price
+                      now={priceFor(size.kind === "figurine" ? "figurine" : "keychain", size.cm, 1, "person", on) ?? 0}
+                      was={regularPrice(size.kind === "figurine" ? "figurine" : "keychain", size.cm, 1, "person", on)}
+                      money={t.money}
+                    />
+                  </span>
                   <span
                     className={`block w-8 rounded-t-lg sm:w-12 ${size.kind === "figurine" ? "bg-ember" : "bg-ink/70"}`}
                     style={{ height: `${size.cm * 7}px` }}

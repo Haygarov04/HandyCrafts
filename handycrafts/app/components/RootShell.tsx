@@ -3,6 +3,7 @@ import "../globals.css";
 import { dict, type Lang } from "@/lib/i18n";
 import { seller, sellerComplete } from "@/lib/legal";
 import { discountOn } from "@/lib/settings";
+import { priceTokens } from "@/lib/price-text";
 import { absolute, business, siteName } from "@/lib/site";
 import JsonLd from "./JsonLd";
 import SiteFrame from "./SiteFrame";
@@ -21,12 +22,13 @@ const unbounded = Unbounded({
 export default async function RootShell({ lang, children }: { lang: Lang; children: React.ReactNode }) {
   const t = dict[lang];
   const discount = await discountOn();
+  const prices = priceTokens(discount);
   const store = {
     "@context": "https://schema.org",
     "@type": "Store",
     name: siteName,
     alternateName: "Handy Crafts",
-    priceRange: "30 € – 260 €",
+    priceRange: `${prices.from} € – ${prices.fig20x3} €`,
     url: absolute(lang === "en" ? "/en" : "/"),
     logo: absolute("/icon.png"),
     image: absolute("/og-family.jpg"),

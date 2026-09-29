@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useLang } from "./lang";
 
 type Item = { q: string; a: string };
 
-export default function FaqList({ items: given }: { items?: readonly Item[] }) {
-  const { t } = useLang();
-  const items = given || t.faq;
+/** Items come from the server with prices already filled in. */
+export default function FaqList({ items }: { items: readonly Item[] }) {
   const [open, setOpen] = useState(0);
 
   return (

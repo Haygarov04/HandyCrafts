@@ -24,12 +24,20 @@ export const business = {
 
 
 /** `product: "all"` covers figurines and keychains together, so the lowest price shown is the keychain's. */
-export function productJsonLd(input: { product: ProductId | "all"; name: string; description: string; image: string; url: string }) {
+export function productJsonLd(input: {
+  product: ProductId | "all";
+  name: string;
+  description: string;
+  image: string;
+  url: string;
+  discountOn?: boolean;
+}) {
+  const on = input.discountOn ?? true;
   const products = input.product === "all" ? (Object.keys(catalog) as ProductId[]) : [input.product];
   // Group figurines (up to three people) set the top of the price range.
   const prices = products.flatMap((id) =>
     catalog[id].sizes.flatMap((size) =>
-      [priceFor(id, size.cm, 1, "pet"), priceFor(id, size.cm, 1), priceFor(id, size.cm, maxPeople)].filter((p): p is number => p !== null)
+      [priceFor(id, size.cm, 1, "pet", on), priceFor(id, size.cm, 1, "person", on), priceFor(id, size.cm, maxPeople, "person", on)].filter((p): p is number => p !== null)
     )
   );
   return {

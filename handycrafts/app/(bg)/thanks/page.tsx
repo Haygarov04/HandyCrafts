@@ -3,7 +3,9 @@ import Thanks from "@/app/components/pages/Thanks";
 import { dict } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata("bg", "/thanks", { title: dict["bg"].meta.thanksTitle, noindex: true });
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata("bg", "/thanks", { title: dict["bg"].meta.thanksTitle, noindex: true });
+}
 
 type Props = { searchParams: Promise<{ n?: string }> };
 

@@ -5,7 +5,9 @@ import { pageMetadata } from "@/lib/seo";
 
 const doc = legalDoc("terms", "bg");
 
-export const metadata: Metadata = pageMetadata("bg", "/terms", { title: doc.title, description: doc.description });
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata("bg", "/terms", { title: doc.title, description: doc.description });
+}
 
 export default function Page() {
   return <Legal id="terms" lang="bg" />;

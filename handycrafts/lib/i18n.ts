@@ -76,14 +76,14 @@ const bg = {
   } as Record<ProductId, { label: string; short: string }>,
   delivery: { econt: "Офис на Еконт", speedy: "Офис на Спиди", address: "До адрес" },
   meta: {
-    title: "Персонализирани фигурки по снимка от 30 € | HandyCrafts",
+    title: "Персонализирани фигурки по снимка от {from} € | HandyCrafts",
     description:
-      "Персонализирана 3D фигурка или ключодържател по твоя снимка от 30 €. Виж визуализацията за минута. Ръчна изработка и доставка в цяла България.",
+      "Персонализирана 3D фигурка или ключодържател по твоя снимка от {from} €. Виж визуализацията за минута. Ръчна изработка и доставка в цяла България.",
     ogTitle: "HandyCrafts — фигурка по снимка",
     ogDescription: "Качи снимка, виж фигурката си веднага и я поръчай с наложен платеж.",
     studioTitle: "Създай фигурка по снимка",
     studioDescription:
-      "Качи снимка и за минута виж как ще изглежда твоята 3D фигурка или ключодържател. Човек или домашен любимец, от 30 €. Плащане с наложен платеж.",
+      "Качи снимка и за минута виж как ще изглежда твоята 3D фигурка или ключодържател. Човек или домашен любимец, от {from} €. Плащане с наложен платеж.",
     contactTitle: "Контакти",
     contactDescription: "Въпрос за фигурка по снимка, поръчка на няколко души или по-голям размер? Пиши на HandyCrafts, Русе.",
     termsTitle: "Общи условия",
@@ -185,7 +185,7 @@ const bg = {
   faq: [
     {
       q: "Колко струва фигурка на двама или трима?",
-      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 90 € за двама и 130 € за трима, 15 см — 145 € / 210 €, 20 см — 180 € / 260 €. Ключодържател на двама е 50 €, на трима — 70 € (5 см).",
+      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — {fig10x2} € за двама и {fig10x3} € за трима, 15 см — {fig15x2} € / {fig15x3} €, 20 см — {fig20x2} € / {fig20x3} €. Ключодържател на двама е {key5x2} €, на трима — {key5x3} € (5 см).",
     },
     {
       q: "Каква снимка работи най-добре?",
@@ -197,7 +197,7 @@ const bg = {
     },
     {
       q: "Колко струва и как се плаща?",
-      a: "Фигурка 10 см е 50 €, 15 см е 80 €, 20 см е 100 €. Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 50 € (6 см — 65 €), за трима — 70 € (6 см — 90 €). Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
+      a: "Фигурка 10 см е {fig10} €, 15 см е {fig15} €, 20 см е {fig20} €. Ключодържател 5 см е {key5} €, 6 см е {key6} €. За двама души е {key5x2} € (6 см — {key6x2} €), за трима — {key5x3} € (6 см — {key6x3} €). Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
     },
     {
       q: "За колко време става?",
@@ -374,14 +374,14 @@ const en: Dict = {
   },
   delivery: { econt: "Econt office", speedy: "Speedy office", address: "To an address" },
   meta: {
-    title: "Personalised figurines from a photo, from €30 | HandyCrafts",
+    title: "Personalised figurines from a photo, from €{from} | HandyCrafts",
     description:
-      "A 3D figurine or keychain made from your photo, from €30. See the preview in a minute and pay cash on delivery. Handmade in Ruse, Bulgaria.",
+      "A 3D figurine or keychain made from your photo, from €{from}. See the preview in a minute and pay cash on delivery. Handmade in Ruse, Bulgaria.",
     ogTitle: "HandyCrafts — a figurine from your photo",
     ogDescription: "Upload a photo, see your figurine right away and order with cash on delivery.",
     studioTitle: "Create a figurine from a photo",
     studioDescription:
-      "Upload a photo and see your 3D figurine or keychain in about a minute. A person or a pet, from €30. Cash on delivery.",
+      "Upload a photo and see your 3D figurine or keychain in about a minute. A person or a pet, from €{from}. Cash on delivery.",
     contactTitle: "Contact",
     contactDescription: "A question about a custom figurine, a group order or a bigger size? Write to HandyCrafts in Ruse, Bulgaria.",
     termsTitle: "Terms and conditions",
@@ -482,7 +482,7 @@ const en: Dict = {
   faq: [
     {
       q: "How much is a figurine of two or three people?",
-      a: "Two or three people on one base cost less than separate figurines: 10 cm — €90 for two and €130 for three, 15 cm — €145 / €210, 20 cm — €180 / €260. A keychain of two is €50 and of three €70 (5 cm).",
+      a: "Two or three people on one base cost less than separate figurines: 10 cm — €{fig10x2} for two and €{fig10x3} for three, 15 cm — €{fig15x2} / €{fig15x3}, 20 cm — €{fig20x2} / €{fig20x3}. A keychain of two is €{key5x2} and of three €{key5x3} (5 cm).",
     },
     {
       q: "What kind of photo works best?",
@@ -494,7 +494,7 @@ const en: Dict = {
     },
     {
       q: "How much does it cost and how do I pay?",
-      a: "A figurine is €50 for 10 cm, €80 for 15 cm and €100 for 20 cm. A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €50 (6 cm — €65), for three €70 (6 cm — €90). You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
+      a: "A figurine is €{fig10} for 10 cm, €{fig15} for 15 cm and €{fig20} for 20 cm. A keychain is €{key5} for 5 cm and €{key6} for 6 cm. For two people it's €{key5x2} (6 cm — €{key6x2}), for three €{key5x3} (6 cm — €{key6x3}). You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
     },
     {
       q: "How long does it take?",

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { catalog, priceFor, regularPrice, type ProductId } from "@/lib/catalog";
 import { discountOn } from "@/lib/settings";
+import { fillPrices } from "@/lib/price-text";
 import Price from "./Price";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { landingLinks } from "@/lib/landing-links";
@@ -26,8 +27,9 @@ export type LandingContent = {
 };
 
 
-export default async function Landing({ content, lang }: { content: LandingContent; lang: Lang }) {
+export default async function Landing({ content: raw, lang }: { content: LandingContent; lang: Lang }) {
   const on = await discountOn();
+  const content = fillPrices(raw, on);
   const subject = content.cta.href.includes("subject=pet") ? "pet" : "person";
   const t = dict[lang];
   const href = (path: string) => localize(lang, path);
@@ -37,6 +39,7 @@ export default async function Landing({ content, lang }: { content: LandingConte
     <>
       <JsonLd
         data={productJsonLd({
+          discountOn: on,
           product: content.product,
           name: content.productName,
           description: content.lead,

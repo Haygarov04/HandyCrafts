@@ -5,7 +5,9 @@ import { pageMetadata } from "@/lib/seo";
 
 const content = landingContent.figurine.en;
 
-export const metadata: Metadata = pageMetadata("en", content.path, { title: content.metaTitle, description: content.lead });
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata("en", content.path, { title: content.metaTitle, description: content.lead });
+}
 
 export default function Page() {
   return <Landing content={content} lang={"en"} />;

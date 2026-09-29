@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { alternates, dict, type Lang } from "@/lib/i18n";
+import { fillPrices } from "@/lib/price-text";
+import { discountOn } from "@/lib/settings";
 import { siteName, siteUrl } from "@/lib/site";
 
 /** One stable share image for every page and chat app (Instagram, Viber, Messenger). */
@@ -14,7 +16,7 @@ function shareImage(lang: Lang) {
 }
 
 /** Shared metadata for the root layout of one language. */
-export function rootMetadata(lang: Lang): Metadata {
+function buildRootMetadata(lang: Lang): Metadata {
   const t = dict[lang].meta;
   return {
     metadataBase: new URL(siteUrl()),
@@ -54,7 +56,7 @@ export function fitDescription(text: string, max = 155) {
 }
 
 /** Title, description, canonical and hreflang for one page. `bgPath` is the page's Bulgarian URL. */
-export function pageMetadata(
+function buildPageMetadata(
   lang: Lang,
   bgPath: string,
   input: { title?: string; description?: string; noindex?: boolean; bgOnly?: boolean }
@@ -80,4 +82,15 @@ export function pageMetadata(
         }
       : {}),
   };
+}
+
+/** Root layout metadata, with prices that follow the discount switch. */
+export async function rootMetadata(lang: Lang): Promise<Metadata> {
+  return fillPrices(buildRootMetadata(lang), await discountOn());
+}
+
+/** Page metadata, with prices that follow the discount switch. */
+export async function pageMetadata(...args: Parameters<typeof buildPageMetadata>): Promise<Metadata> {
+  const [lang, bgPath, input] = args;
+  return buildPageMetadata(lang, bgPath, fillPrices(input, await discountOn()));
 }

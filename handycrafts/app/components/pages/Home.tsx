@@ -6,6 +6,7 @@ import NewsletterBox from "../NewsletterBox";
 import Price from "@/app/components/Price";
 import { catalog, fromPrice, priceFor, regularPrice } from "@/lib/catalog";
 import { discountOn } from "@/lib/settings";
+import { fillPrices } from "@/lib/price-text";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
 
@@ -74,7 +75,7 @@ const productCards = [
 export default async function Home({ lang }: { lang: Lang }) {
   const on = await discountOn();
   const kind = (href: string) => (href.includes("subject=pet") ? "pet" : "person");
-  const t = dict[lang];
+  const t = fillPrices(dict[lang], on);
   const h = t.home;
   const href = (path: string) => localize(lang, path);
   const products = productCards.map((card, index) => ({ ...card, ...h.products[index] }));
@@ -83,6 +84,7 @@ export default async function Home({ lang }: { lang: Lang }) {
       <JsonLd data={faqJsonLd(t.faq)} />
       <JsonLd
         data={productJsonLd({
+          discountOn: on,
           product: "all",
           name: lang === "en" ? "Custom figurines and keychains from a photo" : "Фигурки и ключодържатели по снимка",
           description: t.meta.description,
@@ -92,6 +94,7 @@ export default async function Home({ lang }: { lang: Lang }) {
       />
       <JsonLd
         data={productJsonLd({
+          discountOn: on,
           product: "figurine",
           name: h.productFigurineName,
           description: h.productFigurineText,
@@ -101,6 +104,7 @@ export default async function Home({ lang }: { lang: Lang }) {
       />
       <JsonLd
         data={productJsonLd({
+          discountOn: on,
           product: "keychain",
           name: h.productKeychainName,
           description: h.productKeychainText,

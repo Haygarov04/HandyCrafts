@@ -36,12 +36,12 @@ type Topic = {
 };
 
 const priceBg = {
-  figurine: "Фигурка 10 см е 50 €, 15 см е 80 €, 20 см е 100 €.",
-  keychain: "Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 50 € (6 см — 65 €), за трима — 70 € (6 см — 90 €).",
+  figurine: "Фигурка 10 см е {fig10} €, 15 см е {fig15} €, 20 см е {fig20} €.",
+  keychain: "Ключодържател 5 см е {key5} €, 6 см е {key6} €. За двама души е {key5x2} € (6 см — {key6x2} €), за трима — {key5x3} € (6 см — {key6x3} €).",
 };
 const priceEn = {
-  figurine: "A figurine is €50 for 10 cm, €80 for 15 cm and €100 for 20 cm.",
-  keychain: "A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €50 (6 cm — €65), for three €70 (6 cm — €90).",
+  figurine: "A figurine is €{fig10} for 10 cm, €{fig15} for 15 cm and €{fig20} for 20 cm.",
+  keychain: "A keychain is €{key5} for 5 cm and €{key6} for 6 cm. For two people it's €{key5x2} (6 cm — €{key6x2}), for three €{key5x3} (6 cm — €{key6x3}).",
 };
 
 const topics: Topic[] = [
@@ -182,7 +182,7 @@ const topics: Topic[] = [
       alt: "Фигурка на момиче до снимката ѝ — подарък за рожден ден",
       sections: [
         { title: "Персонално до детайла", text: ["Опиши в студиото какво обича рожденикът — китара, топка, чаша кафе, любимата тениска — и то ще е във визуализацията."] },
-        { title: "За всяка възраст", text: ["За дете, приятелка, мама, татко или колега. Ако бюджетът е по-малък, ключодържателят е от 30 €."] },
+        { title: "За всяка възраст", text: ["За дете, приятелка, мама, татко или колега. Ако бюджетът е по-малък, ключодържателят е от {key5} €."] },
       ],
       faq: [
         { q: "Ще стане ли до рождения ден?", a: "Изработката е 7–12 работни дни плюс 1–2 дни доставка. Напиши датата в бележката." },
@@ -200,7 +200,7 @@ const topics: Topic[] = [
       alt: "Figurine of a girl next to her photo — a birthday gift",
       sections: [
         { title: "Personal down to the detail", text: ["Describe what they love in the studio — a guitar, a ball, a cup of coffee, a favourite T-shirt — and it will be in the preview."] },
-        { title: "For any age", text: ["For a child, a friend, mum, dad or a colleague. On a smaller budget, keychains start at €30."] },
+        { title: "For any age", text: ["For a child, a friend, mum, dad or a colleague. On a smaller budget, keychains start at €{key5}."] },
       ],
       faq: [
         { q: "Will it arrive before the birthday?", a: "Making takes 7–12 working days plus 1–2 days delivery. Add the date to the note." },
@@ -547,7 +547,7 @@ const topics: Topic[] = [
       metaTitle: "Подарък за колега — ключодържател по снимка",
       kicker: "Работа",
       title: "Подарък за колега, който ще го разсмее",
-      lead: "Ключодържател с мини версията на колегата — за рожден ден, напускане или добре свършен проект. От 30 €.",
+      lead: "Ключодържател с мини версията на колегата — за рожден ден, напускане или добре свършен проект. От {key5} €.",
       cta: "Направи ключодържател",
       alt: "Ключодържател по снимка на мъж с палец нагоре",
       sections: [
@@ -564,7 +564,7 @@ const topics: Topic[] = [
       metaTitle: "Gift for a colleague — a keychain from a photo",
       kicker: "Work",
       title: "A gift that will make your colleague laugh",
-      lead: "A keychain with a mini version of your colleague — for a birthday, a farewell or a job well done. From €30.",
+      lead: "A keychain with a mini version of your colleague — for a birthday, a farewell or a job well done. From €{key5}.",
       cta: "Make a keychain",
       alt: "Keychain from a photo of a man giving a thumbs up",
       sections: [
@@ -674,7 +674,7 @@ const topics: Topic[] = [
       ],
       faq: [
         { q: "Ще ѝ хареса ли как изглежда?", a: "Виждаш визуализацията преди поръчката и можеш да я пробваш няколко пъти." },
-        { q: "Може ли по-малък подарък?", a: "Ключодържателят е от 30 €." },
+        { q: "Може ли по-малък подарък?", a: "Ключодържателят е от {key5} €." },
         { q: "Колко струва?", a: priceBg.figurine },
       ],
     },
@@ -691,7 +691,7 @@ const topics: Topic[] = [
       ],
       faq: [
         { q: "Will she like how it looks?", a: "You see the preview before ordering and can try it several times." },
-        { q: "Is there a smaller gift?", a: "Keychains start at €30." },
+        { q: "Is there a smaller gift?", a: "Keychains start at €{key5}." },
         { q: "How much is it?", a: priceEn.figurine },
       ],
     },

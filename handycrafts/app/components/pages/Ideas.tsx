@@ -7,10 +7,12 @@ import { landingLinks } from "@/lib/landing-links";
 import { absolute } from "@/lib/site";
 import { citySlugs } from "@/lib/topic-slugs";
 import { topicCards } from "@/lib/topics";
+import { fillPrices } from "@/lib/price-text";
+import { discountOn } from "@/lib/settings";
 
-export default function Ideas({ lang }: { lang: Lang }) {
+export default async function Ideas({ lang }: { lang: Lang }) {
   const en = lang === "en";
-  const cards = topicCards(lang);
+  const cards = fillPrices(topicCards(lang), await discountOn());
   const href = (path: string) => localize(lang, path);
   const list = {
     "@context": "https://schema.org",

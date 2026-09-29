@@ -185,7 +185,7 @@ const bg = {
   faq: [
     {
       q: "Колко струва фигурка на двама или трима?",
-      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 80 € за двама и 120 € за трима, 15 см — 135 € / 200 €, 20 см — 170 € / 250 €. Ключодържател на двама е 50 €, на трима — 70 € (5 см).",
+      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 70 € за двама и 80 € за трима, 15 см — 90 € / 100 €, 20 см — 100 € / 110 €. Ключодържател на двама е 50 €, на трима — 70 € (5 см).",
     },
     {
       q: "Каква снимка работи най-добре?",
@@ -480,7 +480,7 @@ const en: Dict = {
   faq: [
     {
       q: "How much is a figurine of two or three people?",
-      a: "Two or three people on one base cost less than separate figurines: 10 cm — €80 for two and €120 for three, 15 cm — €135 / €200, 20 cm — €170 / €250. A keychain of two is €50 and of three €70 (5 cm).",
+      a: "Two or three people on one base cost less than separate figurines: 10 cm — €70 for two and €80 for three, 15 cm — €90 / €100, 20 cm — €100 / €110. A keychain of two is €50 and of three €70 (5 cm).",
     },
     {
       q: "What kind of photo works best?",

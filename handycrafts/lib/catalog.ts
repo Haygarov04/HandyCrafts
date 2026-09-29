@@ -17,7 +17,7 @@ export const catalog = {
     line: "Малка плътна фигурка с метална халка. Винаги в джоба.",
     sizes: [
       { cm: 5, price: 30, group: { 2: 50, 3: 70 } },
-      { cm: 6, price: 40, group: { 2: 60, 3: 80 } },
+      { cm: 6, price: 40, group: { 2: 65, 3: 80 } },
     ],
   },
 } as const;

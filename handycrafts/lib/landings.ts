@@ -306,7 +306,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       },
       {
         title: "Цена",
-        text: ["Ключодържател 5 см е 30 €, а 6 см е 40 €. Ключодържател на двама души (5 см) е 50 €, на трима — 70 €; 6 см — 60 € / 80 €. Плащаш с наложен платеж при получаване."],
+        text: ["Ключодържател 5 см е 30 €, а 6 см е 40 €. Ключодържател на двама души (5 см) е 50 €, на трима — 70 €; 6 см — 65 € / 80 €. Плащаш с наложен платеж при получаване."],
       },
     ],
     faq: [
@@ -341,7 +341,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         },
         {
           title: "Price",
-          text: ["A keychain is €30 for 5 cm and €40 for 6 cm. A keychain of two people (5 cm) is €50 and of three €70; 6 cm — €60 / €80. You pay cash on delivery."],
+          text: ["A keychain is €30 for 5 cm and €40 for 6 cm. A keychain of two people (5 cm) is €50 and of three €70; 6 cm — €65 / €80. You pay cash on delivery."],
         },
       ],
       faq: [

@@ -34,7 +34,7 @@ export function figurinePrompt(input: {
   if (people > 1) {
     const pose = input.pose.trim() || "standing close together, natural and friendly";
     return [
-      `Turn this photo into a studio product photo of one physical ${kinds[input.product].replace("a low plain round base", "one shared low plain round base")} showing exactly ${people} people from the photo together, about ${input.cm} cm tall.`,
+      `Turn this photo into a studio product photo of one physical ${kinds[input.product].replace("a low plain round base", "one shared low plain round base")} showing exactly ${people} people from the photo together, about ${input.cm} cm tall${input.product === "keychain" ? ", with one metal ring on top" : ""}.`,
       "Keep every person recognizable: face shape, age, hairstyle, glasses, skin tone and distinguishing features.",
       `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
       `Pose: ${pose}. All ${people} people fully visible, nothing cropped.`,

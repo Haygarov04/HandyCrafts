@@ -185,7 +185,7 @@ const bg = {
   faq: [
     {
       q: "Колко струва фигурка на двама или трима?",
-      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 90 € за двама и 130 € за трима, 15 см — 145 € / 210 €, 20 см — 180 € / 260 €.",
+      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 90 € за двама и 130 € за трима, 15 см — 145 € / 210 €, 20 см — 180 € / 260 €. Ключодържател на двама е 50 €, на трима — 70 € (5 см).",
     },
     {
       q: "Каква снимка работи най-добре?",
@@ -224,9 +224,9 @@ const bg = {
     person: "Човек",
     pet: "Домашен любимец",
     size: "Размер",
-    peopleTitle: "Колко души на една основа?",
+    peopleTitle: "Колко души?",
     peopleOption: (n: number) => (n === 1 ? "1 човек" : `${n} души`),
-    peoplePhoto: (n: number) => `Качи една снимка, на която се виждат ${n === 2 ? "и двамата" : "и тримата"} — ще са заедно на една основа.`,
+    peoplePhoto: (n: number) => `Качи една снимка, на която се виждат ${n === 2 ? "и двамата" : "и тримата"} — ще са заедно в една фигурка.`,
     uploadTitle: "Качи снимка",
     uploaded: "Качената снимка",
     pick: "Избери снимка",
@@ -479,7 +479,7 @@ const en: Dict = {
   faq: [
     {
       q: "How much is a figurine of two or three people?",
-      a: "Two or three people on one base cost less than separate figurines: 10 cm — €90 for two and €130 for three, 15 cm — €145 / €210, 20 cm — €180 / €260.",
+      a: "Two or three people on one base cost less than separate figurines: 10 cm — €90 for two and €130 for three, 15 cm — €145 / €210, 20 cm — €180 / €260. A keychain of two is €50 and of three €70 (5 cm).",
     },
     {
       q: "What kind of photo works best?",
@@ -518,9 +518,9 @@ const en: Dict = {
     person: "Person",
     pet: "Pet",
     size: "Size",
-    peopleTitle: "How many people on one base?",
+    peopleTitle: "How many people?",
     peopleOption: (n: number) => (n === 1 ? "1 person" : `${n} people`),
-    peoplePhoto: (n: number) => `Upload one photo that shows ${n === 2 ? "both of them" : "all three"} — they'll stand together on one base.`,
+    peoplePhoto: (n: number) => `Upload one photo that shows ${n === 2 ? "both of them" : "all three"} — they'll be together in one piece.`,
     uploadTitle: "Upload a photo",
     uploaded: "Your uploaded photo",
     pick: "Choose a photo",

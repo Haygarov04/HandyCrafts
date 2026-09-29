@@ -281,13 +281,13 @@ export default function StudioPage() {
                   </span>
                   <span className="block p-3.5 sm:p-5">
                     <span className="block truncate text-base font-bold sm:font-display sm:text-xl sm:font-medium">{t.product[id].label}</span>
-                    <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, id === "figurine" ? people : 1) ?? 0)}</span>
+                    <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1) ?? 0)}</span>
                     <span className="mt-1 hidden text-sm text-ink/60 sm:block">{t.product[id].short}</span>
                   </span>
                 </button>
               ))}
             </div>
-            {product === "figurine" && subject === "person" ? (
+            {subject === "person" ? (
               <div className="mt-8">
                 <p className="text-sm font-semibold">{s.peopleTitle}</p>
                 <div className="mt-3 grid grid-cols-3 gap-2 sm:gap-3">

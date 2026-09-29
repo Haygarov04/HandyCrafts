@@ -16,8 +16,8 @@ export const catalog = {
     short: "Мини фигура с халка",
     line: "Малка плътна фигурка с метална халка. Винаги в джоба.",
     sizes: [
-      { cm: 5, price: 30 },
-      { cm: 6, price: 40 },
+      { cm: 5, price: 30, group: { 2: 50, 3: 70 } },
+      { cm: 6, price: 40, group: { 2: 65, 3: 90 } },
     ],
   },
 } as const;
@@ -35,14 +35,14 @@ export function isSubjectId(value: unknown): value is SubjectId {
   return typeof value === "string" && value in subjects;
 }
 
-/** Figurines of people can show up to three people on one base. */
+/** Figurines and keychains of people can show up to three people together. */
 export const maxPeople = 3;
 /** Each extra person costs a little less than a whole figurine: 2 people ≈ 1.8×, 3 people ≈ 2.6×. */
 const peopleFactor: Record<number, number> = { 1: 1, 2: 1.8, 3: 2.6 };
 
-/** How many people a piece can have: only person figurines go above one. */
+/** How many people a piece can have: only pieces of people go above one. */
 export function normalizePeople(product: ProductId, subject: SubjectId, value: unknown) {
-  if (product !== "figurine" || subject !== "person") return 1;
+  if (subject !== "person") return 1;
   const n = Math.floor(Number(value) || 1);
   return Math.min(maxPeople, Math.max(1, n));
 }
@@ -62,6 +62,7 @@ export function isProductId(value: unknown): value is ProductId {
 export function priceFor(product: ProductId, cm: number, people = 1) {
   const size = catalog[product].sizes.find((item) => item.cm === cm);
   if (!size) return null;
+  if (people > 1 && "group" in size) return size.group[people as 2 | 3] ?? size.price;
   const factor = peopleFactor[people] ?? 1;
   return factor === 1 ? size.price : Math.round((size.price * factor) / 5) * 5;
 }

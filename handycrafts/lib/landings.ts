@@ -286,7 +286,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
     crumb: "Ключодържател по снимка",
     kicker: "Мини фигурка с халка",
     title: "Ключодържател по снимка",
-    lead: "Персонализиран 3D ключодържател на човек или домашен любимец, направен по твоя снимка. 5 или 6 см, с метална халка, от 30 €.",
+    lead: "Персонализиран 3D ключодържател на човек, двойка или домашен любимец, направен по твоя снимка. 5 или 6 см, с метална халка, от 30 €.",
     cta: { label: "Създай ключодържател", href: "/studio?product=keychain" },
     image: { src: "/shop/keychain.webp", alt: "Ключодържател фигурка на мъж по снимка", ratio: "aspect-[9/16] max-h-[36rem]" },
     product: "keychain",
@@ -306,7 +306,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       },
       {
         title: "Цена",
-        text: ["Ключодържател 5 см е 30 €, а 6 см е 40 €. Плащаш с наложен платеж при получаване."],
+        text: ["Ключодържател 5 см е 30 €, а 6 см е 40 €. Ключодържател на двама души (5 см) е 50 €, на трима — 70 €; 6 см — 65 € / 90 €. Плащаш с наложен платеж при получаване."],
       },
     ],
     faq: [
@@ -321,7 +321,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       crumb: "Custom keychain from a photo",
       kicker: "Mini figure with a ring",
       title: "A keychain made from your photo",
-      lead: "A custom 3D keychain of a person or pet made from your photo. 5 or 6 cm with a metal ring, from €30.",
+      lead: "A custom 3D keychain of a person, a couple or a pet made from your photo. 5 or 6 cm with a metal ring, from €30.",
       cta: { label: "Create a keychain", href: "/studio?product=keychain" },
       image: { src: "/shop/keychain.webp", alt: "Keychain figure of a man made from a photo", ratio: "aspect-[9/16] max-h-[36rem]" },
       product: "keychain",
@@ -341,7 +341,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         },
         {
           title: "Price",
-          text: ["A keychain is €30 for 5 cm and €40 for 6 cm. You pay cash on delivery."],
+          text: ["A keychain is €30 for 5 cm and €40 for 6 cm. A keychain of two people (5 cm) is €50 and of three €70; 6 cm — €65 / €90. You pay cash on delivery."],
         },
       ],
       faq: [

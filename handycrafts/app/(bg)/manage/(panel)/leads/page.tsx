@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { after } from "next/server";
 import { money } from "@/lib/catalog";
+import { nextReminderAt, reminderLabel, sendDueReminders } from "@/lib/lead-mail";
 import { leadLabel, leadTone, listLeads } from "@/lib/leads";
 import { deliveryLabel } from "@/lib/order-types";
 import LeadControls from "./lead-controls";
@@ -14,6 +16,17 @@ const filters = [
   { key: "lost", label: "Не искат" },
 ] as const;
 
+const when = (iso: string) =>
+  new Date(iso).toLocaleString("bg-BG", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Sofia" });
+
+function until(at: number) {
+  const minutes = Math.round((at - Date.now()) / 60000);
+  if (minutes <= 1) return "всеки момент";
+  if (minutes < 60) return `след ${minutes} мин`;
+  const hours = Math.round(minutes / 60);
+  return hours < 24 ? `след ${hours} ч` : `след ${Math.round(hours / 24)} дни`;
+}
+
 function ago(iso: string) {
   const minutes = Math.round((Date.now() - Date.parse(iso)) / 60000);
   if (minutes < 60) return `преди ${Math.max(1, minutes)} мин`;
@@ -24,6 +37,7 @@ function ago(iso: string) {
 
 export default async function LeadsPage({ searchParams }: Props) {
   const show = (await searchParams).show || "todo";
+  after(() => sendDueReminders().catch(() => undefined));
   const leads = await listLeads();
   const shown = leads.filter((lead) =>
     show === "won" ? lead.status === "won" : show === "lost" ? lead.status === "lost" : lead.status === "open" || lead.status === "contacted"
@@ -92,7 +106,34 @@ export default async function LeadsPage({ searchParams }: Props) {
                     </p>
                   </div>
                 </div>
-                <LeadControls id={lead.id} phone={phone} email={c.email} status={lead.status} note={lead.internalNote || ""} />
+                <ul className="mt-3 space-y-1 rounded-2xl bg-paper px-4 py-3 text-xs text-ink/60">
+                  {(lead.emails || []).map((mail) => (
+                    <li key={mail.at} className={mail.ok ? "" : "text-red-700"}>
+                      {mail.ok ? "✓" : "✗"} {reminderLabel[mail.step] || `Имейл ${mail.step + 1}`} · {when(mail.at)}
+                      {mail.ok ? "" : " · не мина"}
+                    </li>
+                  ))}
+                  <li>
+                    {!c.email
+                      ? "Няма имейл — само обаждане."
+                      : lead.optOut
+                        ? "Клиентът спря напомнянията."
+                        : (() => {
+                            const at = nextReminderAt(lead);
+                            if (at) return `Следващ имейл: ${reminderLabel[(lead.emails || []).length]} — ${until(at)}`;
+                            if (lead.status === "won" || lead.status === "lost") return "Имейлите са спрени.";
+                            return "Всички напомняния са пратени.";
+                          })()}
+                  </li>
+                </ul>
+                <LeadControls
+                  id={lead.id}
+                  phone={phone}
+                  email={c.email}
+                  status={lead.status}
+                  note={lead.internalNote || ""}
+                  mailing={nextReminderAt(lead) !== null}
+                />
               </li>
             );
           })}

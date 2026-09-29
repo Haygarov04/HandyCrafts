@@ -90,13 +90,13 @@ const ink = "#161513";
 const paper = "#f6f1e8";
 const ember = "#ff7a00";
 
-function button(label: string, href: string) {
+export function button(label: string, href: string) {
   return `<table role="presentation" cellspacing="0" cellpadding="0" style="margin:24px 0 8px"><tr><td style="border-radius:14px;background:${ember}">
 <a href="${href}" style="display:inline-block;padding:14px 26px;font-weight:700;font-size:15px;color:${ink};text-decoration:none;border-radius:14px">${escapeHtml(label)}</a>
 </td></tr></table>`;
 }
 
-function layout(lang: Lang, preheader: string, body: string) {
+export function layout(lang: Lang, preheader: string, body: string) {
   const f = lang === "en"
     ? { tagline: "Figurines and keychains from a photo · Ruse, Bulgaria", questions: "Questions? Just reply to this email." }
     : { tagline: "Фигурки и ключодържатели по снимка · Русе", questions: "Въпроси? Просто отговори на този имейл." };

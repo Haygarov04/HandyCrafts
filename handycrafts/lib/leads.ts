@@ -1,3 +1,4 @@
+import { createHmac, timingSafeEqual } from "crypto";
 import { del, getJSON, setJSON, zadd, zrem, zrevrange } from "@/lib/kv";
 import type { Delivery } from "@/lib/order-types";
 
@@ -32,10 +33,24 @@ export type Lead = {
   status: LeadStatus;
   lang: "bg" | "en";
   customer: { name: string; phone: string; email: string; city: string; delivery: Delivery; address: string };
-  items: { draftId: string; label: string; cm: number; qty: number; price: number; preview?: string }[];
+  items: {
+    draftId: string;
+    product?: "figurine" | "keychain";
+    subject?: "person" | "pet";
+    people?: number;
+    label: string;
+    cm: number;
+    qty: number;
+    price: number;
+    preview?: string;
+  }[];
   total: number;
   internalNote?: string;
   orderNumber?: string;
+  /** Reminder emails sent so far, oldest first. */
+  emails?: { step: number; at: string; ok: boolean }[];
+  /** The customer asked for no more reminders. */
+  optOut?: boolean;
 };
 
 const LEAD_TTL = 60 * 60 * 24 * 30;
@@ -62,9 +77,13 @@ export async function listLeads(limit = 200) {
   return leads.filter((lead): lead is Lead => Boolean(lead));
 }
 
-export async function updateLead(id: string, change: { status?: LeadStatus; internalNote?: string; orderNumber?: string }) {
+export async function updateLead(
+  id: string,
+  change: { status?: LeadStatus; internalNote?: string; orderNumber?: string; optOut?: boolean }
+) {
   const lead = await getLead(id);
   if (!lead) return null;
+  if (change.optOut !== undefined) lead.optOut = change.optOut;
   if (change.status) lead.status = change.status;
   if (change.internalNote !== undefined) lead.internalNote = change.internalNote;
   if (change.orderNumber) lead.orderNumber = change.orderNumber;
@@ -77,4 +96,20 @@ export async function deleteLead(id: string) {
   if (!isLeadId(id)) return;
   await del(`lead:${id}`);
   await zrem("leads", id);
+}
+
+function sign(id: string) {
+  const secret = `${process.env.SESSION_SECRET || ""}:${process.env.CRM_PASSWORD || ""}:lead`;
+  return createHmac("sha256", secret).update(id).digest("hex").slice(0, 32);
+}
+
+/** Signed token for links in reminder emails, so only the inbox owner can open or stop them. */
+export function leadToken(id: string) {
+  return sign(id);
+}
+
+export function leadTokenValid(id: string, token: string) {
+  const expected = Buffer.from(sign(id));
+  const given = Buffer.from(String(token || ""));
+  return expected.length === given.length && timingSafeEqual(expected, given);
 }

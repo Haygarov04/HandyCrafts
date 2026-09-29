@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { LeadStatus } from "@/lib/leads";
 
-type Props = { id: string; phone: string; email: string; status: LeadStatus; note: string };
+type Props = { id: string; phone: string; email: string; status: LeadStatus; note: string; mailing: boolean };
 
-export default function LeadControls({ id, phone, email, status, note }: Props) {
+export default function LeadControls({ id, phone, email, status, note, mailing }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [text, setText] = useState(note);
 
-  async function send(method: "PATCH" | "DELETE", body: Record<string, string>) {
+  async function send(method: "PATCH" | "DELETE", body: Record<string, string | boolean>) {
     setBusy(true);
     await fetch("/api/manage/leads", {
       method,
@@ -58,6 +58,11 @@ export default function LeadControls({ id, phone, email, status, note }: Props) 
               Върни
             </button>
           )}
+          {mailing ? (
+            <button type="button" disabled={busy} onClick={() => send("PATCH", { optOut: true })} className={`${pill} bg-ink/5`}>
+              Спри имейлите
+            </button>
+          ) : null}
           <button
             type="button"
             disabled={busy}

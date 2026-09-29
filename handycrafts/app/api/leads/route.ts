@@ -35,6 +35,9 @@ export async function POST(req: Request) {
     if (price === null) continue;
     items.push({
       draftId: draft.id,
+      product: draft.product,
+      subject: draft.subject || "person",
+      people,
       label: itemLabel(draft.product, draft.subject, people),
       cm,
       qty: Math.min(maxQty, Math.max(1, Math.floor(Number(entry.qty) || 1))),
@@ -63,6 +66,8 @@ export async function POST(req: Request) {
     items,
     total: items.reduce((sum, item) => sum + item.price * item.qty, 0),
     internalNote: existing?.internalNote,
+    emails: existing?.emails,
+    optOut: existing?.optOut,
   });
   return new NextResponse(null, { status: 204 });
 }

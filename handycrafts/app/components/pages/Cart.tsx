@@ -34,8 +34,37 @@ export default function CartPage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
-  // Save what's typed so far (once there's a phone or email) so we can call if the order never arrives.
   const leadId = useRef("");
+
+  // A link from a reminder email brings the saved cart and details back, on any device.
+  const [resuming, setResuming] = useState(false);
+  const { add: addToCart, setOpen: setCartOpen } = cart;
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("lead");
+    const token = params.get("t");
+    if (!id || !token) return;
+    queueMicrotask(() => setResuming(true));
+    fetch(`/api/leads/resume?id=${encodeURIComponent(id)}&t=${encodeURIComponent(token)}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!data) return;
+        for (const item of data.items || []) addToCart(item);
+        setCartOpen(false);
+        setForm((prev) => ({ ...prev, ...data.customer }));
+        leadId.current = data.id;
+        try {
+          localStorage.setItem(LEAD_KEY, data.id);
+        } catch {}
+      })
+      .catch(() => {})
+      .finally(() => {
+        setResuming(false);
+        window.history.replaceState(null, "", window.location.pathname);
+      });
+  }, [addToCart, setCartOpen]);
+
+  // Save what's typed so far (once there's a phone or email) so we can call if the order never arrives.
   const leadBody = useRef("");
   useEffect(() => {
     if (!cart.ready || cart.items.length === 0) return;
@@ -116,6 +145,8 @@ export default function CartPage() {
       setSending(false);
     }
   }
+
+  if (resuming) return <div className="min-h-[70vh]" />;
 
   if (cart.ready && cart.items.length === 0) {
     return (

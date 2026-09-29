@@ -18,6 +18,7 @@ export async function PATCH(req: Request) {
   const lead = await updateLead(String(body.id || ""), {
     status: isLeadStatus(body.status) ? body.status : undefined,
     internalNote: typeof body.internalNote === "string" ? cleanText(body.internalNote, 1000) : undefined,
+    optOut: body.optOut === true ? true : undefined,
   });
   if (!lead) return NextResponse.json({ error: "Няма такъв лийд." }, { status: 404 });
   return NextResponse.json({ lead });

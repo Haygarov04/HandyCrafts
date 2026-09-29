@@ -1,6 +1,7 @@
 import { del, list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { hasBlob } from "@/lib/files";
+import { sendDueReminders } from "@/lib/lead-mail";
 import { setJSON } from "@/lib/kv";
 import { listOrders } from "@/lib/orders";
 
@@ -21,7 +22,8 @@ export async function GET(req: Request) {
   if (!secret || req.headers.get("authorization") !== `Bearer ${secret}`) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
-  if (!hasBlob()) return NextResponse.json({ skipped: "no blob store" });
+  const reminders = await sendDueReminders().catch(() => ({ sent: 0 }));
+  if (!hasBlob()) return NextResponse.json({ skipped: "no blob store", reminders });
 
   const now = Date.now();
   const orders = await listOrders(5000);
@@ -60,5 +62,5 @@ export async function GET(req: Request) {
 
   for (let i = 0; i < stale.length; i += 100) await del(stale.slice(i, i + 100));
 
-  return NextResponse.json({ draftFilesDeleted: stale.length, orderFilesDeleted: orderFiles });
+  return NextResponse.json({ draftFilesDeleted: stale.length, orderFilesDeleted: orderFiles, reminders });
 }

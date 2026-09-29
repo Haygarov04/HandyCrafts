@@ -5,6 +5,7 @@ import { itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
 import { sendCustomerEmail, sendNewOrderToShop } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
 import { deliveryLabel, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
+import { isLeadId, updateLead } from "@/lib/leads";
 import { createOrder, getDraft, listOrders, logEmail, nextOrderNumber } from "@/lib/orders";
 import { subscribe } from "@/lib/newsletter";
 import { notifyAll } from "@/lib/push";
@@ -113,6 +114,8 @@ export async function POST(req: Request) {
     };
 
     await createOrder(order);
+    const leadId = String(body.leadId || "");
+    if (isLeadId(leadId)) await updateLead(leadId, { status: "won", orderNumber: order.number }).catch(() => null);
     if (body.newsletter === true && email) {
       await subscribe(email.toLowerCase(), order.lang === "en" ? "en" : "bg", "order").catch(() => false);
     }

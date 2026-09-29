@@ -119,6 +119,17 @@ export async function zadd(key: string, score: number, member: string) {
   });
 }
 
+export async function zrem(key: string, member: string) {
+  if (hasRedis()) {
+    await (await redis()).zRem(key, member);
+    return;
+  }
+  await withLocal((data) => {
+    const list = (data[key]?.value as [number, string][]) || [];
+    data[key] = { value: list.filter(([, m]) => m !== member) };
+  });
+}
+
 export async function zrevrange(key: string, start: number, stop: number) {
   if (hasRedis()) {
     return (await redis()).zRange(key, start, stop, { REV: true });

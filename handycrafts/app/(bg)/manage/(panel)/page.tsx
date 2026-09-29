@@ -2,6 +2,7 @@ import Link from "next/link";
 import { money } from "@/lib/catalog";
 import { hasBlob } from "@/lib/files";
 import { hasRedis } from "@/lib/kv";
+import { listLeads } from "@/lib/leads";
 import { isStatus, orderStatuses, statusLabel, statusTone } from "@/lib/order-types";
 import { listOrders } from "@/lib/orders";
 
@@ -12,7 +13,8 @@ type Props = { searchParams: Promise<{ status?: string }> };
 export default async function ManagePage({ searchParams }: Props) {
   const { status } = await searchParams;
   const filter = isStatus(status) ? status : null;
-  const orders = await listOrders();
+  const [orders, leads] = await Promise.all([listOrders(), listLeads()]);
+  const openLeads = leads.filter((lead) => lead.status === "open").length;
   const shown = filter ? orders.filter((order) => order.status === filter) : orders.filter((o) => o.status !== "cancelled");
 
   const month = new Date().toISOString().slice(0, 7);
@@ -43,6 +45,16 @@ export default async function ManagePage({ searchParams }: Props) {
           </div>
         ))}
       </div>
+
+      <Link href="/manage/leads" className="flex items-center justify-between gap-3 rounded-3xl bg-white px-5 py-4 transition hover:shadow-md">
+        <span>
+          <span className="block font-semibold">Незавършени поръчки</span>
+          <span className="block text-sm text-ink/55">Започнали са поръчка, но не са я изпратили</span>
+        </span>
+        <span className={`shrink-0 rounded-full px-3 py-1 text-sm font-semibold ${openLeads ? "bg-ember text-ink" : "bg-ink/5 text-ink/50"}`}>
+          {openLeads}
+        </span>
+      </Link>
 
       <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
         <Link href="/manage" className={`shrink-0 rounded-full px-4 py-2 text-sm ${!filter ? "bg-ink text-paper" : "bg-white"}`}>

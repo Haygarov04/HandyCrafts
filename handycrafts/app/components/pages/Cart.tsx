@@ -3,11 +3,13 @@
 import { trackPurchase } from "@/app/components/Analytics";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/app/components/cart";
 import QtyControl from "@/app/components/QtyControl";
 import { useLang } from "@/app/components/lang";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
+
+const LEAD_KEY = "hc_lead_id";
 
 const field =
   "w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 outline-none transition focus:border-ember";
@@ -32,6 +34,50 @@ export default function CartPage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
+  // Save what's typed so far (once there's a phone or email) so we can call if the order never arrives.
+  const leadId = useRef("");
+  const leadBody = useRef("");
+  useEffect(() => {
+    if (!cart.ready || cart.items.length === 0) return;
+    if (!leadId.current) {
+      try {
+        leadId.current = localStorage.getItem(LEAD_KEY) || "";
+        if (!leadId.current) {
+          leadId.current = crypto.randomUUID();
+          localStorage.setItem(LEAD_KEY, leadId.current);
+        }
+      } catch {
+        leadId.current ||= crypto.randomUUID();
+      }
+    }
+    if (form.phone.replace(/\D/g, "").length < 8 && !form.email.includes("@")) return;
+    const body = JSON.stringify({
+      id: leadId.current,
+      lang,
+      website: form.website,
+      customer: { name: form.name, phone: form.phone, email: form.email, city: form.city, delivery: form.delivery, address: form.address },
+      items: cart.items.map((item) => ({ draftId: item.draftId, qty: item.qty, cm: item.cm })),
+    });
+    if (body === leadBody.current) return;
+    const send = () => {
+      leadBody.current = body;
+      fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true }).catch(() => {});
+    };
+    const timer = setTimeout(send, 1500);
+    // Leaving the page before the timer fires still saves the latest version.
+    const onHide = () => {
+      if (document.visibilityState === "hidden") {
+        clearTimeout(timer);
+        send();
+      }
+    };
+    document.addEventListener("visibilitychange", onHide);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("visibilitychange", onHide);
+    };
+  }, [form, cart.items, cart.ready, lang]);
+
   const set = (key: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm({ ...form, [key]: event.target.value });
 
@@ -53,6 +99,7 @@ export default function CartPage() {
           note: form.note,
           website: form.website,
           newsletter,
+          leadId: leadId.current,
           items: cart.items.map((item) => ({ draftId: item.draftId, qty: item.qty, cm: item.cm })),
         }),
       });
@@ -60,6 +107,9 @@ export default function CartPage() {
       if (!res.ok) throw new Error(data.error || c.failed);
       trackPurchase({ number: data.number, total: cart.items.reduce((sum, item) => sum + item.price * item.qty, 0) });
       cart.clear();
+      try {
+        localStorage.removeItem(LEAD_KEY);
+      } catch {}
       router.push(href(`/thanks?n=${encodeURIComponent(data.number)}`));
     } catch (issue) {
       setError(issue instanceof Error ? issue.message : c.failed);
@@ -102,6 +152,7 @@ export default function CartPage() {
               className="absolute -left-[9999px] h-0 w-0 opacity-0"
               name="website"
             />
+            <p className="mt-3 text-xs leading-5 text-ink/45">{c.leadNote}</p>
           </fieldset>
 
           <fieldset className="rounded-[2rem] bg-white p-6 sm:p-8">

@@ -74,7 +74,7 @@ export default async function SettingsPage() {
             от иконата.
           </li>
           <li>
-            <b>Android:</b> в Chrome натисни ⋮ → „Инсталиране на приложението“.
+            <b>Android:</b> натисни „Инсталирай“ горе вдясно. Ако го няма — в Chrome ⋮ → „Инсталиране на приложението“.
           </li>
         </ul>
       </section>

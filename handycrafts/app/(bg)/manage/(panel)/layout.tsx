@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { manageAllowed, manageOpenInDev } from "@/lib/manage-auth";
+import InstallButton from "../InstallButton";
 import BottomNav from "./bottom-nav";
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +19,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
             <span className="font-display font-semibold">HandyCrafts</span>
           </Link>
           <div className="flex items-center gap-4 text-sm">
+            <InstallButton />
             <Link href="/" className="text-ink/55 hover:text-ink">
               Сайт
             </Link>

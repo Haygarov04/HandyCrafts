@@ -12,5 +12,15 @@ export const viewport: Viewport = {
 };
 
 export default function ManageLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-paper">{children}</div>;
+  return (
+    <div className="min-h-screen bg-paper">
+      {/* Chrome fires beforeinstallprompt once, often before React loads: keep it for the install button. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: "addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__hcInstall=e});",
+        }}
+      />
+      {children}
+    </div>
+  );
 }

@@ -8,7 +8,6 @@ import { deliveryLabel, type Delivery, type Order, type OrderItem } from "@/lib/
 import { isLeadId, updateLead } from "@/lib/leads";
 import { createOrder, getDraft, listOrders, logEmail, nextOrderNumber } from "@/lib/orders";
 import { subscribe } from "@/lib/newsletter";
-import { discountOn } from "@/lib/settings";
 import { notifyAll } from "@/lib/push";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
 
@@ -67,7 +66,6 @@ export async function POST(req: Request) {
     }
 
     const items: OrderItem[] = [];
-    const discount = await discountOn();
     for (const raw of rawItems) {
       const entry = raw as { draftId?: unknown; qty?: unknown; cm?: unknown };
       const draft = await getDraft(String(entry.draftId || ""));
@@ -80,7 +78,7 @@ export async function POST(req: Request) {
       // The size can change after the preview, the product cannot.
       const cm = Number(entry.cm) || draft.cm;
       const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
-      const price = priceFor(draft.product, cm, people, draft.subject || "person", discount);
+      const price = priceFor(draft.product, cm, people);
       if (price === null) return NextResponse.json({ error: tr("Непознат размер.", "Unknown size.") }, { status: 400 });
       const qty = Math.min(maxQty, Math.max(1, Math.floor(Number(entry.qty) || 1)));
       items.push({

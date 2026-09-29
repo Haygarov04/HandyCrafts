@@ -1,9 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { catalog, priceFor, regularPrice, type ProductId } from "@/lib/catalog";
-import { discountOn } from "@/lib/settings";
-import { fillPrices } from "@/lib/price-text";
-import Price from "./Price";
+import { catalog, type ProductId } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { landingLinks } from "@/lib/landing-links";
 import { breadcrumbJsonLd, faqJsonLd, productJsonLd } from "@/lib/site";
@@ -27,10 +24,7 @@ export type LandingContent = {
 };
 
 
-export default async function Landing({ content: raw, lang }: { content: LandingContent; lang: Lang }) {
-  const on = await discountOn();
-  const content = fillPrices(raw, on);
-  const subject = content.cta.href.includes("subject=pet") ? "pet" : "person";
+export default function Landing({ content, lang }: { content: LandingContent; lang: Lang }) {
   const t = dict[lang];
   const href = (path: string) => localize(lang, path);
   const sizes = catalog[content.product].sizes;
@@ -39,7 +33,6 @@ export default async function Landing({ content: raw, lang }: { content: Landing
     <>
       <JsonLd
         data={productJsonLd({
-          discountOn: on,
           product: content.product,
           name: content.productName,
           description: content.lead,
@@ -65,10 +58,7 @@ export default async function Landing({ content: raw, lang }: { content: Landing
             <div className="mt-6 flex flex-wrap gap-2">
               {sizes.map((size) => (
                 <span key={size.cm} className="rounded-full bg-white px-3.5 py-1.5 text-sm">
-                  {size.cm} {t.cm} ·{" "}
-                  <b>
-                    <Price now={priceFor(content.product, size.cm, 1, subject, on) ?? 0} was={regularPrice(content.product, size.cm, 1, subject, on)} money={t.money} />
-                  </b>
+                  {size.cm} {t.cm} · <b>{t.money(size.price)}</b>
                 </span>
               ))}
             </div>

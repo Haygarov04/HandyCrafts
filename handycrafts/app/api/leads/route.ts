@@ -4,7 +4,6 @@ import { getLead, isLeadId, saveLead, type Lead } from "@/lib/leads";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
 import { getDraft } from "@/lib/orders";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
-import { discountOn } from "@/lib/settings";
 
 export const runtime = "nodejs";
 
@@ -27,13 +26,12 @@ export async function POST(req: Request) {
   if (existing?.status === "won") return new NextResponse(null, { status: 204 });
 
   const items: Lead["items"] = [];
-  const discount = await discountOn();
   for (const entry of (Array.isArray(body.items) ? body.items.slice(0, 10) : []) as { draftId?: unknown; qty?: unknown; cm?: unknown }[]) {
     const draft = await getDraft(String(entry?.draftId || ""));
     if (!draft) continue;
     const cm = Number(entry.cm) || draft.cm;
     const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
-    const price = priceFor(draft.product, cm, people, draft.subject || "person", discount);
+    const price = priceFor(draft.product, cm, people);
     if (price === null) continue;
     items.push({
       draftId: draft.id,

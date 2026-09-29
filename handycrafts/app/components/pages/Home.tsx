@@ -3,10 +3,7 @@ import Link from "next/link";
 import FaqList from "../FaqList";
 import JsonLd from "../JsonLd";
 import NewsletterBox from "../NewsletterBox";
-import Price from "@/app/components/Price";
-import { catalog, fromPrice, priceFor, regularPrice } from "@/lib/catalog";
-import { discountOn } from "@/lib/settings";
-import { fillPrices } from "@/lib/price-text";
+import { catalog, fromPrice } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
 
@@ -72,10 +69,8 @@ const productCards = [
   { image: "/shop/keychain.webp", position: "50% 50%", href: "/studio?product=keychain", product: "keychain" as const },
 ];
 
-export default async function Home({ lang }: { lang: Lang }) {
-  const on = await discountOn();
-  const kind = (href: string) => (href.includes("subject=pet") ? "pet" : "person");
-  const t = fillPrices(dict[lang], on);
+export default function Home({ lang }: { lang: Lang }) {
+  const t = dict[lang];
   const h = t.home;
   const href = (path: string) => localize(lang, path);
   const products = productCards.map((card, index) => ({ ...card, ...h.products[index] }));
@@ -84,7 +79,6 @@ export default async function Home({ lang }: { lang: Lang }) {
       <JsonLd data={faqJsonLd(t.faq)} />
       <JsonLd
         data={productJsonLd({
-          discountOn: on,
           product: "all",
           name: lang === "en" ? "Custom figurines and keychains from a photo" : "Фигурки и ключодържатели по снимка",
           description: t.meta.description,
@@ -94,7 +88,6 @@ export default async function Home({ lang }: { lang: Lang }) {
       />
       <JsonLd
         data={productJsonLd({
-          discountOn: on,
           product: "figurine",
           name: h.productFigurineName,
           description: h.productFigurineText,
@@ -104,7 +97,6 @@ export default async function Home({ lang }: { lang: Lang }) {
       />
       <JsonLd
         data={productJsonLd({
-          discountOn: on,
           product: "keychain",
           name: h.productKeychainName,
           description: h.productKeychainText,
@@ -217,12 +209,13 @@ export default async function Home({ lang }: { lang: Lang }) {
                     className="object-cover transition duration-700 group-hover:scale-[1.04]"
                     sizes="(min-width: 768px) 33vw, 100vw"
                   />
-                  {/* Price sits on the photo's corner so a long title can never push it off the card. */}
-                  <span className="absolute right-3 top-3 rounded-xl bg-ember px-3 py-1.5 text-base font-bold text-ink shadow-lg">
-                    {t.from} <Price now={fromPrice(item.product, kind(item.href), on)} was={regularPrice(item.product, catalog[item.product].sizes[0].cm, 1, kind(item.href), on)} money={t.money} />
-                  </span>
                   <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent p-5 pt-20 text-paper">
-                    <span className="block font-display text-2xl sm:text-[1.7rem]">{item.title}</span>
+                    <span className="flex items-end justify-between gap-3">
+                      <span className="block font-display text-2xl sm:text-[1.7rem]">{item.title}</span>
+                      <span className="shrink-0 rounded-lg bg-ember px-2.5 py-1 text-sm font-bold text-ink">
+                        {t.from} {t.money(fromPrice(item.product))}
+                      </span>
+                    </span>
                     <span className="mt-2 block text-[15px] leading-6 text-paper/80">{item.text}</span>
                   </span>
                 </span>
@@ -230,7 +223,7 @@ export default async function Home({ lang }: { lang: Lang }) {
                   <span className="flex flex-wrap gap-1.5">
                     {catalog[item.product].sizes.map((size) => (
                       <span key={size.cm} className="rounded-md border border-ink/10 px-2 py-1 text-xs text-ink/70">
-                        {size.cm} {t.cm} · <Price now={priceFor(item.product, size.cm, 1, kind(item.href), on) ?? 0} was={regularPrice(item.product, size.cm, 1, kind(item.href), on)} money={t.money} />
+                        {size.cm} {t.cm} · {t.money(size.price)}
                       </span>
                     ))}
                   </span>
@@ -251,12 +244,7 @@ export default async function Home({ lang }: { lang: Lang }) {
             <div className="mt-6 flex items-end justify-around gap-2 border-b-2 border-ink sm:gap-4">
               {[...catalog.keychain.sizes.map((s) => ({ ...s, kind: "keychain" })), ...catalog.figurine.sizes.map((s) => ({ ...s, kind: "figurine" }))].map((size) => (
                 <div key={`${size.kind}-${size.cm}`} className="flex flex-col items-center">
-                  <span className="mb-2 flex flex-col items-center text-center text-xs leading-tight text-ink/50 [&>s]:mr-0"><Price
-                      now={priceFor(size.kind === "figurine" ? "figurine" : "keychain", size.cm, 1, "person", on) ?? 0}
-                      was={regularPrice(size.kind === "figurine" ? "figurine" : "keychain", size.cm, 1, "person", on)}
-                      money={t.money}
-                    />
-                  </span>
+                  <span className="mb-2 text-xs text-ink/50">{t.money(size.price)}</span>
                   <span
                     className={`block w-8 rounded-t-lg sm:w-12 ${size.kind === "figurine" ? "bg-ember" : "bg-ink/70"}`}
                     style={{ height: `${size.cm * 7}px` }}

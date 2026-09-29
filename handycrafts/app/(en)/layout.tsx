@@ -2,9 +2,7 @@ import type { Metadata, Viewport } from "next";
 import RootShell from "@/app/components/RootShell";
 import { rootMetadata } from "@/lib/seo";
 
-export function generateMetadata(): Promise<Metadata> {
-  return rootMetadata("en");
-}
+export const metadata: Metadata = rootMetadata("en");
 
 export const viewport: Viewport = {
   themeColor: "#f6f1e8",

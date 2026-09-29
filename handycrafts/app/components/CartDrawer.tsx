@@ -5,14 +5,10 @@ import { useEffect } from "react";
 import { useCart } from "./cart";
 import { useLang } from "./lang";
 import QtyControl from "./QtyControl";
-import Price from "./Price";
-import { discountTotal, regularPrice } from "@/lib/catalog";
-import { useDiscount } from "@/app/components/discount";
 
 export default function CartDrawer() {
   const cart = useCart();
   const { t, href } = useLang();
-  const discountOn = useDiscount();
 
   useEffect(() => {
     if (!cart.open) return;
@@ -93,9 +89,7 @@ export default function CartDrawer() {
                         {t.drawer.remove}
                       </button>
                     </div>
-                    <p className="text-sm text-ink/55">
-                      <Price now={item.price} was={regularPrice(item.product, item.cm, item.people || 1, item.subject, discountOn)} money={t.money} /> / {t.drawer.each}
-                    </p>
+                    <p className="text-sm text-ink/55">{t.money(item.price)} / {t.drawer.each}</p>
                     <div className="mt-auto flex items-center justify-between pt-2">
                       <QtyControl value={item.qty} onChange={(qty) => cart.setQty(item.draftId, qty)} />
                       <p className="font-semibold">{t.money(item.price * item.qty)}</p>
@@ -105,12 +99,6 @@ export default function CartDrawer() {
               ))}
             </ul>
             <div className="border-t border-ink/10 px-5 py-5">
-              {discountTotal(cart.items, discountOn) ? (
-                <div className="mb-1 flex items-center justify-between text-sm font-semibold text-ember-deep">
-                  <span>{t.cart.discount}</span>
-                  <span>−{t.money(discountTotal(cart.items, discountOn))}</span>
-                </div>
-              ) : null}
               <div className="flex items-center justify-between text-lg">
                 <span>{t.drawer.total}</span>
                 <span className="font-semibold">{t.money(cart.total)}</span>

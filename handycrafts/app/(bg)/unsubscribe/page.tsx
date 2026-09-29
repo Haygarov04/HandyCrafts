@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import Unsubscribe from "@/app/components/pages/Unsubscribe";
 import { pageMetadata } from "@/lib/seo";
 
-export function generateMetadata(): Promise<Metadata> {
-  return pageMetadata("bg", "/unsubscribe", { title: "Отписване", noindex: true });
-}
+export const metadata: Metadata = pageMetadata("bg", "/unsubscribe", { title: "Отписване", noindex: true });
 
 type Props = { searchParams: Promise<{ e?: string; t?: string }> };
 

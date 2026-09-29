@@ -8,9 +8,6 @@ import { useCart } from "@/app/components/cart";
 import QtyControl from "@/app/components/QtyControl";
 import { useLang } from "@/app/components/lang";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
-import Price from "@/app/components/Price";
-import { discountTotal, regularPrice } from "@/lib/catalog";
-import { useDiscount } from "@/app/components/discount";
 
 const LEAD_KEY = "hc_lead_id";
 
@@ -21,7 +18,6 @@ export default function CartPage() {
   const cart = useCart();
   const router = useRouter();
   const { lang, t, href } = useLang();
-  const discountOn = useDiscount();
   const c = t.cart;
   const [form, setForm] = useState({
     name: "",
@@ -290,13 +286,7 @@ export default function CartPage() {
                       <p className="text-sm font-semibold">
                         {item.label} · {item.cm} {t.cm}
                       </p>
-                      <p className="shrink-0 text-sm font-semibold">
-                        <Price
-                          now={item.price * item.qty}
-                          was={((p) => (p ? p * item.qty : null))(regularPrice(item.product, item.cm, item.people || 1, item.subject, discountOn))}
-                          money={t.money}
-                        />
-                      </p>
+                      <p className="text-sm font-semibold">{t.money(item.price * item.qty)}</p>
                     </div>
                     <div className="mt-auto flex items-center justify-between">
                       <QtyControl value={item.qty} onChange={(qty) => cart.setQty(item.draftId, qty)} />
@@ -311,14 +301,8 @@ export default function CartPage() {
             <dl className="mt-6 space-y-2 border-t border-ink/10 pt-5 text-sm">
               <div className="flex justify-between">
                 <dt className="text-ink/60">{c.products}</dt>
-                <dd>{t.money(cart.total + discountTotal(cart.items, discountOn))}</dd>
+                <dd>{t.money(cart.total)}</dd>
               </div>
-              {discountTotal(cart.items, discountOn) ? (
-                <div className="flex justify-between font-semibold text-ember-deep">
-                  <dt>{c.discount}</dt>
-                  <dd>−{t.money(discountTotal(cart.items, discountOn))}</dd>
-                </div>
-              ) : null}
               <div className="flex justify-between">
                 <dt className="text-ink/60">{c.shipping}</dt>
                 <dd>{c.shippingValue}</dd>

@@ -5,9 +5,7 @@ import { pageMetadata } from "@/lib/seo";
 
 const t = dict["en"].meta;
 
-export function generateMetadata(): Promise<Metadata> {
-  return pageMetadata("en", "/studio", { title: t.studioTitle, description: t.studioDescription });
-}
+export const metadata: Metadata = pageMetadata("en", "/studio", { title: t.studioTitle, description: t.studioDescription });
 
 export default function Page() {
   return <Studio />;

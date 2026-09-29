@@ -2,8 +2,6 @@ import { Manrope, Unbounded } from "next/font/google";
 import "../globals.css";
 import { dict, type Lang } from "@/lib/i18n";
 import { seller, sellerComplete } from "@/lib/legal";
-import { discountOn } from "@/lib/settings";
-import { priceTokens } from "@/lib/price-text";
 import { absolute, business, siteName } from "@/lib/site";
 import JsonLd from "./JsonLd";
 import SiteFrame from "./SiteFrame";
@@ -19,16 +17,14 @@ const unbounded = Unbounded({
   weight: ["400", "500", "600"],
 });
 
-export default async function RootShell({ lang, children }: { lang: Lang; children: React.ReactNode }) {
+export default function RootShell({ lang, children }: { lang: Lang; children: React.ReactNode }) {
   const t = dict[lang];
-  const discount = await discountOn();
-  const prices = priceTokens(discount);
   const store = {
     "@context": "https://schema.org",
     "@type": "Store",
     name: siteName,
     alternateName: "Handy Crafts",
-    priceRange: `${prices.from} € – ${prices.fig20x3} €`,
+    priceRange: "30 € – 260 €",
     url: absolute(lang === "en" ? "/en" : "/"),
     logo: absolute("/icon.png"),
     image: absolute("/og-family.jpg"),
@@ -59,7 +55,7 @@ export default async function RootShell({ lang, children }: { lang: Lang; childr
       <body className="relative overflow-x-hidden antialiased">
         <JsonLd data={website} />
         <JsonLd data={store} />
-        <SiteFrame discount={discount} sellerLine={sellerComplete() ? `${seller.name}, ${lang === "en" ? "EIK" : "ЕИК"} ${seller.eik}` : undefined}>{children}</SiteFrame>
+        <SiteFrame sellerLine={sellerComplete() ? `${seller.name}, ${lang === "en" ? "EIK" : "ЕИК"} ${seller.eik}` : undefined}>{children}</SiteFrame>
       </body>
     </html>
   );

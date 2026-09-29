@@ -37,11 +37,11 @@ type Topic = {
 
 const priceBg = {
   figurine: "Фигурка 10 см е 40 €, 15 см е 70 €, 20 см е 90 €.",
-  keychain: "Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 50 € (6 см — 65 €), за трима — 70 € (6 см — 80 €).",
+  keychain: "Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 50 € (6 см — 60 €), за трима — 70 € (6 см — 80 €).",
 };
 const priceEn = {
   figurine: "A figurine is €40 for 10 cm, €70 for 15 cm and €90 for 20 cm.",
-  keychain: "A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €50 (6 cm — €65), for three €70 (6 cm — €80).",
+  keychain: "A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €50 (6 cm — €60), for three €70 (6 cm — €80).",
 };
 
 const topics: Topic[] = [

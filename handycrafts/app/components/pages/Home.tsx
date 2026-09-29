@@ -217,13 +217,12 @@ export default async function Home({ lang }: { lang: Lang }) {
                     className="object-cover transition duration-700 group-hover:scale-[1.04]"
                     sizes="(min-width: 768px) 33vw, 100vw"
                   />
+                  {/* Price sits on the photo's corner so a long title can never push it off the card. */}
+                  <span className="absolute right-3 top-3 rounded-xl bg-ember px-3 py-1.5 text-base font-bold text-ink shadow-lg">
+                    {t.from} <Price now={fromPrice(item.product, kind(item.href), on)} was={regularPrice(item.product, catalog[item.product].sizes[0].cm, 1, kind(item.href), on)} money={t.money} />
+                  </span>
                   <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent p-5 pt-20 text-paper">
-                    <span className="flex items-end justify-between gap-3">
-                      <span className="block font-display text-2xl sm:text-[1.7rem]">{item.title}</span>
-                      <span className="shrink-0 rounded-lg bg-ember px-2.5 py-1 text-sm font-bold text-ink">
-                        {t.from} <Price now={fromPrice(item.product, kind(item.href), on)} was={regularPrice(item.product, catalog[item.product].sizes[0].cm, 1, kind(item.href), on)} money={t.money} />
-                      </span>
-                    </span>
+                    <span className="block font-display text-2xl sm:text-[1.7rem]">{item.title}</span>
                     <span className="mt-2 block text-[15px] leading-6 text-paper/80">{item.text}</span>
                   </span>
                 </span>

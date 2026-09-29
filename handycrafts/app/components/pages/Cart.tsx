@@ -291,7 +291,7 @@ export default function CartPage() {
                       <p className="shrink-0 text-sm font-semibold">
                         <Price
                           now={item.price * item.qty}
-                          was={((p) => (p ? p * item.qty : null))(listPrice(item.product, item.cm, item.people || 1))}
+                          was={((p) => (p ? p * item.qty : null))(listPrice(item.product, item.cm, item.people || 1, item.subject))}
                           money={t.money}
                         />
                       </p>

@@ -92,7 +92,7 @@ export default function CartDrawer() {
                       </button>
                     </div>
                     <p className="text-sm text-ink/55">
-                      <Price now={item.price} was={listPrice(item.product, item.cm, item.people || 1)} money={t.money} /> / {t.drawer.each}
+                      <Price now={item.price} was={listPrice(item.product, item.cm, item.people || 1, item.subject)} money={t.money} /> / {t.drawer.each}
                     </p>
                     <div className="mt-auto flex items-center justify-between pt-2">
                       <QtyControl value={item.qty} onChange={(qty) => cart.setQty(item.draftId, qty)} />

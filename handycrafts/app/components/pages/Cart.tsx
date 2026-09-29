@@ -8,6 +8,8 @@ import { useCart } from "@/app/components/cart";
 import QtyControl from "@/app/components/QtyControl";
 import { useLang } from "@/app/components/lang";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
+import Price from "@/app/components/Price";
+import { launchSavings, listPrice } from "@/lib/catalog";
 
 const LEAD_KEY = "hc_lead_id";
 
@@ -286,7 +288,13 @@ export default function CartPage() {
                       <p className="text-sm font-semibold">
                         {item.label} · {item.cm} {t.cm}
                       </p>
-                      <p className="text-sm font-semibold">{t.money(item.price * item.qty)}</p>
+                      <p className="shrink-0 text-sm font-semibold">
+                        <Price
+                          now={item.price * item.qty}
+                          was={((p) => (p ? p * item.qty : null))(listPrice(item.product, item.cm, item.people || 1))}
+                          money={t.money}
+                        />
+                      </p>
                     </div>
                     <div className="mt-auto flex items-center justify-between">
                       <QtyControl value={item.qty} onChange={(qty) => cart.setQty(item.draftId, qty)} />
@@ -301,8 +309,14 @@ export default function CartPage() {
             <dl className="mt-6 space-y-2 border-t border-ink/10 pt-5 text-sm">
               <div className="flex justify-between">
                 <dt className="text-ink/60">{c.products}</dt>
-                <dd>{t.money(cart.total)}</dd>
+                <dd>{t.money(cart.total + launchSavings(cart.items))}</dd>
               </div>
+              {launchSavings(cart.items) ? (
+                <div className="flex justify-between font-semibold text-ember-deep">
+                  <dt>{c.discount}</dt>
+                  <dd>−{t.money(launchSavings(cart.items))}</dd>
+                </div>
+              ) : null}
               <div className="flex justify-between">
                 <dt className="text-ink/60">{c.shipping}</dt>
                 <dd>{c.shippingValue}</dd>

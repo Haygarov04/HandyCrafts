@@ -67,6 +67,28 @@ export function priceFor(product: ProductId, cm: number, people = 1) {
   return factor === 1 ? size.price : Math.round((size.price * factor) / 5) * 5;
 }
 
+/**
+ * Launch offer: single keychains and figurines of one or two people show a regular price
+ * this much higher, crossed out. Set to 0 to switch the offer off everywhere.
+ */
+export const launchDiscount = 10;
+
+/** The crossed-out "regular" price for the launch offer, or null when the piece has no offer. */
+export function listPrice(product: ProductId, cm: number, people = 1) {
+  const price = priceFor(product, cm, people);
+  if (price === null || !launchDiscount) return null;
+  const eligible = product === "keychain" ? people === 1 : people <= 2;
+  return eligible ? price + launchDiscount : null;
+}
+
+/** How much the launch offer takes off a cart. */
+export function launchSavings(items: { product: ProductId; cm: number; people?: number; price: number; qty: number }[]) {
+  return items.reduce((sum, item) => {
+    const list = listPrice(item.product, item.cm, item.people || 1);
+    return sum + (list ? (list - item.price) * item.qty : 0);
+  }, 0);
+}
+
 export function fromPrice(product: ProductId) {
   return Math.min(...catalog[product].sizes.map((item) => item.price));
 }

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "@/app/components/Analytics";
 import { CartButton } from "@/app/components/Navbar";
+import Price from "@/app/components/Price";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
 import { INPUT_MAX, preparePhoto } from "@/app/components/prepare-photo";
@@ -13,6 +14,8 @@ import {
   catalog,
   isProductId,
   isSubjectId,
+  launchDiscount,
+  listPrice,
   maxPeople,
   normalizePeople,
   priceFor,
@@ -247,6 +250,9 @@ export default function StudioPage() {
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">{s.chooseTitle}</h1>
             <p className="mt-3 text-center text-ink/60">{s.chooseText}</p>
+            {launchDiscount ? (
+              <p className="mx-auto mt-4 w-fit rounded-full bg-ember px-4 py-1.5 text-sm font-bold text-ink">{s.launchOffer}</p>
+            ) : null}
             <div className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-2 rounded-full bg-white p-1.5">
               {(["person", "pet"] as const).map((id) => (
                 <button
@@ -281,7 +287,12 @@ export default function StudioPage() {
                   </span>
                   <span className="block p-3.5 sm:p-5">
                     <span className="block truncate text-base font-bold sm:font-display sm:text-xl sm:font-medium">{t.product[id].label}</span>
-                    <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1) ?? 0)}</span>
+                    <span className="mt-0.5 block text-sm text-ink/55">{t.from}{" "}
+                      <Price
+                        now={priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1) ?? 0}
+                        was={listPrice(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1)}
+                        money={t.money}
+                      /></span>
                     <span className="mt-1 hidden text-sm text-ink/60 sm:block">{t.product[id].short}</span>
                   </span>
                 </button>
@@ -309,7 +320,9 @@ export default function StudioPage() {
                         ))}
                       </span>
                       <span className="mt-1.5 block text-sm font-semibold">{s.peopleOption(n)}</span>
-                      <span className="text-xs text-ink/55">{t.money(priceFor(product, cm, n) ?? 0)}</span>
+                      <span className="text-xs text-ink/55">
+                        <Price now={priceFor(product, cm, n) ?? 0} was={listPrice(product, cm, n)} money={t.money} />
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -504,7 +517,9 @@ export default function StudioPage() {
             <span className="block truncate font-semibold">
               {t.itemLabel(product, subject, people)} · {cm} {t.cm}
             </span>
-            <span className="font-display text-lg">{t.money(price)}</span>
+            <span className="font-display text-lg">
+              <Price now={price} was={listPrice(product, cm, people)} money={t.money} />
+            </span>
           </p>
           {step < 3 ? (
             <button
@@ -564,7 +579,9 @@ function SizePicker({
             }`}
           >
             <span className="block font-display text-xl">{size.cm} {unit}</span>
-            <span className="text-sm text-ink/60">{money(priceFor(product, size.cm, people) ?? size.price)}</span>
+            <span className="text-sm text-ink/60">
+              <Price now={priceFor(product, size.cm, people) ?? size.price} was={listPrice(product, size.cm, people)} money={money} />
+            </span>
           </button>
         ))}
       </div>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { catalog, type ProductId } from "@/lib/catalog";
+import { catalog, listPrice, type ProductId } from "@/lib/catalog";
+import Price from "./Price";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { landingLinks } from "@/lib/landing-links";
 import { breadcrumbJsonLd, faqJsonLd, productJsonLd } from "@/lib/site";
@@ -58,7 +59,10 @@ export default function Landing({ content, lang }: { content: LandingContent; la
             <div className="mt-6 flex flex-wrap gap-2">
               {sizes.map((size) => (
                 <span key={size.cm} className="rounded-full bg-white px-3.5 py-1.5 text-sm">
-                  {size.cm} {t.cm} · <b>{t.money(size.price)}</b>
+                  {size.cm} {t.cm} ·{" "}
+                  <b>
+                    <Price now={size.price} was={listPrice(content.product, size.cm)} money={t.money} />
+                  </b>
                 </span>
               ))}
             </div>

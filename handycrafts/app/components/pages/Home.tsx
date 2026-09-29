@@ -3,7 +3,8 @@ import Link from "next/link";
 import FaqList from "../FaqList";
 import JsonLd from "../JsonLd";
 import NewsletterBox from "../NewsletterBox";
-import { catalog, fromPrice } from "@/lib/catalog";
+import Price from "@/app/components/Price";
+import { catalog, fromPrice, listPrice } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
 
@@ -213,7 +214,7 @@ export default function Home({ lang }: { lang: Lang }) {
                     <span className="flex items-end justify-between gap-3">
                       <span className="block font-display text-2xl sm:text-[1.7rem]">{item.title}</span>
                       <span className="shrink-0 rounded-lg bg-ember px-2.5 py-1 text-sm font-bold text-ink">
-                        {t.from} {t.money(fromPrice(item.product))}
+                        {t.from} <Price now={fromPrice(item.product)} was={listPrice(item.product, catalog[item.product].sizes[0].cm)} money={t.money} />
                       </span>
                     </span>
                     <span className="mt-2 block text-[15px] leading-6 text-paper/80">{item.text}</span>
@@ -223,7 +224,7 @@ export default function Home({ lang }: { lang: Lang }) {
                   <span className="flex flex-wrap gap-1.5">
                     {catalog[item.product].sizes.map((size) => (
                       <span key={size.cm} className="rounded-md border border-ink/10 px-2 py-1 text-xs text-ink/70">
-                        {size.cm} {t.cm} · {t.money(size.price)}
+                        {size.cm} {t.cm} · <Price now={size.price} was={listPrice(item.product, size.cm)} money={t.money} />
                       </span>
                     ))}
                   </span>

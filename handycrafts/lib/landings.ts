@@ -16,7 +16,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       crumb: "Персонализирани фигурки",
       kicker: "Персонализирани 3D фигурки",
       title: "Персонализирани фигурки по твоя снимка",
-      lead: "Персонализирана 3D фигурка на човек, двойка или домашен любимец — направена по една снимка. Виждаш визуализацията за минута, поръчваш само ако ти харесва и плащаш с наложен платеж. Ключодържатели от 30 €, фигурки от 50 €.",
+      lead: "Персонализирана 3D фигурка на човек, двойка или домашен любимец — направена по една снимка. Виждаш визуализацията за минута, поръчваш само ако ти харесва и плащаш с наложен платеж. Ключодържатели от 30 €, фигурки от 40 €.",
       cta: { label: "Създай своята фигурка", href: "/studio" },
       image: { src: "/shop/hero-mobile.webp", alt: "Семейство с персонализирани фигурки на всеки от тях и на кучето", ratio: "aspect-[9/16] max-h-[36rem]" },
       product: "figurine",
@@ -39,7 +39,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         {
           title: "Размери и цени",
           text: [
-            "Фигурките са 10 см за 50 €, 15 см за 80 € и 20 см за 100 €. Ако искаш нещо по-малко, персонализираният ключодържател е 5 см за 30 € или 6 см за 40 €.",
+            "Фигурките са 10 см за 40 €, 15 см за 70 € и 20 см за 90 €. Ако искаш нещо по-малко, персонализираният ключодържател е 5 см за 30 € или 6 см за 40 €.",
             "Цената е крайна за фигурката. Плащаш с наложен платеж, когато получиш пратката от Еконт или Спиди — без предплащане и без карта.",
           ],
         },
@@ -58,7 +58,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         },
       ],
       faq: [
-        { q: "Колко струва персонализирана фигурка?", a: "Фигурка 10 см е 50 €, 15 см — 80 €, 20 см — 100 €. Персонализиран ключодържател е от 30 €. Плащаш с наложен платеж." },
+        { q: "Колко струва персонализирана фигурка?", a: "Фигурка 10 см е 40 €, 15 см — 70 €, 20 см — 90 €. Персонализиран ключодържател е от 30 €. Плащаш с наложен платеж." },
         { q: "Каква снимка ми трябва?", a: "Една ясна снимка на светло, на която лицето се вижда добре. За фигурка в цял ръст е най-добре човекът да е целият в кадър." },
         { q: "Ще видя ли фигурката преди да поръчам?", a: "Да. След като качиш снимката, за около минута виждаш визуализация. Поръчваш само ако ти харесва." },
         { q: "Колко време отнема?", a: `Изработката е ${productionDays}. Доставката с Еконт или Спиди е обикновено 1–2 работни дни след това.` },
@@ -71,7 +71,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       crumb: "Personalised figurines",
       kicker: "Personalised 3D figurines",
       title: "Personalised figurines from your photo",
-      lead: "A personalised 3D figurine of a person, a couple or a pet — made from one photo. See the preview in a minute, order only if you like it and pay cash on delivery. Keychains from €30, figurines from €50.",
+      lead: "A personalised 3D figurine of a person, a couple or a pet — made from one photo. See the preview in a minute, order only if you like it and pay cash on delivery. Keychains from €30, figurines from €40.",
       cta: { label: "Create your figurine", href: "/studio" },
       image: { src: "/shop/hero-mobile.webp", alt: "A family holding personalised figurines of each of them and their dog", ratio: "aspect-[9/16] max-h-[36rem]" },
       product: "figurine",
@@ -94,7 +94,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         {
           title: "Sizes and prices",
           text: [
-            "Figurines are 10 cm for €50, 15 cm for €80 and 20 cm for €100. For something smaller, a personalised keychain is 5 cm for €30 or 6 cm for €40.",
+            "Figurines are 10 cm for €40, 15 cm for €70 and 20 cm for €90. For something smaller, a personalised keychain is 5 cm for €30 or 6 cm for €40.",
             "The price is final for the figurine. You pay cash on delivery when the parcel arrives with Econt or Speedy — no prepayment and no card.",
           ],
         },
@@ -113,7 +113,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         },
       ],
       faq: [
-        { q: "How much is a personalised figurine?", a: "A 10 cm figurine is €50, 15 cm is €80 and 20 cm is €100. A personalised keychain is from €30. You pay cash on delivery." },
+        { q: "How much is a personalised figurine?", a: "A 10 cm figurine is €40, 15 cm is €70 and 20 cm is €90. A personalised keychain is from €30. You pay cash on delivery." },
         { q: "What photo do I need?", a: "One clear, well-lit photo where the face is easy to see. For a full-body figurine the person should be fully in the shot." },
         { q: "Will I see the figurine before I order?", a: "Yes. After you upload the photo you see a preview in about a minute. You order only if you like it." },
         { q: "How long does it take?", a: `Making it takes ${productionDaysEn}. Delivery with Econt or Speedy usually takes 1–2 working days after that.` },
@@ -123,7 +123,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
   },
   figurine: {
     bg: {
-    metaTitle: "Фигурка по снимка — 3D фигурка на човек от 50 €",
+    metaTitle: "Фигурка по снимка — 3D фигурка на човек от 40 €",
     path: "/figurka-po-snimka",
     crumb: "Фигурка по снимка",
     kicker: "3D фигурка по снимка",
@@ -151,18 +151,18 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       {
         title: "Цена и доставка",
         text: [
-          "Фигурка 10 см струва 50 €, 15 см — 80 €, 20 см — 100 €. Плащаш с наложен платеж при получаване, доставката е с Еконт или Спиди до офис или адрес в цяла България.",
+          "Фигурка 10 см струва 40 €, 15 см — 70 €, 20 см — 90 €. Плащаш с наложен платеж при получаване, доставката е с Еконт или Спиди до офис или адрес в цяла България.",
         ],
       },
     ],
     faq: [
-      { q: "Колко струва фигурка по снимка?", a: "Фигурка 10 см е 50 €, 15 см е 80 €, а 20 см е 100 €. Плащаш с наложен платеж при получаване." },
+      { q: "Колко струва фигурка по снимка?", a: "Фигурка 10 см е 40 €, 15 см е 70 €, а 20 см е 90 €. Плащаш с наложен платеж при получаване." },
       { q: "Колко ще прилича на човека?", a: "Визуализацията запазва лицето, прическата, очилата и дрехите от снимката. Готовата фигурка се довършва на ръка по нея, затова малки разлики в детайлите са нормални." },
       { q: "Може ли фигурка на двойка?", a: "Студиото прави по един човек. За двойка направи две фигурки или ни пиши и ще ти дадем цена за обща основа." },
     ],
     },
     en: {
-      metaTitle: "Custom figurine from a photo — a 3D figurine from €50",
+      metaTitle: "Custom figurine from a photo — a 3D figurine from €40",
       path: "/figurka-po-snimka",
       crumb: "Custom figurine from a photo",
       kicker: "3D figurine from a photo",
@@ -190,12 +190,12 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         {
           title: "Price and delivery",
           text: [
-            "A figurine costs €50 for 10 cm, €80 for 15 cm and €100 for 20 cm. You pay cash on delivery; we ship with Econt or Speedy to an office or address anywhere in Bulgaria.",
+            "A figurine costs €40 for 10 cm, €70 for 15 cm and €90 for 20 cm. You pay cash on delivery; we ship with Econt or Speedy to an office or address anywhere in Bulgaria.",
           ],
         },
       ],
       faq: [
-        { q: "How much is a figurine from a photo?", a: "€50 for 10 cm, €80 for 15 cm and €100 for 20 cm. You pay cash on delivery." },
+        { q: "How much is a figurine from a photo?", a: "€40 for 10 cm, €70 for 15 cm and €90 for 20 cm. You pay cash on delivery." },
         { q: "How much will it look like the person?", a: "The preview keeps the face, hairstyle, glasses and clothes from the photo. The finished figurine is completed by hand from it, so small differences in detail are normal." },
         { q: "Can you make a couple?", a: "The studio makes one person at a time. For a couple, make two figurines or write to us for a quote on a shared base." },
       ],
@@ -203,7 +203,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
   },
   pet: {
     bg: {
-    metaTitle: "Фигурка на куче или котка по снимка — от 50 €",
+    metaTitle: "Фигурка на куче или котка по снимка — от 40 €",
     path: "/figurka-na-domashen-lyubimets",
     crumb: "Фигурка на домашен любимец",
     kicker: "Куче, котка и всеки любимец",
@@ -230,7 +230,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
       {
         title: "Размери и цена",
         text: [
-          "Фигурка на любимец 10 см е 50 €, 15 см е 80 €, 20 см е 100 €. Ако предпочиташ нещо по-малко, има и ключодържател на любимец от 30 €.",
+          "Фигурка на любимец 10 см е 40 €, 15 см е 70 €, 20 см е 90 €. Ако предпочиташ нещо по-малко, има и ключодържател на любимец от 30 €.",
         ],
       },
     ],
@@ -241,7 +241,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
     ],
     },
     en: {
-      metaTitle: "Pet figurine from a photo — dog or cat from €50",
+      metaTitle: "Pet figurine from a photo — dog or cat from €40",
       path: "/figurka-na-domashen-lyubimets",
       crumb: "Pet figurine from a photo",
       kicker: "Dogs, cats and every pet",
@@ -268,7 +268,7 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         {
           title: "Sizes and price",
           text: [
-            "A pet figurine is €50 for 10 cm, €80 for 15 cm and €100 for 20 cm. If you prefer something smaller, there's a pet keychain from €30.",
+            "A pet figurine is €40 for 10 cm, €70 for 15 cm and €90 for 20 cm. If you prefer something smaller, there's a pet keychain from €30.",
           ],
         },
       ],

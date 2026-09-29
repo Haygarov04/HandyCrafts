@@ -6,9 +6,9 @@ export const catalog = {
     short: "Цяла фигура върху основа",
     line: "Цял ръст, върху ниска кръгла основа. Стои на рафт, бюро или торта.",
     sizes: [
-      { cm: 10, price: 50 },
-      { cm: 15, price: 80 },
-      { cm: 20, price: 100 },
+      { cm: 10, price: 40, group: { 2: 80, 3: 120 } },
+      { cm: 15, price: 70, group: { 2: 135, 3: 200 } },
+      { cm: 20, price: 90, group: { 2: 170, 3: 250 } },
     ],
   },
   keychain: {

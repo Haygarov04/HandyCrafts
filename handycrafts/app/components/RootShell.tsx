@@ -24,7 +24,7 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
     "@type": "Store",
     name: siteName,
     alternateName: "Handy Crafts",
-    priceRange: "30 € – 260 €",
+    priceRange: "30 € – 250 €",
     url: absolute(lang === "en" ? "/en" : "/"),
     logo: absolute("/icon.png"),
     image: absolute("/og-family.jpg"),

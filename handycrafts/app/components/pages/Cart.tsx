@@ -10,6 +10,7 @@ import { useLang } from "@/app/components/lang";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
 import Price from "@/app/components/Price";
 import { discountTotal, regularPrice } from "@/lib/catalog";
+import { useDiscount } from "@/app/components/discount";
 
 const LEAD_KEY = "hc_lead_id";
 
@@ -20,6 +21,7 @@ export default function CartPage() {
   const cart = useCart();
   const router = useRouter();
   const { lang, t, href } = useLang();
+  const discountOn = useDiscount();
   const c = t.cart;
   const [form, setForm] = useState({
     name: "",
@@ -291,7 +293,7 @@ export default function CartPage() {
                       <p className="shrink-0 text-sm font-semibold">
                         <Price
                           now={item.price * item.qty}
-                          was={((p) => (p ? p * item.qty : null))(regularPrice(item.product, item.cm, item.people || 1))}
+                          was={((p) => (p ? p * item.qty : null))(regularPrice(item.product, item.cm, item.people || 1, item.subject, discountOn))}
                           money={t.money}
                         />
                       </p>
@@ -309,12 +311,12 @@ export default function CartPage() {
             <dl className="mt-6 space-y-2 border-t border-ink/10 pt-5 text-sm">
               <div className="flex justify-between">
                 <dt className="text-ink/60">{c.products}</dt>
-                <dd>{t.money(cart.total + discountTotal(cart.items))}</dd>
+                <dd>{t.money(cart.total + discountTotal(cart.items, discountOn))}</dd>
               </div>
-              {discountTotal(cart.items) ? (
+              {discountTotal(cart.items, discountOn) ? (
                 <div className="flex justify-between font-semibold text-ember-deep">
                   <dt>{c.discount}</dt>
-                  <dd>−{t.money(discountTotal(cart.items))}</dd>
+                  <dd>−{t.money(discountTotal(cart.items, discountOn))}</dd>
                 </div>
               ) : null}
               <div className="flex justify-between">

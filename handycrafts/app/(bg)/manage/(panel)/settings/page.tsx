@@ -6,12 +6,15 @@ import { listSubscribers } from "@/lib/newsletter";
 import { pushReady, subscriptionCount } from "@/lib/push";
 import PushToggle from "../../PushToggle";
 import LogoutButton from "../logout-button";
+import { discountOn } from "@/lib/settings";
+import DiscountToggle from "./discount-toggle";
 
 export const dynamic = "force-dynamic";
 
 export default async function SettingsPage() {
   const devices = pushReady() ? await subscriptionCount() : 0;
   const subscribers = await listSubscribers();
+  const discount = await discountOn();
   const checks = [
     { label: "Данни на търговеца (LEGAL_NAME, LEGAL_EIK, LEGAL_ADDRESS)", ok: sellerComplete() },
     { label: "База за поръчки (Redis)", ok: hasRedis() },
@@ -30,6 +33,8 @@ export default async function SettingsPage() {
   return (
     <div className="space-y-5">
       <h1 className="text-3xl">Настройки</h1>
+
+      <DiscountToggle on={discount} />
 
       <section className="space-y-3">
         <h2 className="text-base">Известия</h2>

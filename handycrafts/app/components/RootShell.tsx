@@ -2,6 +2,7 @@ import { Manrope, Unbounded } from "next/font/google";
 import "../globals.css";
 import { dict, type Lang } from "@/lib/i18n";
 import { seller, sellerComplete } from "@/lib/legal";
+import { discountOn } from "@/lib/settings";
 import { absolute, business, siteName } from "@/lib/site";
 import JsonLd from "./JsonLd";
 import SiteFrame from "./SiteFrame";
@@ -17,8 +18,9 @@ const unbounded = Unbounded({
   weight: ["400", "500", "600"],
 });
 
-export default function RootShell({ lang, children }: { lang: Lang; children: React.ReactNode }) {
+export default async function RootShell({ lang, children }: { lang: Lang; children: React.ReactNode }) {
   const t = dict[lang];
+  const discount = await discountOn();
   const store = {
     "@context": "https://schema.org",
     "@type": "Store",
@@ -55,7 +57,7 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
       <body className="relative overflow-x-hidden antialiased">
         <JsonLd data={website} />
         <JsonLd data={store} />
-        <SiteFrame sellerLine={sellerComplete() ? `${seller.name}, ${lang === "en" ? "EIK" : "ЕИК"} ${seller.eik}` : undefined}>{children}</SiteFrame>
+        <SiteFrame discount={discount} sellerLine={sellerComplete() ? `${seller.name}, ${lang === "en" ? "EIK" : "ЕИК"} ${seller.eik}` : undefined}>{children}</SiteFrame>
       </body>
     </html>
   );

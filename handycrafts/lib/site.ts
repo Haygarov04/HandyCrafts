@@ -28,7 +28,9 @@ export function productJsonLd(input: { product: ProductId | "all"; name: string;
   const products = input.product === "all" ? (Object.keys(catalog) as ProductId[]) : [input.product];
   // Group figurines (up to three people) set the top of the price range.
   const prices = products.flatMap((id) =>
-    catalog[id].sizes.flatMap((size) => [size.price, priceFor(id, size.cm, maxPeople) ?? size.price])
+    catalog[id].sizes.flatMap((size) =>
+      [priceFor(id, size.cm, 1, "pet"), priceFor(id, size.cm, 1), priceFor(id, size.cm, maxPeople)].filter((p): p is number => p !== null)
+    )
   );
   return {
     "@context": "https://schema.org",

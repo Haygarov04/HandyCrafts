@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { maxQty, type ProductId } from "@/lib/catalog";
+import { maxQty, priceFor, type ProductId } from "@/lib/catalog";
+import { useDiscount } from "./discount";
 
 export type CartItem = {
   draftId: string;
@@ -32,7 +33,17 @@ const STORAGE = "hc_cart_v1";
 const CartContext = createContext<Cart | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [stored, setItems] = useState<CartItem[]>([]);
+  const discountOn = useDiscount();
+  // Prices follow the current price list, whatever they were when the item was added.
+  const items = useMemo(
+    () =>
+      stored.map((item) => ({
+        ...item,
+        price: priceFor(item.product, item.cm, item.people || 1, item.subject || "person", discountOn) ?? item.price,
+      })),
+    [stored, discountOn]
+  );
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -48,9 +59,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!ready) return;
     try {
-      localStorage.setItem(STORAGE, JSON.stringify(items));
+      localStorage.setItem(STORAGE, JSON.stringify(stored));
     } catch {}
-  }, [items, ready]);
+  }, [stored, ready]);
 
   const add = useCallback((item: CartItem) => {
     setItems((list) => [...list.filter((entry) => entry.draftId !== item.draftId), item]);

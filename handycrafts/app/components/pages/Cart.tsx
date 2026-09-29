@@ -9,7 +9,7 @@ import QtyControl from "@/app/components/QtyControl";
 import { useLang } from "@/app/components/lang";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
 import Price from "@/app/components/Price";
-import { launchSavings, listPrice } from "@/lib/catalog";
+import { discountTotal, regularPrice } from "@/lib/catalog";
 
 const LEAD_KEY = "hc_lead_id";
 
@@ -291,7 +291,7 @@ export default function CartPage() {
                       <p className="shrink-0 text-sm font-semibold">
                         <Price
                           now={item.price * item.qty}
-                          was={((p) => (p ? p * item.qty : null))(listPrice(item.product, item.cm, item.people || 1, item.subject))}
+                          was={((p) => (p ? p * item.qty : null))(regularPrice(item.product, item.cm, item.people || 1))}
                           money={t.money}
                         />
                       </p>
@@ -309,12 +309,12 @@ export default function CartPage() {
             <dl className="mt-6 space-y-2 border-t border-ink/10 pt-5 text-sm">
               <div className="flex justify-between">
                 <dt className="text-ink/60">{c.products}</dt>
-                <dd>{t.money(cart.total + launchSavings(cart.items))}</dd>
+                <dd>{t.money(cart.total + discountTotal(cart.items))}</dd>
               </div>
-              {launchSavings(cart.items) ? (
+              {discountTotal(cart.items) ? (
                 <div className="flex justify-between font-semibold text-ember-deep">
                   <dt>{c.discount}</dt>
-                  <dd>−{t.money(launchSavings(cart.items))}</dd>
+                  <dd>−{t.money(discountTotal(cart.items))}</dd>
                 </div>
               ) : null}
               <div className="flex justify-between">

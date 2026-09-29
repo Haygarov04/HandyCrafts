@@ -14,8 +14,8 @@ import {
   catalog,
   isProductId,
   isSubjectId,
-  launchDiscount,
-  listPrice,
+  discount,
+  regularPrice,
   maxPeople,
   normalizePeople,
   priceFor,
@@ -250,8 +250,8 @@ export default function StudioPage() {
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">{s.chooseTitle}</h1>
             <p className="mt-3 text-center text-ink/60">{s.chooseText}</p>
-            {launchDiscount && subject === "person" ? (
-              <p className="mx-auto mt-4 w-fit rounded-full bg-ember px-4 py-1.5 text-sm font-bold text-ink">{s.launchOffer}</p>
+            {discount ? (
+              <p className="mx-auto mt-4 w-fit rounded-full bg-ember px-4 py-1.5 text-sm font-bold text-ink">{s.discountBadge}</p>
             ) : null}
             <div className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-2 rounded-full bg-white p-1.5">
               {(["person", "pet"] as const).map((id) => (
@@ -290,7 +290,7 @@ export default function StudioPage() {
                     <span className="mt-0.5 block text-sm text-ink/55">{t.from}{" "}
                       <Price
                         now={priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1) ?? 0}
-                        was={listPrice(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1, subject)}
+                        was={regularPrice(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1)}
                         money={t.money}
                       /></span>
                     <span className="mt-1 hidden text-sm text-ink/60 sm:block">{t.product[id].short}</span>
@@ -321,14 +321,14 @@ export default function StudioPage() {
                       </span>
                       <span className="mt-1.5 block text-sm font-semibold">{s.peopleOption(n)}</span>
                       <span className="text-xs text-ink/55">
-                        <Price now={priceFor(product, cm, n) ?? 0} was={listPrice(product, cm, n)} money={t.money} />
+                        <Price now={priceFor(product, cm, n) ?? 0} was={regularPrice(product, cm, n)} money={t.money} />
                       </span>
                     </button>
                   ))}
                 </div>
               </div>
             ) : null}
-            <SizePicker product={product} subject={subject} people={people} cm={cm} onChange={setCm} label={s.size} unit={t.cm} money={t.money} />
+            <SizePicker product={product} people={people} cm={cm} onChange={setCm} label={s.size} unit={t.cm} money={t.money} />
           </section>
         ) : null}
 
@@ -460,7 +460,7 @@ export default function StudioPage() {
             {!busy ? (
               <div className="mx-auto mt-6 max-w-lg">
                 {error && preview ? <p className="mb-3 text-center text-sm text-red-700">{error}</p> : null}
-                {preview ? <SizePicker product={preview.product} subject={preview.subject} people={preview.people || 1} cm={cm} onChange={setCm} compact label={s.size} unit={t.cm} money={t.money} /> : null}
+                {preview ? <SizePicker product={preview.product} people={preview.people || 1} cm={cm} onChange={setCm} compact label={s.size} unit={t.cm} money={t.money} /> : null}
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   <button type="button" onClick={() => setStep(2)} className="rounded-full border border-ink/15 bg-white px-5 py-3 font-semibold">
                     {s.editDetails}
@@ -518,7 +518,7 @@ export default function StudioPage() {
               {t.itemLabel(product, subject, people)} · {cm} {t.cm}
             </span>
             <span className="font-display text-lg">
-              <Price now={price} was={listPrice(product, cm, people, subject)} money={t.money} />
+              <Price now={price} was={regularPrice(product, cm, people)} money={t.money} />
             </span>
           </p>
           {step < 3 ? (
@@ -548,7 +548,6 @@ export default function StudioPage() {
 
 function SizePicker({
   product,
-  subject = "person",
   people = 1,
   cm,
   onChange,
@@ -558,7 +557,6 @@ function SizePicker({
   money,
 }: {
   product: ProductId;
-  subject?: SubjectId;
   people?: number;
   cm: number;
   onChange: (cm: number) => void;
@@ -582,7 +580,7 @@ function SizePicker({
           >
             <span className="block font-display text-xl">{size.cm} {unit}</span>
             <span className="text-sm text-ink/60">
-              <Price now={priceFor(product, size.cm, people) ?? size.price} was={listPrice(product, size.cm, people, subject)} money={money} />
+              <Price now={priceFor(product, size.cm, people) ?? size.price} was={regularPrice(product, size.cm, people)} money={money} />
             </span>
           </button>
         ))}

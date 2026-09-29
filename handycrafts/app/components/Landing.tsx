@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { catalog, listPrice, type ProductId } from "@/lib/catalog";
+import { catalog, regularPrice, type ProductId } from "@/lib/catalog";
 import Price from "./Price";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { landingLinks } from "@/lib/landing-links";
@@ -61,7 +61,7 @@ export default function Landing({ content, lang }: { content: LandingContent; la
                 <span key={size.cm} className="rounded-full bg-white px-3.5 py-1.5 text-sm">
                   {size.cm} {t.cm} ·{" "}
                   <b>
-                    <Price now={size.price} was={listPrice(content.product, size.cm, 1, content.cta.href.includes("subject=pet") ? "pet" : "person")} money={t.money} />
+                    <Price now={size.price} was={regularPrice(content.product, size.cm)} money={t.money} />
                   </b>
                 </span>
               ))}

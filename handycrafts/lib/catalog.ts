@@ -67,23 +67,23 @@ export function priceFor(product: ProductId, cm: number, people = 1) {
   return factor === 1 ? size.price : Math.round((size.price * factor) / 5) * 5;
 }
 
-/** Launch offer on single keychains and figurines of one or two people. */
-export const launchDiscount = 10;
+/** Off the regular price of single keychains and figurines of one or two people or a pet. */
+export const discount = 10;
 
-/** The crossed-out regular price, or null when the piece has no offer. */
-export function listPrice(product: ProductId, cm: number, people = 1, subject: SubjectId = "person") {
+/** The crossed-out regular price, or null when the piece has no discount. */
+export function regularPrice(product: ProductId, cm: number, people = 1) {
   const price = priceFor(product, cm, people);
-  if (price === null || !launchDiscount || subject !== "person") return null;
+  if (price === null || !discount) return null;
   const eligible = product === "keychain" ? people === 1 : people <= 2;
-  return eligible ? price + launchDiscount : null;
+  return eligible ? price + discount : null;
 }
 
-/** How much the launch offer takes off a cart. */
-export function launchSavings(
+/** How much the discount takes off a cart. */
+export function discountTotal(
   items: { product: ProductId; subject?: SubjectId; cm: number; people?: number; price: number; qty: number }[]
 ) {
   return items.reduce((sum, item) => {
-    const list = listPrice(item.product, item.cm, item.people || 1, item.subject);
+    const list = regularPrice(item.product, item.cm, item.people || 1);
     return sum + (list ? (list - item.price) * item.qty : 0);
   }, 0);
 }

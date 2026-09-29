@@ -1,4 +1,4 @@
-/** A price, with the crossed-out regular price in front of it while the launch offer runs. */
+/** A price, with the crossed-out regular price in front of it. */
 export default function Price({ now, was, money }: { now: number; was?: number | null; money: (value: number) => string }) {
   return (
     <>

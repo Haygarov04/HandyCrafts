@@ -7,6 +7,7 @@ import { trackEvent } from "@/app/components/Analytics";
 import { CartButton } from "@/app/components/Navbar";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
+import VisualTag from "@/app/components/VisualTag";
 import { INPUT_MAX, preparePhoto } from "@/app/components/prepare-photo";
 import { loadPhoto, loadState, savePhoto, saveState } from "@/app/components/studio-store";
 import {
@@ -278,6 +279,7 @@ export default function StudioPage() {
                       className="object-cover transition-opacity duration-300"
                       sizes="(min-width: 640px) 360px, 50vw"
                     />
+                    <VisualTag label={t.visual} className="left-2 top-2" />
                   </span>
                   <span className="block p-3.5 sm:p-5">
                     <span className="block truncate text-base font-bold sm:font-display sm:text-xl sm:font-medium">{t.product[id].label}</span>

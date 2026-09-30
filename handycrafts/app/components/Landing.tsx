@@ -5,6 +5,7 @@ import { dict, localize, type Lang } from "@/lib/i18n";
 import { landingLinks } from "@/lib/landing-links";
 import { breadcrumbJsonLd, faqJsonLd, productJsonLd } from "@/lib/site";
 import FaqList from "./FaqList";
+import VisualTag from "./VisualTag";
 import JsonLd from "./JsonLd";
 
 export type LandingContent = {
@@ -75,6 +76,7 @@ export default function Landing({ content, lang }: { content: LandingContent; la
           </div>
           <div className={`relative mx-auto w-full max-w-md overflow-hidden rounded-[2rem] bg-sand shadow-[0_30px_70px_rgba(22,21,19,0.15)] ${content.image.ratio}`}>
             <Image src={content.image.src} alt={content.image.alt} fill priority className="object-cover" sizes="(min-width: 1024px) 40vw, 90vw" />
+            <VisualTag label={t.visual} className="left-4 top-4" />
           </div>
         </div>
       </section>

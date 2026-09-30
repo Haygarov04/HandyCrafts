@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import FaqList from "../FaqList";
+import VisualTag from "../VisualTag";
 import JsonLd from "../JsonLd";
 import NewsletterBox from "../NewsletterBox";
 import { catalog, fromPrice } from "@/lib/catalog";
@@ -116,6 +117,7 @@ export default function Home({ lang }: { lang: Lang }) {
             style={{ objectPosition: "70% 50%" }}
             sizes="64vw"
           />
+          <VisualTag label={t.visual} className="right-6 top-24" />
           <div className="absolute bottom-10 right-10 -rotate-6 rounded-xl bg-ink px-5 py-2.5 font-display text-2xl text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)]">
             {h.heroSticker}
           </div>
@@ -161,6 +163,7 @@ export default function Home({ lang }: { lang: Lang }) {
             <div className="relative rounded-[1.4rem] bg-white p-2 shadow-[0_30px_70px_rgba(22,21,19,0.16)] sm:p-3">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-sand">
                 <Image src="/shop/hero-mobile.webp" alt={h.heroAlt} fill priority className="object-cover" style={{ objectPosition: "50% 62%" }} sizes="(min-width: 640px) 448px, 95vw" />
+                <VisualTag label={t.visual} />
               </div>
             </div>
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 -rotate-3 whitespace-nowrap rounded-xl bg-ink px-4 py-2 font-display text-lg text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:text-xl">
@@ -209,13 +212,13 @@ export default function Home({ lang }: { lang: Lang }) {
                     className="object-cover transition duration-700 group-hover:scale-[1.04]"
                     sizes="(min-width: 768px) 33vw, 100vw"
                   />
+                  <VisualTag label={t.visual} />
+                  {/* On the photo's corner, so a long title can't push the price off the card. */}
+                  <span className="absolute right-3 top-3 rounded-xl bg-ember px-3 py-1.5 text-base font-bold text-ink shadow-lg">
+                    {t.from} {t.money(fromPrice(item.product))}
+                  </span>
                   <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent p-5 pt-20 text-paper">
-                    <span className="flex items-end justify-between gap-3">
-                      <span className="block font-display text-2xl sm:text-[1.7rem]">{item.title}</span>
-                      <span className="shrink-0 rounded-lg bg-ember px-2.5 py-1 text-sm font-bold text-ink">
-                        {t.from} {t.money(fromPrice(item.product))}
-                      </span>
-                    </span>
+                    <span className="block font-display text-2xl sm:text-[1.7rem]">{item.title}</span>
                     <span className="mt-2 block text-[15px] leading-6 text-paper/80">{item.text}</span>
                   </span>
                 </span>
@@ -288,6 +291,7 @@ export default function Home({ lang }: { lang: Lang }) {
             <div className="relative aspect-[9/16] overflow-hidden rounded-[1.6rem] bg-sand sm:aspect-[16/9]">
               <Image src="/shop/process-mobile.webp" alt={h.processAlt} fill className="object-cover sm:hidden" sizes="100vw" />
               <Image src="/shop/process.webp" alt={h.processAlt} fill className="hidden object-cover sm:block" sizes="(min-width: 1024px) 60vw, 100vw" />
+              <VisualTag label={t.visual} />
             </div>
             <div>
               <p className="flex items-center gap-2 font-display text-2xl">
@@ -297,7 +301,16 @@ export default function Home({ lang }: { lang: Lang }) {
                 </svg>
                 {h.madeTitle}
               </p>
-              <p className="mt-3 leading-7 text-ink/65">{h.madeText}</p>
+              <ol className="mt-4 space-y-3">
+                {h.made.map((line, index) => (
+                  <li key={line} className="flex gap-3 leading-7 text-ink/70">
+                    <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-ember/15 text-sm font-bold text-ember-deep">
+                      {index + 1}
+                    </span>
+                    {line}
+                  </li>
+                ))}
+              </ol>
               <Link
                 href={href("/studio")}
                 className="mt-6 inline-flex items-center gap-3 rounded-xl bg-ember px-7 py-4 text-lg font-bold text-ink transition hover:bg-ink hover:text-paper"
@@ -347,6 +360,7 @@ export default function Home({ lang }: { lang: Lang }) {
             <div className="rounded-[1.4rem] bg-paper p-2.5">
               <div className="relative aspect-[9/16] overflow-hidden rounded-[1rem]">
                 <Image src="/shop/keychain.webp" alt={h.keychainAlt} fill className="object-cover" sizes="300px" />
+                <VisualTag label={t.visual} className="left-2 top-2" />
               </div>
             </div>
           </div>

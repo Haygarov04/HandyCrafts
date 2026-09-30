@@ -185,7 +185,7 @@ const bg = {
   faq: [
     {
       q: "Колко струва фигурка на двама или трима?",
-      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 70 € за двама и 80 € за трима, 15 см — 90 € / 100 €, 20 см — 100 € / 110 €. Ключодържател на двама е 50 €, на трима — 70 € (5 см).",
+      a: "Двама или трима души на една основа струват по-малко, отколкото отделни фигурки: 10 см — 60 € за двама и 70 € за трима, 15 см — 80 € / 90 €, 20 см — 100 € / 110 €. Ключодържател на двама е 40 €, на трима — 60 € (5 см).",
     },
     {
       q: "Каква снимка работи най-добре?",
@@ -197,7 +197,7 @@ const bg = {
     },
     {
       q: "Колко струва и как се плаща?",
-      a: "Фигурка 10 см е 40 €, 15 см е 70 €, 20 см е 90 €. Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 50 € (6 см — 60 €), за трима — 70 € (6 см — 80 €). Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
+      a: "Фигурка 10 см е 40 €, 15 см е 60 €, 20 см е 80 €. Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 40 € (6 см — 50 €), за трима — 60 € (6 см — 70 €). Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
     },
     {
       q: "За колко време става?",
@@ -480,7 +480,7 @@ const en: Dict = {
   faq: [
     {
       q: "How much is a figurine of two or three people?",
-      a: "Two or three people on one base cost less than separate figurines: 10 cm — €70 for two and €80 for three, 15 cm — €90 / €100, 20 cm — €100 / €110. A keychain of two is €50 and of three €70 (5 cm).",
+      a: "Two or three people on one base cost less than separate figurines: 10 cm — €60 for two and €70 for three, 15 cm — €80 / €90, 20 cm — €100 / €110. A keychain of two is €40 and of three €60 (5 cm).",
     },
     {
       q: "What kind of photo works best?",
@@ -492,7 +492,7 @@ const en: Dict = {
     },
     {
       q: "How much does it cost and how do I pay?",
-      a: "A figurine is €40 for 10 cm, €70 for 15 cm and €90 for 20 cm. A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €50 (6 cm — €60), for three €70 (6 cm — €80). You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
+      a: "A figurine is €40 for 10 cm, €60 for 15 cm and €80 for 20 cm. A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €40 (6 cm — €50), for three €60 (6 cm — €70). You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
     },
     {
       q: "How long does it take?",

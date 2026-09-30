@@ -6,9 +6,9 @@ export const catalog = {
     short: "Цяла фигура върху основа",
     line: "Цял ръст, върху ниска кръгла основа. Стои на рафт, бюро или торта.",
     sizes: [
-      { cm: 10, price: 40, group: { 2: 70, 3: 80 } },
-      { cm: 15, price: 70, group: { 2: 90, 3: 100 } },
-      { cm: 20, price: 90, group: { 2: 100, 3: 110 } },
+      { cm: 10, price: 40, group: { 2: 60, 3: 70 } },
+      { cm: 15, price: 60, group: { 2: 80, 3: 90 } },
+      { cm: 20, price: 80, group: { 2: 100, 3: 110 } },
     ],
   },
   keychain: {
@@ -16,8 +16,8 @@ export const catalog = {
     short: "Мини фигура с халка",
     line: "Малка плътна фигурка с метална халка. Винаги в джоба.",
     sizes: [
-      { cm: 5, price: 30, group: { 2: 50, 3: 70 } },
-      { cm: 6, price: 40, group: { 2: 60, 3: 80 } },
+      { cm: 5, price: 30, group: { 2: 40, 3: 60 } },
+      { cm: 6, price: 40, group: { 2: 50, 3: 70 } },
     ],
   },
 } as const;

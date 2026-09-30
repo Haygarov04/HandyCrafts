@@ -7,6 +7,7 @@ import NewsletterBox from "../NewsletterBox";
 import { catalog, fromPrice } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
+import { realPieces } from "@/lib/gallery";
 
 const perkIcons = [
   // eye — see the preview
@@ -172,6 +173,34 @@ export default function Home({ lang }: { lang: Lang }) {
           </div>
         </div>
       </section>
+
+      {realPieces.length ? (
+        <section id="real" className="scroll-mt-24 border-b border-ink/10 bg-white px-4 py-14 sm:px-6 sm:py-20">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-3xl leading-tight sm:text-5xl">
+              {h.realTitle[0]} <span className="text-ember-deep">{h.realTitle[1]}</span>
+            </h2>
+            <p className="mt-3 max-w-xl text-lg text-ink/65">{h.realText}</p>
+            <div className="-mx-4 mt-8 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+              {realPieces.map((piece) => (
+                <figure key={piece.result} className="w-[78%] shrink-0 snap-start sm:w-auto">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem] bg-sand">
+                    <Image src={piece.result} alt={piece.caption[lang]} fill className="object-cover" sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 78vw" />
+                    {piece.photo ? (
+                      <div className="absolute bottom-3 left-3 w-[34%] rotate-[-4deg] rounded-lg bg-white p-1 shadow-lg">
+                        <div className="relative aspect-square overflow-hidden rounded">
+                          <Image src={piece.photo} alt={h.realPhoto} fill className="object-cover" sizes="120px" />
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                  <figcaption className="mt-2.5 px-1 text-sm text-ink/65">{piece.caption[lang]}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="border-b border-ink/10 bg-white px-4 sm:px-6">
         <div className="mx-auto grid max-w-6xl grid-cols-2 lg:grid-cols-4">

@@ -14,11 +14,9 @@ export const realPieces: RealPiece[] = [
   {
     result: "/real/couple-keychain.webp",
     caption: { bg: "Ключодържател на двойка", en: "Keychain of a couple" },
-    note: { bg: "Оцветен на ръка, по една снимка", en: "Hand-painted, from one photo" },
   },
   {
     result: "/real/man-keychain.webp",
-    caption: { bg: "Ключодържател по снимка", en: "Keychain from a photo" },
-    note: { bg: "С часовника и вратовръзката от снимката", en: "With the watch and tie from the photo" },
+    caption: { bg: "Фигурка по снимка", en: "Figurine from a photo" },
   },
 ];

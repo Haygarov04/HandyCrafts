@@ -178,15 +178,9 @@ export default function Home({ lang }: { lang: Lang }) {
         <section id="real" className="scroll-mt-24 border-b border-ink/10 bg-white px-4 py-14 sm:px-6 sm:py-20">
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                  {h.realBadge}
-                </p>
-                <h2 className="mt-3 text-3xl leading-tight sm:text-5xl">
-                  {h.realTitle[0]} <span className="text-ember-deep">{h.realTitle[1]}</span>
-                </h2>
-              </div>
+              <h2 className="text-3xl leading-tight sm:text-5xl">
+                {h.realTitle[0]} <span className="text-ember-deep">{h.realTitle[1]}</span>
+              </h2>
               <p className="max-w-sm text-lg text-ink/65">{h.realText}</p>
             </div>
             <div
@@ -204,9 +198,6 @@ export default function Home({ lang }: { lang: Lang }) {
                       className="object-cover transition duration-700 group-hover:scale-[1.04]"
                       sizes="(min-width: 1024px) 25vw, 50vw"
                     />
-                    <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 shadow-sm sm:left-3 sm:top-3">
-                      ✓ {h.realTag}
-                    </span>
                     {piece.photo ? (
                       <div className="absolute bottom-3 left-3 w-[34%] rotate-[-4deg] rounded-lg bg-white p-1 shadow-lg">
                         <div className="relative aspect-square overflow-hidden rounded">

@@ -177,15 +177,36 @@ export default function Home({ lang }: { lang: Lang }) {
       {realPieces.length ? (
         <section id="real" className="scroll-mt-24 border-b border-ink/10 bg-white px-4 py-14 sm:px-6 sm:py-20">
           <div className="mx-auto max-w-6xl">
-            <h2 className="text-3xl leading-tight sm:text-5xl">
-              {h.realTitle[0]} <span className="text-ember-deep">{h.realTitle[1]}</span>
-            </h2>
-            <p className="mt-3 max-w-xl text-lg text-ink/65">{h.realText}</p>
-            <div className="-mx-4 mt-8 flex snap-x scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  {h.realBadge}
+                </p>
+                <h2 className="mt-3 text-3xl leading-tight sm:text-5xl">
+                  {h.realTitle[0]} <span className="text-ember-deep">{h.realTitle[1]}</span>
+                </h2>
+              </div>
+              <p className="max-w-sm text-lg text-ink/65">{h.realText}</p>
+            </div>
+            <div
+              className={`mt-8 grid grid-cols-2 gap-3 sm:gap-5 ${
+                realPieces.length > 2 ? "sm:grid-cols-3 lg:grid-cols-4" : "sm:grid-cols-3"
+              }`}
+            >
               {realPieces.map((piece) => (
-                <figure key={piece.result} className="w-[78%] shrink-0 snap-start sm:w-auto">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.4rem] bg-sand">
-                    <Image src={piece.result} alt={piece.caption[lang]} fill className="object-cover" sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 78vw" />
+                <figure key={piece.result} className="group">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.2rem] bg-sand sm:rounded-[1.6rem]">
+                    <Image
+                      src={piece.result}
+                      alt={piece.caption[lang]}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                      sizes="(min-width: 1024px) 25vw, 50vw"
+                    />
+                    <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-semibold text-emerald-800 shadow-sm sm:left-3 sm:top-3">
+                      ✓ {h.realTag}
+                    </span>
                     {piece.photo ? (
                       <div className="absolute bottom-3 left-3 w-[34%] rotate-[-4deg] rounded-lg bg-white p-1 shadow-lg">
                         <div className="relative aspect-square overflow-hidden rounded">
@@ -194,9 +215,27 @@ export default function Home({ lang }: { lang: Lang }) {
                       </div>
                     ) : null}
                   </div>
-                  <figcaption className="mt-2.5 px-1 text-sm text-ink/65">{piece.caption[lang]}</figcaption>
+                  <figcaption className="mt-2.5 px-1">
+                    <span className="block text-sm font-semibold sm:text-base">{piece.caption[lang]}</span>
+                    {piece.note ? <span className="block text-xs text-ink/55 sm:text-sm">{piece.note[lang]}</span> : null}
+                  </figcaption>
                 </figure>
               ))}
+              {realPieces.length < 3 ? (
+                // Fills the row on wider screens while there are only a few real photos.
+                <Link
+                  href={href("/studio")}
+                  className="hidden aspect-[4/5] flex-col justify-between rounded-[1.6rem] bg-ember p-6 text-ink transition hover:bg-ember-deep sm:flex"
+                >
+                  <span className="font-display text-2xl leading-tight lg:text-3xl">{h.realNext}</span>
+                  <span className="inline-flex items-center gap-2 text-lg font-bold">
+                    {h.create}
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                </Link>
+              ) : null}
             </div>
           </div>
         </section>

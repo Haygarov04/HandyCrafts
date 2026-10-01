@@ -19,4 +19,37 @@ export const topicSlugs: Record<string, string> = {
 };
 
 /** Bulgarian city pages under /figurka-po-snimka/<slug>. */
-export const citySlugs = ["sofia", "plovdiv", "varna", "burgas", "ruse", "stara-zagora", "pleven", "veliko-tarnovo"] as const;
+export const citySlugs = [
+  "sofia",
+  "plovdiv",
+  "varna",
+  "burgas",
+  "ruse",
+  "stara-zagora",
+  "pleven",
+  "veliko-tarnovo",
+  "sliven",
+  "dobrich",
+  "shumen",
+  "pernik",
+  "haskovo",
+  "yambol",
+  "pazardzhik",
+  "blagoevgrad",
+  "vratsa",
+  "gabrovo",
+  "asenovgrad",
+  "vidin",
+  "kazanlak",
+  "kardzhali",
+  "kyustendil",
+  "montana",
+  "dimitrovgrad",
+  "lovech",
+  "silistra",
+  "targovishte",
+  "razgrad",
+  "smolyan",
+  "dupnitsa",
+  "svishtov",
+] as const;

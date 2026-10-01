@@ -2,7 +2,7 @@ import { Manrope, Unbounded } from "next/font/google";
 import "../globals.css";
 import { dict, type Lang } from "@/lib/i18n";
 import { seller, sellerComplete } from "@/lib/legal";
-import { absolute, business, siteName } from "@/lib/site";
+import { absolute, business, siteName, socials } from "@/lib/site";
 import JsonLd from "./JsonLd";
 import SiteFrame from "./SiteFrame";
 
@@ -38,6 +38,7 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
     areaServed: { "@type": "Country", name: t.meta.country },
     paymentAccepted: t.meta.payment,
     currenciesAccepted: "EUR",
+    sameAs: socials.map((profile) => profile.url),
   };
 
   // Tells Google the brand name, including the spellings people type ("handy crafts").

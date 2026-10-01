@@ -2,6 +2,14 @@ import { catalog, currency, maxPeople, priceFor, type ProductId } from "@/lib/ca
 
 export const siteName = "HandyCrafts";
 
+/** Our profiles. Shown in the footer and told to Google (sameAs) so it ties them to the site. */
+export const socials = [
+  { name: "Instagram", url: "https://www.instagram.com/handycrafts_lab/" },
+  { name: "TikTok", url: "https://www.tiktok.com/@handycrafts_lab" },
+  // A share link until we have the page's own address (facebook.com/<page name>).
+  { name: "Facebook", url: "https://www.facebook.com/share/19KdZh9YSj/" },
+] as const;
+
 // Absolute URLs for sitemaps, canonicals and link previews. On Vercel the
 // production domain is known even when NEXT_PUBLIC_SITE_URL is not set.
 export function siteUrl() {

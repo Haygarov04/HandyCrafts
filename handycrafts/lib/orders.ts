@@ -54,7 +54,11 @@ export async function updateOrder(
 ) {
   const order = await getOrder(id);
   if (!order) return null;
-  if (change.status) order.status = change.status;
+  if (change.status) {
+    if (change.status === "completed" && order.status !== "completed") order.completedAt = new Date().toISOString();
+    if (change.status !== "completed") delete order.completedAt;
+    order.status = change.status;
+  }
   if (change.internalNote !== undefined) order.internalNote = change.internalNote;
   if (change.tracking !== undefined) order.tracking = change.tracking || undefined;
   order.updatedAt = new Date().toISOString();

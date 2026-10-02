@@ -3,6 +3,7 @@ import { money } from "@/lib/catalog";
 import { deliveryLabel, type Order } from "@/lib/order-types";
 import { listOrders } from "@/lib/orders";
 import { dayKey, visitSourceLabel, visitSources, visitsOnDays } from "@/lib/visits";
+import Chart from "./chart";
 
 export const dynamic = "force-dynamic";
 
@@ -85,35 +86,75 @@ export default async function StatsPage({ searchParams }: Props) {
   const inRange = all.filter((order) => daySet.has(dayKey(new Date(order.createdAt))));
   const orders = inRange.filter((order) => order.status !== "cancelled");
 
-  const revenue = orders.reduce((sum, o) => sum + o.total, 0);
-  const collected = orders.filter((o) => o.status === "delivered").reduce((sum, o) => sum + o.total, 0);
-  const pending = revenue - collected;
-  const average = orders.length ? revenue / orders.length : 0;
+  // Revenue is booked on the day an order is marked "completed", not when it was placed.
+  const doneOn = (order: Order) => dayKey(new Date(order.completedAt || order.updatedAt));
+  const completed = all.filter((order) => order.status === "completed" && daySet.has(doneOn(order)));
+  const revenue = completed.reduce((sum, o) => sum + o.total, 0);
+  const placed = orders.reduce((sum, o) => sum + o.total, 0);
+  const open = all.filter((o) => o.status !== "completed" && o.status !== "cancelled");
+  const openValue = open.reduce((sum, o) => sum + o.total, 0);
+  const average = orders.length ? placed / orders.length : 0;
   const cancelRate = inRange.length ? Math.round(((inRange.length - orders.length) / inRange.length) * 100) : 0;
   const visitTotal = visitDays.reduce((sum, d) => sum + d.total, 0);
+  const tiktokTotal = visitDays.reduce((s, d) => s + d.bySource.tiktok, 0);
   const conversion = visitTotal ? ((orders.length / visitTotal) * 100).toFixed(1) : "0";
 
   const tiles = [
-    { label: "Оборот", value: money(revenue), note: `${orders.length} поръчки` },
+    { label: "Оборот", value: money(revenue), note: `${completed.length} приключени` },
+    { label: "Нови поръчки", value: String(orders.length), note: `за ${money(placed)}` },
+    { label: "В процес", value: money(openValue), note: `${open.length} неприключени сега` },
     { label: "Средна поръчка", value: money(Math.round(average)), note: `отказани ${cancelRate}%` },
-    { label: "Прибрани", value: money(collected), note: "получени пратки" },
-    { label: "Очаквани", value: money(pending), note: "още не са получени" },
-    { label: "Посещения", value: String(visitTotal), note: `${visitDays.reduce((s, d) => s + d.bySource.tiktok, 0)} от TikTok` },
+    { label: "Посещения", value: String(visitTotal), note: `${tiktokTotal} от TikTok` },
     { label: "Конверсия", value: `${conversion}%`, note: "поръчки от посещения" },
   ];
 
   const groups = buckets(days);
   const weekly = days.length > 31;
+  const when = (g: { start: string; days: string[] }) =>
+    weekly ? `${label(g.days[0])} – ${label(g.days[g.days.length - 1])}` : label(g.start, true);
   const revenueBars = groups.map((g) => {
     const set = new Set(g.days);
+    const list = completed.filter((o) => set.has(doneOn(o)));
+    const value = list.reduce((sum, o) => sum + o.total, 0);
+    return {
+      key: g.start,
+      label: short(g.start),
+      title: when(g),
+      value,
+      rows: [["Приключени", String(list.length)], ...(list.length ? [["Средно", money(Math.round(value / list.length))]] : [])] as [string, string][],
+    };
+  });
+  const orderBars = groups.map((g) => {
+    const set = new Set(g.days);
     const list = orders.filter((o) => set.has(dayKey(new Date(o.createdAt))));
-    return { start: g.start, value: list.reduce((sum, o) => sum + o.total, 0), count: list.length };
+    return {
+      key: g.start,
+      label: short(g.start),
+      title: when(g),
+      value: list.length,
+      rows: [["Стойност", money(list.reduce((sum, o) => sum + o.total, 0))]] as [string, string][],
+    };
   });
   const visitBars = groups.map((g) => {
     const set = new Set(g.days);
     const list = visitDays.filter((d) => set.has(d.day));
-    return { start: g.start, value: list.reduce((sum, d) => sum + d.total, 0), tiktok: list.reduce((sum, d) => sum + d.bySource.tiktok, 0) };
+    const value = list.reduce((sum, d) => sum + d.total, 0);
+    const tiktok = list.reduce((sum, d) => sum + d.bySource.tiktok, 0);
+    const got = orders.filter((o) => set.has(dayKey(new Date(o.createdAt)))).length;
+    return {
+      key: g.start,
+      label: short(g.start),
+      title: when(g),
+      value,
+      part: tiktok,
+      rows: [
+        ["TikTok", String(tiktok)],
+        ["Други", String(value - tiktok)],
+        ["Поръчки", String(got)],
+      ] as [string, string][],
+    };
   });
+  const per = weekly ? "седмици" : "дни";
 
   const sources = visitSources
     .map((source) => [visitSourceLabel[source], visitDays.reduce((sum, d) => sum + d.bySource[source], 0)] as [string, number])
@@ -171,15 +212,28 @@ export default async function StatsPage({ searchParams }: Props) {
         ))}
       </div>
 
-      <Bars
-        title={weekly ? "Оборот по седмици" : "Оборот по дни"}
-        note="Без отказаните поръчки"
-        bars={revenueBars.map((b) => ({ key: b.start, label: short(b.start), value: b.value, tip: `${label(b.start)} · ${money(b.value)} · ${b.count} бр.` }))}
+      <Chart
+        title={`Оборот по ${per}`}
+        unit="money"
+        total={money(revenue)}
+        totalNote="от приключените поръчки за периода"
+        bars={revenueBars}
+        empty="Още няма приключени поръчки в този период."
       />
-      <Bars
-        title={weekly ? "Посещения по седмици" : "Посещения по дни"}
-        note="Тъмната част е от TikTok"
-        bars={visitBars.map((b) => ({ key: b.start, label: short(b.start), value: b.value, part: b.tiktok, tip: `${label(b.start)} · ${b.value} посещения · ${b.tiktok} TikTok` }))}
+      <Chart
+        title={`Нови поръчки по ${per}`}
+        unit="count"
+        total={String(orders.length)}
+        totalNote="без отказаните"
+        bars={orderBars}
+      />
+      <Chart
+        title={`Посещения по ${per}`}
+        unit="count"
+        total={String(visitTotal)}
+        totalNote={`${tiktokTotal} от TikTok`}
+        bars={visitBars}
+        legend={{ part: "TikTok", rest: "Други" }}
       />
 
       <div className="grid gap-5 md:grid-cols-2">
@@ -193,49 +247,9 @@ export default async function StatsPage({ searchParams }: Props) {
   );
 }
 
-function Bars({
-  title,
-  note,
-  bars,
-}: {
-  title: string;
-  note: string;
-  bars: { key: string; label: string; value: number; part?: number; tip: string }[];
-}) {
-  const peak = Math.max(1, ...bars.map((b) => b.value));
-  const every = Math.ceil(bars.length / 6);
-  return (
-    <section className="rounded-3xl bg-white p-5">
-      <h2 className="text-base">{title}</h2>
-      <p className="text-xs text-ink/50">{note}</p>
-      <div className="mt-6 flex h-40 items-end gap-1 border-b border-ink/15" role="img" aria-label={title}>
-        {bars.map((bar) => (
-          <div key={bar.key} className="group relative flex h-full flex-1 items-end justify-center">
-            <span className="pointer-events-none absolute -top-1 left-1/2 z-10 hidden -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-lg bg-ink px-2 py-1 text-[11px] text-paper group-hover:block">
-              {bar.tip}
-            </span>
-            <span
-              className="flex w-full max-w-10 flex-col justify-end overflow-hidden rounded-t-[4px] bg-ember/45"
-              style={{ height: `${bar.value ? Math.max(3, (bar.value / peak) * 100) : 0}%` }}
-            >
-              <span className="block w-full bg-ember" style={{ height: bar.part === undefined ? "100%" : `${bar.value ? (bar.part / bar.value) * 100 : 0}%` }} />
-            </span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-1.5 flex gap-1 text-[10px] text-ink/45">
-        {bars.map((bar, i) => (
-          <span key={bar.key} className="flex-1 truncate text-center">
-            {i % every === 0 || i === bars.length - 1 ? bar.label : ""}
-          </span>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function Breakdown({ title, rows }: { title: string; rows: [string, number][] }) {
   const top = Math.max(1, ...rows.map(([, n]) => n));
+  const sum = rows.reduce((total, [, n]) => total + n, 0);
   return (
     <section className="rounded-3xl bg-white p-5">
       <h2 className="text-base">{title}</h2>
@@ -247,7 +261,10 @@ function Breakdown({ title, rows }: { title: string; rows: [string, number][] })
             <li key={name}>
               <div className="flex justify-between text-sm">
                 <span>{name}</span>
-                <span className="font-semibold">{count}</span>
+                <span>
+                  <span className="font-semibold">{count}</span>
+                  <span className="ml-1.5 text-xs text-ink/45">{Math.round((count / sum) * 100)}%</span>
+                </span>
               </div>
               <div className="mt-1.5 h-2 rounded-full bg-paper">
                 <div className="h-2 rounded-full bg-ember" style={{ width: `${(count / top) * 100}%` }} />

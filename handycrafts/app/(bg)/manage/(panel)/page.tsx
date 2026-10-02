@@ -15,7 +15,7 @@ export default async function ManagePage({ searchParams }: Props) {
   const filter = isStatus(status) ? status : null;
   const [orders, leads] = await Promise.all([listOrders(), listLeads()]);
   const openLeads = leads.filter((lead) => lead.status === "open").length;
-  const shown = filter ? orders.filter((order) => order.status === filter) : orders.filter((o) => o.status !== "cancelled");
+  const shown = filter ? orders.filter((order) => order.status === filter) : orders.filter((o) => o.status !== "cancelled" && o.status !== "completed");
 
   const month = new Date().toISOString().slice(0, 7);
   const active = orders.filter((o) => o.status !== "cancelled");

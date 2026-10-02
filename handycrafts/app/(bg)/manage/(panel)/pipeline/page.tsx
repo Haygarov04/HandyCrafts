@@ -43,7 +43,7 @@ export default async function PipelinePage() {
                 </p>
               ) : (
                 <ul className="space-y-2.5">
-                  {column.map((order) => (
+                  {(stage === "completed" ? column.slice(0, 10) : column).map((order) => (
                     <li key={order.id} className="rounded-2xl bg-white p-3 shadow-sm">
                       <Link href={`/manage/${order.id}`} className="flex gap-3">
                         {/* eslint-disable-next-line @next/next/no-img-element */}

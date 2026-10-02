@@ -4,6 +4,7 @@ export const orderStatuses = [
   "printing",
   "shipped",
   "delivered",
+  "completed",
   "cancelled",
 ] as const;
 
@@ -15,6 +16,7 @@ export const statusLabel: Record<OrderStatus, string> = {
   printing: "В изработка",
   shipped: "Изпратена",
   delivered: "Получена",
+  completed: "Приключена",
   cancelled: "Отказана",
 };
 
@@ -24,6 +26,7 @@ export const statusTone: Record<OrderStatus, string> = {
   printing: "bg-violet-100 text-violet-800",
   shipped: "bg-amber-100 text-amber-900",
   delivered: "bg-emerald-100 text-emerald-800",
+  completed: "bg-ink text-paper",
   cancelled: "bg-ink/10 text-ink/60",
 };
 
@@ -34,6 +37,9 @@ export const deliveryLabel = {
 } as const;
 
 export type Delivery = keyof typeof deliveryLabel;
+
+/** Statuses that never email the customer — "completed" is bookkeeping only. */
+export const silentStatuses: readonly OrderStatus[] = ["new", "completed"];
 
 export function isStatus(value: unknown): value is OrderStatus {
   return (orderStatuses as readonly unknown[]).includes(value);
@@ -76,6 +82,8 @@ export type Order = {
   items: OrderItem[];
   total: number;
   tracking?: { courier: "econt" | "speedy"; number: string };
+  /** When the order was marked "completed" — revenue counts on this day. */
+  completedAt?: string;
   /** Emails sent to the customer, newest last. */
   emails?: { type: string; at: string; ok: boolean }[];
 };
@@ -86,6 +94,7 @@ export const nextStatus: Record<OrderStatus, OrderStatus | null> = {
   confirmed: "printing",
   printing: "shipped",
   shipped: "delivered",
-  delivered: null,
+  delivered: "completed",
+  completed: null,
   cancelled: null,
 };

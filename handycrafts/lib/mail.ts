@@ -153,7 +153,7 @@ function trackingUrl(order: Order, lang: Lang) {
 
 /* ---------- customer emails ---------- */
 
-export type CustomerEmail = "received" | Exclude<OrderStatus, "new">;
+export type CustomerEmail = "received" | Exclude<OrderStatus, "new" | "completed">;
 
 const copy: Record<Lang, Record<CustomerEmail, { subject: string; title: string; text: string }>> = {
   bg: {

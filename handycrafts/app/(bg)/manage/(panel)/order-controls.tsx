@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { orderStatuses, statusLabel, type Order, type OrderStatus } from "@/lib/order-types";
+import { orderStatuses, silentStatuses, statusLabel, type Order, type OrderStatus } from "@/lib/order-types";
 
 const emailLabel: Record<string, string> = {
   received: "Приета",
@@ -87,6 +87,7 @@ export default function OrderControls({
           />
           {hasEmail ? "Прати имейл на клиента при смяна на статуса" : "Клиентът не е оставил имейл"}
         </label>
+        <p className="mt-1.5 text-xs text-ink/50">„Приключена“ не праща имейл — от нея се смята оборотът в статистиката.</p>
       </div>
 
       <div>
@@ -150,7 +151,7 @@ export default function OrderControls({
         </div>
       ) : null}
 
-      {hasEmail && current !== "new" ? (
+      {hasEmail && !silentStatuses.includes(current) ? (
         <button type="button" onClick={() => save({ resend: true })} className="text-sm font-semibold underline decoration-ember underline-offset-4">
           Прати пак имейла за „{statusLabel[current]}“
         </button>

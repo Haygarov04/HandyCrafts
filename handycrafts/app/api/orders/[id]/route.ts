@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { manageAllowed } from "@/lib/manage-auth";
-import { isStatus } from "@/lib/order-types";
+import { isStatus, silentStatuses } from "@/lib/order-types";
 import { sendCustomerEmail, type CustomerEmail } from "@/lib/mail";
 import { getOrder, logEmail, updateOrder } from "@/lib/orders";
 import { cleanText, sameOrigin } from "@/lib/security";
@@ -44,8 +44,9 @@ export async function PATCH(req: Request, context: Context) {
 
   // A status change emails the customer unless the workshop unticks "notify".
   let emailed: boolean | null = null;
-  const statusChanged = change.status && before?.status !== change.status && change.status !== "new";
-  const resend = body?.resend === true && order.status !== "new";
+  const silent = silentStatuses.includes(order.status);
+  const statusChanged = change.status && before?.status !== change.status && !silent;
+  const resend = body?.resend === true && !silent;
   if ((statusChanged && body?.notify !== false) || resend) {
     const type = order.status as CustomerEmail;
     emailed = order.customer.email ? await sendCustomerEmail(order, type) : false;

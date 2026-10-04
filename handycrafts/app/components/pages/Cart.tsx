@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/app/components/cart";
 import QtyControl from "@/app/components/QtyControl";
 import { useLang } from "@/app/components/lang";
-import { deliveryLabel, type Delivery } from "@/lib/order-types";
+import { deliveryLabel, isFullName, type Delivery } from "@/lib/order-types";
 
 const LEAD_KEY = "hc_lead_id";
 
@@ -113,6 +113,10 @@ export default function CartPage() {
   async function submit(event: React.FormEvent) {
     event.preventDefault();
     setError("");
+    if (!isFullName(form.name)) {
+      setError(c.needFullName);
+      return;
+    }
     if (!agree) {
       setError(c.mustAgree);
       return;

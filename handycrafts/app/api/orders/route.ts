@@ -4,7 +4,7 @@ import { translator } from "@/lib/api-lang";
 import { itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
 import { sendCustomerEmail, sendNewOrderToShop } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
-import { deliveryLabel, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
+import { deliveryLabel, isFullName, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
 import { isLeadId, updateLead } from "@/lib/leads";
 import { createOrder, getDraft, listOrders, logEmail, nextOrderNumber } from "@/lib/orders";
 import { subscribe } from "@/lib/newsletter";
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const address = cleanText(customer.address, 200);
     const delivery = String(customer.delivery || "") as Delivery;
 
-    if (name.length < 3) return NextResponse.json({ error: tr("Напиши име и фамилия.", "Please enter your full name.") }, { status: 400 });
+    if (!isFullName(name)) return NextResponse.json({ error: tr("Напиши име и фамилия.", "Please enter your full name.") }, { status: 400 });
     if (!/^\+?[0-9 ()-]{8,20}$/.test(phone)) {
       return NextResponse.json({ error: tr("Напиши телефон, на който да те потърсим.", "Please enter a phone number we can call.") }, { status: 400 });
     }

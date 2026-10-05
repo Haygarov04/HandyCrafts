@@ -85,6 +85,7 @@ function bg(id: LegalId): LegalDoc {
             body: [
               "Съгласно чл. 57, т. 3 от Закона за защита на потребителите правото на отказ от договора в 14-дневен срок не се прилага за стоки, изработени по поръчка на потребителя или съобразени с неговите индивидуални изисквания. Фигурките и ключодържателите се изработват по снимка на клиента и попадат в това изключение.",
               "Клиентът може да откаже поръчката безплатно, докато тя не е потвърдена. Подробности има в страницата „Връщане и рекламации“.",
+              "След потвърждението поръчката е обвързваща. Ако клиентът откаже или не потърси в срок пратка, която отговаря на поръчката, той дължи на търговеца направените разходи за изработката и за доставката в двете посоки. Търговецът може да потърси тези суми по законовия ред, включително чрез съда.",
             ],
           },
           {
@@ -319,6 +320,7 @@ function en(id: LegalId): LegalDoc {
             body: [
               "Under Art. 57(3) of the Bulgarian Consumer Protection Act, the 14-day right of withdrawal does not apply to goods made to the consumer's specifications or clearly personalised. Figurines and keychains are made from the customer's photo and fall under this exception.",
               "The customer can cancel free of charge until the order is confirmed. See the “Returns and complaints” page.",
+              "Once confirmed, the order is binding. If the customer refuses or does not collect a parcel that matches the order, they owe the merchant the costs of making the item and of delivery both ways. The merchant may recover these amounts through the legal process, including the courts.",
             ],
           },
           { title: "Legal guarantee and complaints", body: ["The customer has a 2-year legal guarantee of conformity from receipt of the goods under Bulgarian law. Complaints are accepted by email as described on the “Returns and complaints” page."] },

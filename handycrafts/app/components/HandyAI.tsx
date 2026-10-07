@@ -227,20 +227,13 @@ export default function HandyAI({
   const fileRef = useRef<HTMLInputElement>(null);
   const wasAdded = useRef(added);
 
-  // Most people never scroll to the launcher, so the first time a preview appears the chat opens
-  // by itself (once per browser), greeting them with what it can do.
+  // Until someone has opened Handy AI once on this device, the launcher pulses to catch the eye.
   useEffect(() => {
     let known = false;
     try {
       known = localStorage.getItem("hc_ai_seen") === "1";
     } catch {}
-    if (known) return;
-    queueMicrotask(() => setSeen(false));
-    const timer = window.setTimeout(() => {
-      setOpen(true);
-      trackEvent("handy_ai_open", { from: "auto" });
-    }, 1400);
-    return () => window.clearTimeout(timer);
+    if (!known) queueMicrotask(() => setSeen(false));
   }, []);
 
   useEffect(() => {

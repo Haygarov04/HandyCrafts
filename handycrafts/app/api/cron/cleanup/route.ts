@@ -47,6 +47,21 @@ export async function GET(req: Request) {
         }
       }
     }
+    for (const item of order.items) {
+      for (const ref of item.extras || []) {
+        if (!ref.startsWith("blob:")) continue;
+        if (old) {
+          await del(ref.slice(5)).catch(() => undefined);
+          orderFiles += 1;
+        } else {
+          keep.add(ref.slice(5));
+        }
+      }
+      if (old && item.extras?.length) {
+        item.extras = undefined;
+        changed = true;
+      }
+    }
     if (changed) await setJSON(`order:${order.id}`, order);
   }
 

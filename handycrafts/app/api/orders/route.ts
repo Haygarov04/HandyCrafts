@@ -94,6 +94,8 @@ export async function POST(req: Request) {
         pose: draft.pose,
         photo: draft.photo,
         preview: draft.preview,
+        edits: draft.edits,
+        extras: draft.extras,
       });
     }
 

@@ -17,6 +17,10 @@ export type Draft = {
   root?: string;
   /** When the customer put this preview in the cart. */
   cartAt?: string;
+  /** Changes asked for in the studio chat, oldest first, that led to this version. */
+  edits?: string[];
+  /** Extra photos added in the chat, for the workshop. */
+  extras?: string[];
 };
 
 const DRAFT_TTL = 60 * 60 * 24 * 30;

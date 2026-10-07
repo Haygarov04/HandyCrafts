@@ -133,6 +133,9 @@ export default async function PreviewsPage({ searchParams }: Props) {
                 {latest.clothes || latest.pose ? (
                   <p className="mt-1 line-clamp-2 text-xs text-ink/50">{[latest.clothes, latest.pose].filter(Boolean).join(" · ")}</p>
                 ) : null}
+                {latest.edits?.length ? (
+                  <p className="mt-1 line-clamp-2 text-xs text-ink/50">Чат: {latest.edits.join(" → ")}</p>
+                ) : null}
                 {contact ? (
                   <Link href="/manage/leads" className="mt-1 inline-block text-sm text-sky-800 underline">
                     {contact}

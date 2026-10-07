@@ -124,7 +124,7 @@ function bg(id: LegalId): LegalDoc {
             title: "Какви данни събираме",
             body: [
               [
-                "Снимката, която качваш в студиото, описанието на дрехите и позата и създадената визуализация.",
+                "Снимката, която качваш в студиото, описанието на дрехите и позата, допълнителните снимки и промените, които поискаш в чата, и създадените визуализации.",
                 "При поръчка: име, телефон, имейл (по желание), град, адрес или офис на куриер и бележка към поръчката.",
                 "Незавършена поръчка: ако въведеш телефон или имейл в количката, но не изпратиш поръчката — въведените данни и продуктите в количката.",
                 "Визуализация на имейл: ако поискаш в студиото да ти я изпратим — имейлът ти и визуализацията.",
@@ -358,7 +358,7 @@ function en(id: LegalId): LegalDoc {
             title: "What we collect",
             body: [
               [
-                "The photo you upload in the studio, your description of clothes and pose, and the generated preview.",
+                "The photo you upload in the studio, your description of clothes and pose, any extra photos and changes you ask for in the chat, and the generated previews.",
                 "When you order: name, phone, email (optional), city, address or courier office, and your order note.",
                 "Unfinished order: if you enter a phone or email at checkout but don't send the order — what you entered and the items in your cart.",
                 "Preview by email: if you ask us in the studio to send you your preview — your email and the preview.",

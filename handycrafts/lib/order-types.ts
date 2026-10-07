@@ -63,6 +63,10 @@ export type OrderItem = {
   pose: string;
   photo?: string;
   preview?: string;
+  /** Changes the customer asked for in the studio chat, oldest first. */
+  edits?: string[];
+  /** Extra photos the customer added in the chat. */
+  extras?: string[];
 };
 
 export type Order = {

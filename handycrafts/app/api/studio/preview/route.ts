@@ -7,29 +7,12 @@ import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
 import { incr } from "@/lib/kv";
 import { getDraft, saveDraft } from "@/lib/orders";
 import { allow, cleanText } from "@/lib/security";
+import { editImage, streamToBuffer } from "@/lib/xai-image";
 
 export const runtime = "nodejs";
 export const maxDuration = 90;
 
 const MAX_BYTES = 8 * 1024 * 1024;
-
-function imageFromResponse(payload: unknown): string | null {
-  if (!payload || typeof payload !== "object") return null;
-  const data = payload as {
-    url?: string;
-    b64_json?: string;
-    image?: { url?: string; b64_json?: string };
-    data?: Array<{ url?: string; b64_json?: string }>;
-  };
-  const url = data.url || data.image?.url || data.data?.[0]?.url;
-  if (url) return url;
-  const b64 = data.b64_json || data.image?.b64_json || data.data?.[0]?.b64_json;
-  return b64 ? `data:image/png;base64,${b64}` : null;
-}
-
-async function streamToBuffer(body: BodyInit) {
-  return Buffer.from(await new Response(body).arrayBuffer());
-}
 
 export async function POST(req: Request) {
   const tr = translator(req);
@@ -96,25 +79,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: tr("Качи снимка.", "Please upload a photo.") }, { status: 400 });
     }
 
-    const response = await fetch("https://api.x.ai/v1/images/edits", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: process.env.XAI_IMAGE_MODEL || "grok-imagine-image-2.0",
-        prompt: figurinePrompt({ product, subject, people, cm, clothes, pose }),
-        image: {
-          url: `data:${photo.contentType};base64,${photo.bytes.toString("base64")}`,
-          type: "image_url",
-        },
-        aspect_ratio: "1:1",
-        resolution: "2k",
-      }),
-      signal: AbortSignal.timeout(80_000),
-    });
-    const payload = await response.json().catch(() => null);
-    const source = response.ok ? imageFromResponse(payload) : null;
+    const source = await editImage(key, figurinePrompt({ product, subject, people, cm, clothes, pose }), [photo]);
     if (!source) {
-      console.error("XAI_PREVIEW", response.status, JSON.stringify(payload).slice(0, 500));
       return NextResponse.json(
         { error: tr("Визуализацията не се получи. Опитай с друга снимка след малко.", "The preview didn't work. Try another photo in a moment.") },
         { status: 502 }

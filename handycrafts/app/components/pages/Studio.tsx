@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "@/app/components/Analytics";
 import { CartButton } from "@/app/components/Navbar";
+import PreviewChat from "@/app/components/PreviewChat";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
 import VisualTag from "@/app/components/VisualTag";
@@ -477,6 +478,18 @@ export default function StudioPage() {
               <p className="mx-auto mt-3 max-w-lg text-center text-xs text-ink/45">
                 {s.previewNote}
               </p>
+            ) : null}
+            {preview && !busy && !added ? (
+              <div className="mx-auto max-w-lg">
+                <PreviewChat
+                  lang={lang}
+                  current={{ draftId: preview.draftId, url: preview.url }}
+                  onVersion={(version) => {
+                    setPreview({ ...preview, ...version });
+                    setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
+                  }}
+                />
+              </div>
             ) : null}
 
             {!busy ? (

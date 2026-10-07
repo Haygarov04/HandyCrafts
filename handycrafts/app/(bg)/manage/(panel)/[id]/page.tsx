@@ -128,11 +128,38 @@ export default async function OrderPage({ params }: Props) {
               </figure>
             ))}
           </div>
+          {item.extras?.length ? (
+            <div className="mt-3 grid grid-cols-3 gap-3">
+              {item.extras.map((_, n) => (
+                <figure key={n}>
+                  <a href={`${file("photo", index).replace("kind=photo", "kind=extra")}&n=${n}`} target="_blank" rel="noreferrer">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`${file("photo", index).replace("kind=photo", "kind=extra")}&n=${n}`}
+                      alt=""
+                      className="aspect-square w-full rounded-2xl bg-sand object-cover"
+                    />
+                  </a>
+                  <figcaption className="mt-1 text-xs text-ink/50">Допълнителна снимка {n + 1}</figcaption>
+                </figure>
+              ))}
+            </div>
+          ) : null}
           {item.clothes || item.pose ? (
             <dl className="mt-4 grid gap-2 text-sm">
               {item.clothes ? <Row label="Дрехи" value={item.clothes} /> : null}
               {item.pose ? <Row label="Поза" value={item.pose} /> : null}
             </dl>
+          ) : null}
+          {item.edits?.length ? (
+            <div className="mt-4 rounded-2xl bg-paper px-4 py-3 text-sm">
+              <p className="font-semibold">Промени, поискани в чата</p>
+              <ol className="mt-1 list-decimal space-y-0.5 pl-5 text-ink/70">
+                {item.edits.map((edit, n) => (
+                  <li key={n}>{edit}</li>
+                ))}
+              </ol>
+            </div>
           ) : null}
         </section>
       ))}

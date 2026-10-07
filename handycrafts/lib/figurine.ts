@@ -8,6 +8,14 @@ const kinds: Record<ProductId, string> = {
 const framing =
   "Framing: square image, the figurine centered and filling most of the frame, soft warm studio light, plain cream seamless background, gentle contact shadow, no text, no logo, no watermark.";
 
+// Previews went wrong in the same few ways: extra feet when the photo pose was crouching,
+// busts instead of full bodies, and results that looked like a real child rather than a figurine.
+const anatomy =
+  "Correct anatomy for every figure: exactly two arms, two hands with five fingers, two legs and two feet each, no extra, merged or missing limbs.";
+const toy =
+  "It must clearly read as a small physical painted resin figurine, not a real person and not a photo: stylized sculpted forms, simplified smooth skin, painted details.";
+const fullBody = "Full body from the top of the head to the shoes, both feet resting flat on the base — never a bust or a half body.";
+
 export function figurinePrompt(input: {
   product: ProductId;
   subject: SubjectId;
@@ -32,24 +40,34 @@ export function figurinePrompt(input: {
 
   const people = input.people ?? 1;
   if (people > 1) {
-    const pose = input.pose.trim() || "standing close together, natural and friendly";
+    const pose = input.pose.trim() || "standing upright side by side, close together, natural and friendly (do not copy a sitting or crouching pose from the photo)";
     return [
       `Turn this photo into a studio product photo of one physical ${kinds[input.product].replace("a low plain round base", "one shared low plain round base")} showing exactly ${people} people from the photo together, about ${input.cm} cm tall${input.product === "keychain" ? ", with one metal ring on top" : ""}.`,
       "Keep every person recognizable: face shape, age, hairstyle, glasses, skin tone and distinguishing features.",
       `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
       `Pose: ${pose}. All ${people} people fully visible, nothing cropped.`,
+      input.product === "figurine" ? fullBody : "",
+      anatomy,
       "Style: premium hand-painted stylized resin miniature, soft matte finish, clean sculpted hair, slightly larger heads, friendly expressions, eyes sharp.",
+      toy,
       framing,
-    ].join(" ");
+    ]
+      .filter(Boolean)
+      .join(" ");
   }
 
-  const pose = input.pose.trim() || "a calm natural standing pose";
+  const pose = input.pose.trim() || "standing upright in a calm natural pose (do not copy a sitting or crouching pose from the photo)";
   return [
     `Turn this photo into a studio product photo of one physical full-body ${kinds[input.product]}, about ${input.cm} cm tall.`,
     "Keep this exact person recognizable: face shape, age, hairstyle, glasses, skin tone and distinguishing features.",
     `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
     `Pose: ${pose}. Full subject visible, nothing cropped.`,
+    input.product === "figurine" ? fullBody : "",
+    anatomy,
     "Style: premium hand-painted stylized resin miniature, soft matte finish, clean sculpted hair, slightly larger head, friendly expression, eyes sharp.",
+    toy,
     framing,
-  ].join(" ");
+  ]
+    .filter(Boolean)
+    .join(" ");
 }

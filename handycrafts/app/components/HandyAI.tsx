@@ -25,7 +25,7 @@ const copy = {
       n === 1 ? "остава 1 промяна" : `остават ${n} промени`,
     close: "Затвори",
     hello:
-      "Здравей! Аз съм Handy AI ✦ Кажи ми какво да променя по фигурката — коса, дрехи, поза, аксесоари — или ми прати още снимка, например на човек, който не е на първата.",
+      "Здравей! Аз съм Handy AI ✦ Ето първата версия. Не е съвсем като в главата ти? Просто ми напиши какво да променя — коса, дрехи, поза, лого, аксесоари — или ми прати още снимка. Ако ти харесва, добави я в количката 🙂",
     ideas: [
       "По-дълга коса",
       "Друга прическа",
@@ -70,7 +70,7 @@ const copy = {
     left: (n: number) => (n === 1 ? "1 change left" : `${n} changes left`),
     close: "Close",
     hello:
-      "Hi! I'm Handy AI ✦ Tell me what to change on the figurine — hair, clothes, pose, accessories — or send me another photo, for example of someone who isn't in the first one.",
+      "Hi! I'm Handy AI ✦ Here's the first version. Not quite what you had in mind? Just tell me what to change — hair, clothes, pose, a logo, accessories — or send me another photo. If you like it, add it to your cart 🙂",
     ideas: [
       "Longer hair",
       "A different hairstyle",
@@ -207,6 +207,8 @@ export default function HandyAI({
 }: Props) {
   const c = copy[lang];
   const [open, setOpen] = useState(false);
+  // Until someone has opened Handy AI once, the launcher pulses to catch the eye.
+  const [seen, setSeen] = useState(true);
   const [first] = useState(() => restore(lang, current).first);
   const [entries, setEntries] = useState<Entry[]>(
     () => restore(lang, current).entries,
@@ -224,6 +226,30 @@ export default function HandyAI({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const wasAdded = useRef(added);
+
+  // Most people never scroll to the launcher, so the first time a preview appears the chat opens
+  // by itself (once per browser), greeting them with what it can do.
+  useEffect(() => {
+    let known = false;
+    try {
+      known = localStorage.getItem("hc_ai_seen") === "1";
+    } catch {}
+    if (known) return;
+    queueMicrotask(() => setSeen(false));
+    const timer = window.setTimeout(() => {
+      setOpen(true);
+      trackEvent("handy_ai_open", { from: "auto" });
+    }, 1400);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    try {
+      localStorage.setItem("hc_ai_seen", "1");
+    } catch {}
+    queueMicrotask(() => setSeen(true));
+  }, [open]);
 
   // The studio can open the chat from elsewhere, e.g. the button over the preview image.
   useEffect(() => {
@@ -469,7 +495,7 @@ export default function HandyAI({
           setOpen(true);
           trackEvent("handy_ai_open", {});
         }}
-        className="group relative mt-6 flex w-full items-center gap-4 overflow-hidden rounded-3xl bg-ink p-4 text-left text-paper shadow-[0_18px_40px_rgba(22,21,19,0.22)] transition hover:-translate-y-0.5 sm:p-5"
+        className={`group relative mt-6 flex w-full items-center gap-4 overflow-hidden rounded-3xl bg-ink p-4 text-left text-paper shadow-[0_18px_40px_rgba(22,21,19,0.22)] transition hover:-translate-y-0.5 sm:p-5 ${seen ? "" : "cta-pulse"}`}
       >
         <span
           className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-ember/40 blur-3xl transition group-hover:bg-ember/60"

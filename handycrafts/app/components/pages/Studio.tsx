@@ -438,6 +438,17 @@ export default function StudioPage() {
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">{s.detailsTitle}</h1>
             <p className="mt-3 text-center text-ink/60">{s.detailsText}</p>
+            <div className="mt-6 flex items-start gap-3 rounded-3xl bg-ink p-4 text-paper sm:p-5">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-gradient-to-br from-ember to-ember-deep" aria-hidden>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9L19 15z" />
+                </svg>
+              </span>
+              <span className="text-sm leading-snug">
+                <b className="block font-display text-base">{s.aiTeaserTitle}</b>
+                <span className="text-paper/75">{s.aiTeaserText}</span>
+              </span>
+            </div>
             <label className="mt-8 block text-sm font-semibold">
               {copy[subject].extrasLabel}
               <textarea

@@ -77,16 +77,15 @@ export function figurinePrompt(input: {
  * original photo (for the likeness) and <IMAGE_2>, if there is one, a photo they just added.
  */
 export function editPrompt(input: { product: ProductId; subject: SubjectId; request: string; extraPhoto: boolean; hasOriginal: boolean }) {
-  const pet = input.subject === "pet";
   return [
     `<IMAGE_0> is a studio product photo of a custom ${kinds[input.product]}.`,
-    input.hasOriginal ? `<IMAGE_1> is the customer's original photo: keep the ${pet ? "pet" : "person"} recognizable from it.` : "",
+    input.hasOriginal ? `<IMAGE_1> is the customer's reference photo: keep the likeness that <IMAGE_0> already has, use <IMAGE_1> only to keep it faithful.` : "",
     input.extraPhoto
       ? `<IMAGE_${input.hasOriginal ? 2 : 1}> is an extra reference photo the customer added for this change — use it for what they describe.`
       : "",
     `Edit <IMAGE_0> to make exactly this change the customer asked for (it may be written in Bulgarian or English): "${input.request}".`,
     "Change only that. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
-    pet ? "" : anatomy,
+    input.subject === "pet" ? "" : anatomy,
     toy,
     framing,
   ]

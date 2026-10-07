@@ -61,7 +61,8 @@ export async function POST(req: Request) {
     const current = await readStoredFile(base.preview);
     if (!current) return NextResponse.json({ error: tr("Визуализацията е изтекла. Направи нова.", "The preview has expired. Make a new one.") }, { status: 404 });
     const images: ImageInput[] = [{ bytes: await streamToBuffer(current.body), contentType: current.contentType }];
-    const original = await readStoredFile(base.photo);
+    // A face or person sent earlier in the chat must stay: later edits compare with that photo, not the first one.
+    const original = await readStoredFile(base.likeness || base.photo);
     if (original) images.push({ bytes: await streamToBuffer(original.body), contentType: original.contentType });
     if (extra) images.push(extra);
 
@@ -85,6 +86,7 @@ export async function POST(req: Request) {
       // The panel shows what the customer wrote, not the instruction sent to the model.
       edits: [...(base.edits || []), cleanText(ticket.m, 300)].slice(-20),
       extras: extraRef ? [...(base.extras || []), extraRef].slice(-5) : base.extras,
+      likeness: extraRef || base.likeness,
     });
     return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}`, editsLeft: Math.max(0, EDIT_LIMIT - (base.edits?.length || 0) - 1) });
   } catch (error) {

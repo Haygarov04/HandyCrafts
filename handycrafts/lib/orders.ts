@@ -21,6 +21,8 @@ export type Draft = {
   edits?: string[];
   /** Extra photos added in the chat, for the workshop. */
   extras?: string[];
+  /** The photo later chat edits keep the likeness from: the latest one the customer added, else `photo`. */
+  likeness?: string;
 };
 
 const DRAFT_TTL = 60 * 60 * 24 * 30;

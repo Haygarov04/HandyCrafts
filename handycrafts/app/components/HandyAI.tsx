@@ -724,36 +724,21 @@ export default function HandyAI({
                     </button>
                   </div>
                 ) : null}
-                <div className="flex items-end gap-2">
+                {/* One pill: attach and send sit inside it, so the text gets the whole width. */}
+                <div className="flex items-end gap-1 rounded-[1.6rem] border border-ink/15 bg-paper p-1 transition focus-within:border-ink">
                   <button
                     type="button"
                     onClick={() => fileRef.current?.click()}
                     disabled={busy}
                     aria-label={c.attach}
                     title={c.attach}
-                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-ink/70 transition hover:bg-ink/5 disabled:opacity-40"
+                    className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink/60 transition hover:bg-ink/5 disabled:opacity-40"
                   >
-                    <svg
-                      width="21"
-                      height="21"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden
-                    >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                       <path d="M21 12.5 12.6 21a5.5 5.5 0 0 1-7.8-7.8l8.9-8.9a3.7 3.7 0 0 1 5.2 5.2l-8.9 8.9a1.8 1.8 0 0 1-2.6-2.6l8.2-8.2" />
                     </svg>
                   </button>
-                  <input
-                    ref={fileRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={attach}
-                    className="hidden"
-                  />
+                  <input ref={fileRef} type="file" accept="image/*" onChange={attach} className="hidden" />
                   <textarea
                     ref={inputRef}
                     rows={1}
@@ -763,39 +748,25 @@ export default function HandyAI({
                     onChange={(event) => {
                       setText(event.target.value);
                       event.target.style.height = "auto";
-                      event.target.style.height = `${Math.min(event.target.scrollHeight, 120)}px`;
+                      event.target.style.height = `${Math.min(event.target.scrollHeight, 132)}px`;
                     }}
                     onKeyDown={(event) => {
-                      if (
-                        event.key === "Enter" &&
-                        !event.shiftKey &&
-                        !event.nativeEvent.isComposing
-                      ) {
+                      if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
                         event.preventDefault();
                         send();
                       }
                     }}
                     placeholder={c.placeholder}
                     enterKeyHint="send"
-                    className="max-h-[120px] min-h-11 min-w-0 flex-1 resize-none rounded-[1.4rem] border border-ink/15 bg-paper px-4 py-2.5 text-[16px] leading-snug outline-none transition focus:border-ink disabled:opacity-60"
+                    className="max-h-[132px] min-h-10 min-w-0 flex-1 resize-none bg-transparent px-1 py-2 text-[16px] leading-6 outline-none placeholder:text-ink/40 disabled:opacity-60"
                   />
                   <button
                     type="submit"
                     disabled={busy || (!text.trim() && !photo)}
                     aria-label={c.send}
-                    className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ember text-ink transition hover:bg-ember-deep disabled:bg-ink/10 disabled:text-ink/30"
+                    className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ember text-ink transition hover:bg-ember-deep disabled:bg-ink/10 disabled:text-ink/30"
                   >
-                    <svg
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden
-                    >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                       <path d="M12 19V5M5 12l7-7 7 7" />
                     </svg>
                   </button>

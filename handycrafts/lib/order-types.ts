@@ -38,8 +38,8 @@ export const deliveryLabel = {
 
 export type Delivery = keyof typeof deliveryLabel;
 
-/** Statuses that never email the customer — "completed" is bookkeeping only. */
-export const silentStatuses: readonly OrderStatus[] = ["new", "completed"];
+/** Statuses that never email the customer. */
+export const silentStatuses: readonly OrderStatus[] = ["new"];
 
 /** Couriers need a first and a last name: two words of at least two letters each. */
 export function isFullName(name: string) {

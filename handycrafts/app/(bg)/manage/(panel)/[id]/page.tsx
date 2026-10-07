@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { money } from "@/lib/catalog";
 import { deliveryLabel, statusLabel, statusTone } from "@/lib/order-types";
 import { getOrder } from "@/lib/orders";
+import { getReview, reviewStatusLabel, reviewUrl } from "@/lib/reviews";
 import OrderControls from "../order-controls";
+import ReviewLink from "./review-link";
 
 export const dynamic = "force-dynamic";
 
@@ -12,6 +14,8 @@ type Props = { params: Promise<{ id: string }> };
 export default async function OrderPage({ params }: Props) {
   const order = await getOrder((await params).id);
   if (!order) notFound();
+  const review = await getReview(order.id);
+  const askReview = order.status === "delivered" || order.status === "completed";
 
   const file = (kind: "photo" | "preview", index: number) => `/api/orders/${order.id}/file?kind=${kind}&item=${index}`;
   const c = order.customer;
@@ -69,6 +73,34 @@ export default async function OrderPage({ params }: Props) {
         hasEmail={Boolean(c.email)}
         emails={order.emails || []}
       />
+
+      {askReview || review ? (
+        <section className="rounded-3xl bg-white p-5">
+          <p className="font-semibold">Отзив</p>
+          {review ? (
+            <>
+              <p className="mt-2 text-ember">
+                {"★".repeat(review.rating)}
+                <span className="text-ink/15">{"★".repeat(5 - review.rating)}</span>
+                <span className="ml-2 text-xs font-semibold text-ink/55">{reviewStatusLabel[review.status]}</span>
+              </p>
+              <p className="mt-2 line-clamp-3 text-sm text-ink/70">{review.text}</p>
+              <Link href="/manage/reviews" className="mt-2 inline-block text-sm font-semibold underline decoration-ember underline-offset-4">
+                Към отзивите
+              </Link>
+            </>
+          ) : (
+            <>
+              <p className="mt-1 text-sm text-ink/55">
+                {c.email
+                  ? "Молбата за отзив тръгва по имейл при статус „Приключена“. Можеш да пратиш линка и във Viber:"
+                  : "Клиентът няма имейл — прати му линка за отзив във Viber:"}
+              </p>
+              <ReviewLink url={reviewUrl(order)} name={c.name.split(" ")[0]} />
+            </>
+          )}
+        </section>
+      ) : null}
 
       {order.items.map((item, index) => (
         <section key={item.draftId} className="rounded-3xl bg-white p-5">

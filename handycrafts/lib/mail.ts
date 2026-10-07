@@ -3,6 +3,7 @@ import { dict, localize, type Lang } from "@/lib/i18n";
 import type { Order, OrderStatus } from "@/lib/order-types";
 import { escapeHtml } from "@/lib/security";
 import { unsubscribeToken } from "@/lib/newsletter";
+import { reviewUrl } from "@/lib/reviews";
 import { absolute } from "@/lib/site";
 
 // Emails go out through Resend (RESEND_API_KEY). SMTP_* is kept as a fallback.
@@ -153,7 +154,7 @@ function trackingUrl(order: Order, lang: Lang) {
 
 /* ---------- customer emails ---------- */
 
-export type CustomerEmail = "received" | Exclude<OrderStatus, "new" | "completed">;
+export type CustomerEmail = "received" | Exclude<OrderStatus, "new">;
 
 const copy: Record<Lang, Record<CustomerEmail, { subject: string; title: string; text: string }>> = {
   bg: {
@@ -180,7 +181,12 @@ const copy: Record<Lang, Record<CustomerEmail, { subject: string; title: string;
     delivered: {
       subject: "Как ти хареса фигурката?",
       title: "Надяваме се да ти хареса!",
-      text: "Благодарим, че избра HandyCrafts. Ще се радваме, ако ни оставиш отзив — помага много на малка работилница като нашата.",
+      text: "Благодарим, че избра HandyCrafts! Надяваме се фигурката да ти донесе много радост. Ако нещо не е наред, просто отговори на този имейл.",
+    },
+    completed: {
+      subject: "Ще ни напишеш ли няколко думи?",
+      title: "Как ти хареса фигурката?",
+      text: "Ще се радваме да ни напишеш няколко изречения за поръчката си. Отнема минута, а на малка работилница като нашата помага много — и на другите да решат дали да поръчат.",
     },
     cancelled: {
       subject: "Поръчка {n} е отказана",
@@ -212,7 +218,12 @@ const copy: Record<Lang, Record<CustomerEmail, { subject: string; title: string;
     delivered: {
       subject: "How do you like your figurine?",
       title: "We hope you love it!",
-      text: "Thank you for choosing HandyCrafts. We'd be grateful for a review — it helps a small workshop like ours a lot.",
+      text: "Thank you for choosing HandyCrafts! We hope your figurine brings you a lot of joy. If anything isn't right, just reply to this email.",
+    },
+    completed: {
+      subject: "Would you write us a few words?",
+      title: "How do you like your figurine?",
+      text: "We'd love a few sentences about your order. It takes a minute and helps a small workshop like ours a lot — and helps others decide.",
     },
     cancelled: {
       subject: "Order {n} cancelled",
@@ -238,11 +249,11 @@ export function customerEmail(order: Order, type: CustomerEmail) {
       extra += button(lang === "en" ? "Track the parcel" : "Проследи пратката", url);
     }
   }
-  if (type === "delivered" && process.env.GOOGLE_REVIEW_URL) {
-    extra += button(lang === "en" ? "Leave a review" : "Остави отзив", process.env.GOOGLE_REVIEW_URL);
+  if (type === "completed") {
+    extra += button(lang === "en" ? "Write a review" : "Напиши отзив", reviewUrl(order));
   }
 
-  const showItems = type !== "delivered";
+  const showItems = type !== "delivered" && type !== "completed";
   const body = `<p style="margin:0 0 6px;font-size:13px;color:#8a847b">${numberLine}</p>
 <h1 style="margin:0 0 14px;font-size:24px;line-height:1.25">${escapeHtml(c.title)}</h1>
 <p style="margin:0">${escapeHtml(hi)}</p>

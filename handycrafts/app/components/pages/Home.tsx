@@ -4,6 +4,7 @@ import FaqList from "../FaqList";
 import VisualTag from "../VisualTag";
 import JsonLd from "../JsonLd";
 import NewsletterBox from "../NewsletterBox";
+import ReviewsSection from "../ReviewsSection";
 import { catalog, fromPrice } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
@@ -250,6 +251,8 @@ export default function Home({ lang }: { lang: Lang }) {
           ))}
         </div>
       </section>
+
+      <ReviewsSection lang={lang} />
 
       <section id="products" className="scroll-mt-24 px-4 py-20 sm:px-6 sm:py-28">
         <div className="mx-auto max-w-6xl">

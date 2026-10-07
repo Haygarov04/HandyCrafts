@@ -3,6 +3,7 @@ import { money } from "@/lib/catalog";
 import { hasBlob } from "@/lib/files";
 import { hasRedis } from "@/lib/kv";
 import { listLeads } from "@/lib/leads";
+import { listReviews } from "@/lib/reviews";
 import { isStatus, orderStatuses, statusLabel, statusTone, type Order } from "@/lib/order-types";
 import { listDrafts, listOrders, type Draft } from "@/lib/orders";
 
@@ -22,7 +23,8 @@ function lostThisWeek(drafts: Draft[], orders: Order[]) {
 export default async function ManagePage({ searchParams }: Props) {
   const { status } = await searchParams;
   const filter = isStatus(status) ? status : null;
-  const [orders, leads, drafts] = await Promise.all([listOrders(), listLeads(), listDrafts()]);
+  const [orders, leads, drafts, reviews] = await Promise.all([listOrders(), listLeads(), listDrafts(), listReviews()]);
+  const pendingReviews = reviews.filter((review) => review.status === "pending").length;
   const openLeads = leads.filter((lead) => lead.status === "open").length;
   const lostTries = lostThisWeek(drafts, orders);
   const shown = filter ? orders.filter((order) => order.status === filter) : orders.filter((o) => o.status !== "cancelled" && o.status !== "completed");
@@ -65,6 +67,20 @@ export default async function ManagePage({ searchParams }: Props) {
           {openLeads}
         </span>
       </Link>
+
+      {pendingReviews ? (
+        <Link href="/manage/reviews" className="flex items-center justify-between gap-3 rounded-3xl bg-white px-5 py-4 transition hover:shadow-md">
+          <span>
+            <span className="block font-semibold">Нови отзиви</span>
+            <span className="block text-sm text-ink/55">Прочети ги и публикувай хубавите на сайта</span>
+          </span>
+          <span className="shrink-0 rounded-full bg-ember px-3 py-1 text-sm font-semibold text-ink">{pendingReviews}</span>
+        </Link>
+      ) : (
+        <Link href="/manage/reviews" className="block px-1 text-sm text-ink/55 underline decoration-ink/20 underline-offset-4">
+          Отзиви
+        </Link>
+      )}
 
       <Link href="/manage/previews" className="flex items-center justify-between gap-3 rounded-3xl bg-white px-5 py-4 transition hover:shadow-md">
         <span>

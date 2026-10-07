@@ -41,7 +41,8 @@ const copy = {
     selected: "Избрана",
     pick: "Избери",
     newVersion: (n: number) => `Ето версия ${n} ✨ Как ти се струва?`,
-    fresh: (n: number) => `Направих версия ${n} с новите детайли ✨ Предишните са тук, ако някоя ти харесва повече.`,
+    fresh: (n: number) =>
+      `Направих версия ${n} с новите детайли ✨ Предишните са тук, ако някоя ти харесва повече.`,
     quick: {
       cart: "Харесва ми — в количката",
       more: "Още промяна",
@@ -85,7 +86,8 @@ const copy = {
     selected: "Selected",
     pick: "Choose",
     newVersion: (n: number) => `Here's version ${n} ✨ What do you think?`,
-    fresh: (n: number) => `I made version ${n} with the new details ✨ The earlier ones are still here if you like one better.`,
+    fresh: (n: number) =>
+      `I made version ${n} with the new details ✨ The earlier ones are still here if you like one better.`,
     quick: {
       cart: "I love it — add to cart",
       more: "One more change",
@@ -120,14 +122,36 @@ function load(): Saved | null {
 /** The saved conversation, with this preview added as a new version if it was made outside the chat. */
 function restore(lang: Lang, current: Version): Saved {
   const saved = load();
-  if (!saved) return { first: current.draftId, entries: fresh(lang, current), editsLeft: null };
-  if (saved.entries.some((e) => e.kind === "version" && e.version.draftId === current.draftId)) return saved;
-  return { ...saved, entries: withNewPreview(lang, saved.entries, current), editsLeft: null };
+  if (!saved)
+    return {
+      first: current.draftId,
+      entries: fresh(lang, current),
+      editsLeft: null,
+    };
+  if (
+    saved.entries.some(
+      (e) => e.kind === "version" && e.version.draftId === current.draftId,
+    )
+  )
+    return saved;
+  return {
+    ...saved,
+    entries: withNewPreview(lang, saved.entries, current),
+    editsLeft: null,
+  };
 }
 
-function withNewPreview(lang: Lang, entries: Entry[], version: Version): Entry[] {
+function withNewPreview(
+  lang: Lang,
+  entries: Entry[],
+  version: Version,
+): Entry[] {
   const n = entries.filter((e) => e.kind === "version").length + 1;
-  return [...entries, { kind: "version", version, n }, { kind: "bot", text: copy[lang].fresh(n), quick: ["cart", "more", "prev"] }];
+  return [
+    ...entries,
+    { kind: "version", version, n },
+    { kind: "bot", text: copy[lang].fresh(n), quick: ["cart", "more", "prev"] },
+  ];
 }
 
 function fresh(lang: Lang, version: Version): Entry[] {
@@ -184,8 +208,12 @@ export default function HandyAI({
   const c = copy[lang];
   const [open, setOpen] = useState(false);
   const [first] = useState(() => restore(lang, current).first);
-  const [entries, setEntries] = useState<Entry[]>(() => restore(lang, current).entries);
-  const [editsLeft, setEditsLeft] = useState<number | null>(() => restore(lang, current).editsLeft);
+  const [entries, setEntries] = useState<Entry[]>(
+    () => restore(lang, current).entries,
+  );
+  const [editsLeft, setEditsLeft] = useState<number | null>(
+    () => restore(lang, current).editsLeft,
+  );
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState<{ file: File; url: string } | null>(null);
   const [phase, setPhase] = useState<"idle" | "thinking" | "drawing">("idle");
@@ -266,16 +294,14 @@ export default function HandyAI({
     const onKey = (event: KeyboardEvent) =>
       event.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
-    // On phones the sheet covers the page, so the page itself shouldn't scroll underneath.
-    const lock = window.matchMedia("(max-width: 1279px)").matches;
-    if (lock) document.body.style.overflow = "hidden";
+    // No body scroll lock: on iOS Safari toggling overflow:hidden leaves the fixed bottom bar
+    // stranded mid-screen. The sheet covers the page and its list uses overscroll-contain instead.
     // On wide screens the studio slides left to make room for the panel (see globals.css).
     document.body.classList.add("hc-ai-open", "hc-chat-open");
     return () => {
       observer?.disconnect();
       window.removeEventListener("resize", measure);
       window.removeEventListener("keydown", onKey);
-      if (lock) document.body.style.overflow = "";
       document.body.classList.remove("hc-ai-open", "hc-chat-open");
     };
   }, [open]);
@@ -437,49 +463,47 @@ export default function HandyAI({
 
   return (
     <>
-      {!added ? (
-        <button
-          type="button"
-          onClick={() => {
-            setOpen(true);
-            trackEvent("handy_ai_open", {});
-          }}
-          className="group relative mt-6 flex w-full items-center gap-4 overflow-hidden rounded-3xl bg-ink p-4 text-left text-paper shadow-[0_18px_40px_rgba(22,21,19,0.22)] transition hover:-translate-y-0.5 sm:p-5"
-        >
-          <span
-            className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-ember/40 blur-3xl transition group-hover:bg-ember/60"
-            aria-hidden
-          />
-          <Avatar size={48} />
-          <span className="relative min-w-0 flex-1">
-            <span className="block font-display text-lg leading-tight sm:text-xl">
-              {c.launch}
-            </span>
-            <span className="mt-1 block text-sm leading-snug text-paper/70">
-              {c.launchText}
-            </span>
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(true);
+          trackEvent("handy_ai_open", {});
+        }}
+        className="group relative mt-6 flex w-full items-center gap-4 overflow-hidden rounded-3xl bg-ink p-4 text-left text-paper shadow-[0_18px_40px_rgba(22,21,19,0.22)] transition hover:-translate-y-0.5 sm:p-5"
+      >
+        <span
+          className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-ember/40 blur-3xl transition group-hover:bg-ember/60"
+          aria-hidden
+        />
+        <Avatar size={48} />
+        <span className="relative min-w-0 flex-1">
+          <span className="block font-display text-lg leading-tight sm:text-xl">
+            {c.launch}
           </span>
-          {versions.length > 1 ? (
-            <span className="relative shrink-0 rounded-full bg-paper/10 px-2.5 py-1 text-xs font-semibold">
-              {versions.length}×
-            </span>
-          ) : null}
-          <svg
-            className="relative shrink-0 transition group-hover:translate-x-1"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden
-          >
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </button>
-      ) : null}
+          <span className="mt-1 block text-sm leading-snug text-paper/70">
+            {c.launchText}
+          </span>
+        </span>
+        {versions.length > 1 ? (
+          <span className="relative shrink-0 rounded-full bg-paper/10 px-2.5 py-1 text-xs font-semibold">
+            {versions.length}×
+          </span>
+        ) : null}
+        <svg
+          className="relative shrink-0 transition group-hover:translate-x-1"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden
+        >
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </button>
 
       {open
         ? createPortal(
@@ -740,11 +764,27 @@ export default function HandyAI({
                     title={c.attach}
                     className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-ink/60 transition hover:bg-ink/5 disabled:opacity-40"
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden
+                    >
                       <path d="M21 12.5 12.6 21a5.5 5.5 0 0 1-7.8-7.8l8.9-8.9a3.7 3.7 0 0 1 5.2 5.2l-8.9 8.9a1.8 1.8 0 0 1-2.6-2.6l8.2-8.2" />
                     </svg>
                   </button>
-                  <input ref={fileRef} type="file" accept="image/*" onChange={attach} className="hidden" />
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={attach}
+                    className="hidden"
+                  />
                   <textarea
                     ref={inputRef}
                     rows={1}
@@ -757,7 +797,11 @@ export default function HandyAI({
                       event.target.style.height = `${Math.min(event.target.scrollHeight, 132)}px`;
                     }}
                     onKeyDown={(event) => {
-                      if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+                      if (
+                        event.key === "Enter" &&
+                        !event.shiftKey &&
+                        !event.nativeEvent.isComposing
+                      ) {
                         event.preventDefault();
                         send();
                       }
@@ -772,7 +816,17 @@ export default function HandyAI({
                     aria-label={c.send}
                     className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ember text-ink transition hover:bg-ember-deep disabled:bg-ink/10 disabled:text-ink/30"
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden
+                    >
                       <path d="M12 19V5M5 12l7-7 7 7" />
                     </svg>
                   </button>

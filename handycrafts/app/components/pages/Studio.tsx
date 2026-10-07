@@ -97,6 +97,18 @@ export default function StudioPage() {
     };
   }, [photoUrl]);
 
+  // iOS Safari can leave the fixed bottom bar halfway up the screen after the keyboard closes.
+  // Nudging the scroll position once the keyboard is gone makes it lay the bar out again.
+  useEffect(() => {
+    const settle = () => window.setTimeout(() => window.scrollTo(window.scrollX, window.scrollY), 120);
+    document.addEventListener("focusout", settle);
+    window.visualViewport?.addEventListener("resize", settle);
+    return () => {
+      document.removeEventListener("focusout", settle);
+      window.visualViewport?.removeEventListener("resize", settle);
+    };
+  }, []);
+
   useEffect(() => {
     if (!restored) return;
     saveState({ step, product, subject, people: peopleChoice, cm, clothes, pose, preview, added });
@@ -245,7 +257,7 @@ export default function StudioPage() {
   }
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-paper">
+    <div className="min-h-screen bg-paper pb-36">
       <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
           <Link href={href("/")} className="flex items-center gap-2">
@@ -283,7 +295,7 @@ export default function StudioPage() {
         </div>
       </header>
 
-      <main id="studio-main" className="mx-auto w-full max-w-3xl px-4 pb-10 pt-8 sm:px-6 sm:pt-12">
+      <main id="studio-main" className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 sm:pt-12">
         {step === 0 ? (
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">{s.chooseTitle}</h1>
@@ -494,8 +506,24 @@ export default function StudioPage() {
                   checkoutHref={href("/cart")}
                   onAddToCart={addToCart}
                   onVersion={(version) => {
+                    // Already in the cart: swap the cart item for the version just chosen, so the order matches it.
+                    if (added && version.draftId !== preview.draftId) {
+                      cart.remove(preview.draftId);
+                      cart.add({
+                        draftId: version.draftId,
+                        product: preview.product,
+                        subject: preview.subject,
+                        people: preview.people || 1,
+                        label: t.itemLabel(preview.product, preview.subject, preview.people || 1),
+                        cm,
+                        price,
+                        qty: 1,
+                        previewUrl: version.url,
+                      });
+                      // A quiet swap: don't pop the cart open over the chat.
+                      cart.setOpen(false);
+                    }
                     setPreview({ ...preview, ...version });
-                    setAdded(false);
                     setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
                   }}
                 />
@@ -587,7 +615,7 @@ export default function StudioPage() {
         {error && step !== 3 ? <p className="mt-6 text-center text-sm text-red-700">{error}</p> : null}
       </main>
 
-      <div id="studio-bar" className="sticky bottom-0 z-40 mt-auto border-t border-ink/10 bg-white/95 px-4 py-3 backdrop-blur sm:py-4">
+      <div id="studio-bar" className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white/95 px-4 py-3 backdrop-blur sm:py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
           <button
             type="button"

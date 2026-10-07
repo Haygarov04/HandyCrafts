@@ -15,6 +15,12 @@ export const reminderDelays = [1 * HOUR, 24 * HOUR, 72 * HOUR];
 
 export const reminderLabel = ["Напомняне 1 (след 1 час)", "Напомняне 2 (след 1 ден)", "Напомняне 3 (след 3 дни)"];
 
+/** What the panel calls each email: a studio lead's first one is the preview itself, sent right away. */
+export function emailLabel(lead: Lead, step: number) {
+  if (lead.source === "studio") return step === 0 ? "Визуализацията (веднага)" : reminderLabel[step];
+  return reminderLabel[step] || `Имейл ${step + 1}`;
+}
+
 /** When the next reminder is due, or null if none will be sent. */
 export function nextReminderAt(lead: Lead) {
   if (!lead.customer.email || lead.optOut || lead.status === "won" || lead.status === "lost") return null;
@@ -97,6 +103,41 @@ ${button(c.cta, resumeUrl(lead))}
 <p style="margin:18px 0 0;font-size:12px;color:#8a847b">${
     lang === "en" ? "Not interested any more?" : "Не искаш повече напомняния?"
   } <a href="${stopUrl(lead)}" style="color:#8a847b">${lang === "en" ? "Stop these emails" : "Спри тези имейли"}</a></p>`;
+  return { subject: c.subject, html: layout(lang, c.text.slice(0, 90), body) };
+}
+
+const previewCopy: Record<Lang, { subject: string; title: string; text: string; cta: string; later: string }> = {
+  bg: {
+    subject: "Ето визуализацията ти",
+    title: "Визуализацията ти е готова",
+    text: "Запазихме визуализацията, за да я покажеш на когото искаш или да поръчаш, когато решиш. С бутона продължаваш точно оттук — не е нужно да качваш снимката отново.",
+    cta: "Поръчай я",
+    later: "Плащаш чак при получаване, с наложен платеж. Ако искаш промяна в позата, дрехите или размера — просто отговори на този имейл.",
+  },
+  en: {
+    subject: "Here is your preview",
+    title: "Your preview is ready",
+    text: "We saved your preview so you can show it to anyone or order whenever you're ready. The button takes you right back here — no need to upload the photo again.",
+    cta: "Order it",
+    later: "You only pay when the parcel arrives, cash on delivery. Want a different pose, outfit or size? Just reply to this email.",
+  },
+};
+
+/** The preview someone asked for in the studio, sent straight away. */
+export function previewEmail(lead: Lead) {
+  const lang = lead.lang;
+  const t = dict[lang];
+  const c = previewCopy[lang];
+  const item = lead.items[0];
+  const body = `<h1 style="margin:0 0 12px;font-size:24px;line-height:1.25">${escapeHtml(c.title)}</h1>
+<p style="margin:0">${escapeHtml(c.text)}</p>
+<img src="${absolute(`/api/studio/draft/${item.draftId}`)}" width="480" alt="" style="display:block;width:100%;max-width:480px;height:auto;margin:18px 0 6px;border-radius:18px;background:#f6f1e8">
+<p style="margin:0;color:#8a847b">${escapeHtml(item.product ? t.itemLabel(item.product, item.subject, item.people) : item.label)} · ${item.cm} ${t.cm} · ${t.money(item.price)}</p>
+${button(c.cta, resumeUrl(lead))}
+<p style="margin:18px 0 0">${escapeHtml(c.later)}</p>
+<p style="margin:18px 0 0;font-size:12px;color:#8a847b">${
+    lang === "en" ? "Don't want any more emails about it?" : "Не искаш повече имейли за нея?"
+  } <a href="${stopUrl(lead)}" style="color:#8a847b">${lang === "en" ? "Stop these emails" : "Спри ги"}</a></p>`;
   return { subject: c.subject, html: layout(lang, c.text.slice(0, 90), body) };
 }
 

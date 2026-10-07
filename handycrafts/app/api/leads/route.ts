@@ -55,19 +55,21 @@ export async function POST(req: Request) {
     updatedAt: now,
     status: existing?.status || "open",
     lang: body.lang === "en" ? "en" : "bg",
+    // Keep what we already have (an email left in the studio) when the checkout field is still empty.
     customer: {
-      name: cleanText(raw.name, 80),
-      phone,
-      email,
-      city: cleanText(raw.city, 60),
+      name: cleanText(raw.name, 80) || existing?.customer.name || "",
+      phone: phone || existing?.customer.phone || "",
+      email: email || existing?.customer.email || "",
+      city: cleanText(raw.city, 60) || existing?.customer.city || "",
       delivery: delivery in deliveryLabel ? delivery : "econt",
-      address: cleanText(raw.address, 200),
+      address: cleanText(raw.address, 200) || existing?.customer.address || "",
     },
     items,
     total: items.reduce((sum, item) => sum + item.price * item.qty, 0),
     internalNote: existing?.internalNote,
     emails: existing?.emails,
     optOut: existing?.optOut,
+    source: existing?.source,
   });
   return new NextResponse(null, { status: 204 });
 }

@@ -3,18 +3,28 @@ import { money } from "@/lib/catalog";
 import { hasBlob } from "@/lib/files";
 import { hasRedis } from "@/lib/kv";
 import { listLeads } from "@/lib/leads";
-import { isStatus, orderStatuses, statusLabel, statusTone } from "@/lib/order-types";
-import { listOrders } from "@/lib/orders";
+import { isStatus, orderStatuses, statusLabel, statusTone, type Order } from "@/lib/order-types";
+import { listDrafts, listOrders, type Draft } from "@/lib/orders";
 
 export const dynamic = "force-dynamic";
 
 type Props = { searchParams: Promise<{ status?: string }> };
 
+/** Tries from the last 7 days that never became an order (retries with the same photo count once). */
+function lostThisWeek(drafts: Draft[], orders: Order[]) {
+  const ordered = new Set(orders.flatMap((order) => order.items.map((item) => item.draftId)));
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const recent = drafts.filter((draft) => draft.createdAt >= weekAgo);
+  const orderedRoots = new Set(recent.filter((draft) => ordered.has(draft.id)).map((draft) => draft.root || draft.id));
+  return new Set(recent.map((draft) => draft.root || draft.id).filter((root) => !orderedRoots.has(root))).size;
+}
+
 export default async function ManagePage({ searchParams }: Props) {
   const { status } = await searchParams;
   const filter = isStatus(status) ? status : null;
-  const [orders, leads] = await Promise.all([listOrders(), listLeads()]);
+  const [orders, leads, drafts] = await Promise.all([listOrders(), listLeads(), listDrafts()]);
   const openLeads = leads.filter((lead) => lead.status === "open").length;
+  const lostTries = lostThisWeek(drafts, orders);
   const shown = filter ? orders.filter((order) => order.status === filter) : orders.filter((o) => o.status !== "cancelled" && o.status !== "completed");
 
   const month = new Date().toISOString().slice(0, 7);
@@ -53,6 +63,16 @@ export default async function ManagePage({ searchParams }: Props) {
         </span>
         <span className={`shrink-0 rounded-full px-3 py-1 text-sm font-semibold ${openLeads ? "bg-ember text-ink" : "bg-ink/5 text-ink/50"}`}>
           {openLeads}
+        </span>
+      </Link>
+
+      <Link href="/manage/previews" className="flex items-center justify-between gap-3 rounded-3xl bg-white px-5 py-4 transition hover:shadow-md">
+        <span>
+          <span className="block font-semibold">Визуализации без поръчка</span>
+          <span className="block text-sm text-ink/55">Направили са визуализация тази седмица, но не са поръчали</span>
+        </span>
+        <span className={`shrink-0 rounded-full px-3 py-1 text-sm font-semibold ${lostTries ? "bg-ink text-paper" : "bg-ink/5 text-ink/50"}`}>
+          {lostTries}
         </span>
       </Link>
 

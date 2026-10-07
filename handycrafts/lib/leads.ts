@@ -2,7 +2,8 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { del, getJSON, setJSON, zadd, zrem, zrevrange } from "@/lib/kv";
 import type { Delivery } from "@/lib/order-types";
 
-// Checkouts where someone typed a phone or email but never pressed "Order".
+// Checkouts where someone typed a phone or email but never pressed "Order",
+// and previews someone asked us to email them from the studio.
 // Kept for 30 days so the shop can call and help, then they expire on their own.
 
 export const leadStatuses = ["open", "contacted", "won", "lost"] as const;
@@ -51,6 +52,8 @@ export type Lead = {
   emails?: { step: number; at: string; ok: boolean }[];
   /** The customer asked for no more reminders. */
   optOut?: boolean;
+  /** "studio": left an email under a preview; otherwise started at checkout. */
+  source?: "cart" | "studio";
 };
 
 const LEAD_TTL = 60 * 60 * 24 * 30;

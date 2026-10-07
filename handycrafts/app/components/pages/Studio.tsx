@@ -22,6 +22,9 @@ import {
   type SubjectId,
 } from "@/lib/catalog";
 
+/** Shared with checkout, so an email left here and the details typed there end up as one unfinished order. */
+const LEAD_KEY = "hc_lead_id";
+
 type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number };
 
 export default function StudioPage() {
@@ -48,6 +51,7 @@ export default function StudioPage() {
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [restored, setRestored] = useState(false);
   const [converting, setConverting] = useState(false);
+  const [mail, setMail] = useState({ email: "", website: "", sending: false, sentTo: "", error: "" });
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -174,6 +178,7 @@ export default function StudioPage() {
       setProgress(100);
       trackEvent("generate_preview", { product, subject });
       setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people });
+      setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
     } catch (issue) {
       setError(issue instanceof Error ? issue.message : s.wrong);
     } finally {
@@ -196,7 +201,35 @@ export default function StudioPage() {
       previewUrl: preview.url,
     });
     setAdded(true);
+    fetch(`/api/studio/draft/${preview.draftId}`, { method: "POST", keepalive: true }).catch(() => {});
     trackEvent("add_to_cart", { currency: "EUR", value: price, items: [{ item_id: preview.product, item_name: t.itemLabel(preview.product, preview.subject, preview.people || 1), price }] });
+  }
+
+  // Emails the preview and keeps the address as an unfinished order, under the same id checkout uses.
+  async function emailPreview(event: React.FormEvent) {
+    event.preventDefault();
+    if (!preview || mail.sending) return;
+    setMail((prev) => ({ ...prev, sending: true, error: "" }));
+    let id = "";
+    try {
+      id = localStorage.getItem(LEAD_KEY) || "";
+    } catch {}
+    try {
+      const res = await fetch("/api/leads/preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, draftId: preview.draftId, cm, email: mail.email, website: mail.website, lang }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || t.studio.wrong);
+      try {
+        if (data.id) localStorage.setItem(LEAD_KEY, data.id);
+      } catch {}
+      setMail((prev) => ({ ...prev, sending: false, sentTo: prev.email }));
+      trackEvent("preview_email", { product: preview.product });
+    } catch (err) {
+      setMail((prev) => ({ ...prev, sending: false, error: err instanceof Error ? err.message : t.studio.wrong }));
+    }
   }
 
   function next() {
@@ -458,6 +491,45 @@ export default function StudioPage() {
                     {s.retry}
                   </button>
                 </div>
+                {preview && !added ? (
+                  <div className="mt-5 rounded-3xl bg-white p-5">
+                    {mail.sentTo ? (
+                      <p className="text-center font-semibold">{s.mailSent(mail.sentTo)}</p>
+                    ) : (
+                      <form onSubmit={emailPreview}>
+                        <p className="font-semibold">{s.mailTitle}</p>
+                        <p className="mt-1 text-sm text-ink/60">{s.mailText}</p>
+                        <input
+                          type="text"
+                          name="website"
+                          tabIndex={-1}
+                          autoComplete="off"
+                          value={mail.website}
+                          onChange={(event) => setMail({ ...mail, website: event.target.value })}
+                          className="hidden"
+                          aria-hidden
+                        />
+                        <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                          <input
+                            type="email"
+                            required
+                            inputMode="email"
+                            autoComplete="email"
+                            value={mail.email}
+                            onChange={(event) => setMail({ ...mail, email: event.target.value, error: "" })}
+                            placeholder={s.mailPlaceholder}
+                            className="min-w-0 flex-1 rounded-full border border-ink/15 bg-paper px-4 py-3 outline-none focus:border-ink"
+                          />
+                          <button type="submit" disabled={mail.sending} className="shrink-0 rounded-full bg-ink px-5 py-3 font-semibold text-paper disabled:opacity-50">
+                            {mail.sending ? "…" : s.mailSend}
+                          </button>
+                        </div>
+                        {mail.error ? <p className="mt-2 text-sm text-red-700">{mail.error}</p> : null}
+                        <p className="mt-2 text-xs text-ink/45">{s.mailFine}</p>
+                      </form>
+                    )}
+                  </div>
+                ) : null}
                 {added ? (
                   <div className="mt-5 rounded-3xl bg-white p-5 text-center">
                     <p className="font-semibold">{s.added}</p>

@@ -140,6 +140,7 @@ export async function POST(req: Request) {
       pose,
       photo: photoRef,
       preview: previewRef,
+      root: previous ? previous.root || previous.id : undefined,
     });
 
     return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}` });

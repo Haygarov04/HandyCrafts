@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { after } from "next/server";
 import { money } from "@/lib/catalog";
-import { nextReminderAt, reminderLabel, sendDueReminders } from "@/lib/lead-mail";
+import { emailLabel, nextReminderAt, sendDueReminders } from "@/lib/lead-mail";
 import { leadLabel, leadTone, listLeads } from "@/lib/leads";
 import { deliveryLabel } from "@/lib/order-types";
 import LeadControls from "./lead-controls";
@@ -51,7 +51,7 @@ export default async function LeadsPage({ searchParams }: Props) {
       <div>
         <h1 className="text-3xl">Незавършени поръчки</h1>
         <p className="mt-1 text-sm text-ink/55">
-          Хора, които са написали телефон или имейл в количката, но не са натиснали „Поръчай“. Пазят се 30 дни.
+          Хора, които са написали телефон или имейл в количката, но не са натиснали „Поръчай“, или са поискали визуализацията си на имейл от студиото. Пазят се 30 дни.
         </p>
       </div>
 
@@ -103,13 +103,14 @@ export default async function LeadsPage({ searchParams }: Props) {
                       {c.city ? ` · ${c.city}` : ""}
                       {c.city && c.address ? ` · ${deliveryLabel[c.delivery]}: ${c.address}` : ""}
                       {lead.lang === "en" ? " · EN" : ""}
+                      {lead.source === "studio" ? " · имейл от студиото" : ""}
                     </p>
                   </div>
                 </div>
                 <ul className="mt-3 space-y-1 rounded-2xl bg-paper px-4 py-3 text-xs text-ink/60">
                   {(lead.emails || []).map((mail) => (
                     <li key={mail.at} className={mail.ok ? "" : "text-red-700"}>
-                      {mail.ok ? "✓" : "✗"} {reminderLabel[mail.step] || `Имейл ${mail.step + 1}`} · {when(mail.at)}
+                      {mail.ok ? "✓" : "✗"} {emailLabel(lead, mail.step)} · {when(mail.at)}
                       {mail.ok ? "" : " · не мина"}
                     </li>
                   ))}
@@ -120,7 +121,7 @@ export default async function LeadsPage({ searchParams }: Props) {
                         ? "Клиентът спря напомнянията."
                         : (() => {
                             const at = nextReminderAt(lead);
-                            if (at) return `Следващ имейл: ${reminderLabel[(lead.emails || []).length]} — ${until(at)}`;
+                            if (at) return `Следващ имейл: ${emailLabel(lead, (lead.emails || []).length)} — ${until(at)}`;
                             if (lead.status === "won" || lead.status === "lost") return "Имейлите са спрени.";
                             return "Всички напомняния са пратени.";
                           })()}

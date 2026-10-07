@@ -1,4 +1,4 @@
-import { getJSON, incr, setJSON, zadd, zrevrange } from "@/lib/kv";
+import { getJSON, incr, setJSON, zadd, zrem, zrevrange } from "@/lib/kv";
 import type { Order, OrderStatus } from "@/lib/order-types";
 
 export type Draft = {
@@ -13,12 +13,25 @@ export type Draft = {
   pose: string;
   photo: string;
   preview: string;
+  /** The first preview of this try; new tries ("Нов опит") point back to it. */
+  root?: string;
+  /** When the customer put this preview in the cart. */
+  cartAt?: string;
 };
 
 const DRAFT_TTL = 60 * 60 * 24 * 30;
 
 export async function saveDraft(draft: Draft) {
   await setJSON(`draft:${draft.id}`, draft, DRAFT_TTL);
+  await zadd("drafts", Date.parse(draft.createdAt), draft.id);
+}
+
+/** Newest previews first, for the panel. Expired ones are dropped from the index as we go. */
+export async function listDrafts(limit = 300) {
+  const ids = await zrevrange("drafts", 0, limit - 1);
+  const drafts = await Promise.all(ids.map((id) => getJSON<Draft>(`draft:${id}`)));
+  await Promise.all(ids.filter((_, i) => !drafts[i]).map((id) => zrem("drafts", id)));
+  return drafts.filter((draft): draft is Draft => Boolean(draft));
 }
 
 export async function getDraft(id: string) {

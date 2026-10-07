@@ -456,7 +456,23 @@ export default function StudioPage() {
             <div className="relative mx-auto mt-8 aspect-square w-full max-w-lg overflow-hidden rounded-[2rem] bg-white shadow-[0_30px_70px_rgba(22,21,19,0.12)]">
               {preview && !busy ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={preview.url} alt={s.previewAlt} className="h-full w-full object-cover" />
+                <>
+                  <img src={preview.url} alt={s.previewAlt} className="h-full w-full object-cover" />
+                  {!added ? (
+                    <button
+                      type="button"
+                      onClick={() => window.dispatchEvent(new Event("handy-ai:open"))}
+                      className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-ink/90 py-2 pl-2 pr-4 text-sm font-semibold text-paper shadow-[0_10px_30px_rgba(22,21,19,0.35)] backdrop-blur transition hover:bg-ink sm:bottom-5 sm:text-base"
+                    >
+                      <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-ember to-ember-deep" aria-hidden>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9L19 15z" />
+                        </svg>
+                      </span>
+                      {s.editWithAi}
+                    </button>
+                  ) : null}
+                </>
               ) : (
                 <>
                   {busy ? <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-sand via-paper to-blush/60" /> : null}
@@ -595,7 +611,7 @@ export default function StudioPage() {
             <span className="block truncate font-semibold">
               {t.itemLabel(product, subject, people)} · {cm} {t.cm}
             </span>
-            <span className="font-display text-lg">{t.money(price)}</span>
+            <span className="whitespace-nowrap font-display text-lg">{t.money(price)}</span>
           </p>
           {step < 3 ? (
             <button

@@ -195,6 +195,16 @@ export default function HandyAI({
   const fileRef = useRef<HTMLInputElement>(null);
   const wasAdded = useRef(added);
 
+  // The studio can open the chat from elsewhere, e.g. the button over the preview image.
+  useEffect(() => {
+    const show = () => {
+      setOpen(true);
+      trackEvent("handy_ai_open", { from: "preview" });
+    };
+    window.addEventListener("handy-ai:open", show);
+    return () => window.removeEventListener("handy-ai:open", show);
+  }, []);
+
   const versions = entries.filter(
     (e): e is Extract<Entry, { kind: "version" }> => e.kind === "version",
   );

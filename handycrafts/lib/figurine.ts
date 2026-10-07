@@ -43,7 +43,7 @@ export function figurinePrompt(input: {
     const pose = input.pose.trim() || "standing upright side by side, close together, natural and friendly (do not copy a sitting or crouching pose from the photo)";
     return [
       `Turn this photo into a studio product photo of one physical ${kinds[input.product].replace("a low plain round base", "one shared low plain round base")} showing exactly ${people} people from the photo together, about ${input.cm} cm tall${input.product === "keychain" ? ", with one metal ring on top" : ""}.`,
-      "Keep every person recognizable: face shape, age, hairstyle, glasses, skin tone and distinguishing features.",
+      "Keep every person recognizable: face shape, age, hairstyle, skin tone and distinguishing features. Add glasses only if the person clearly wears them in the photo — never invent glasses, jewellery or other accessories that are not there.",
       `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
       `Pose: ${pose}. All ${people} people fully visible, nothing cropped.`,
       input.product === "figurine" ? fullBody : "",
@@ -59,7 +59,7 @@ export function figurinePrompt(input: {
   const pose = input.pose.trim() || "standing upright in a calm natural pose (do not copy a sitting or crouching pose from the photo)";
   return [
     `Turn this photo into a studio product photo of one physical full-body ${kinds[input.product]}, about ${input.cm} cm tall.`,
-    "Keep this exact person recognizable: face shape, age, hairstyle, glasses, skin tone and distinguishing features.",
+    "Keep this exact person recognizable: face shape, age, hairstyle, skin tone and distinguishing features. Add glasses only if the person clearly wears them in the photo — never invent glasses, jewellery or other accessories that are not there.",
     `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
     `Pose: ${pose}. Full subject visible, nothing cropped.`,
     input.product === "figurine" ? fullBody : "",
@@ -84,7 +84,7 @@ export function editPrompt(input: { product: ProductId; subject: SubjectId; requ
       ? `<IMAGE_${input.hasOriginal ? 2 : 1}> is an extra reference photo the customer added for this change — use it for what they describe.`
       : "",
     `Edit <IMAGE_0> to make exactly this change the customer asked for (it may be written in Bulgarian or English): "${input.request}".`,
-    "Change only that. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
+    "Change only that. Do not add glasses or accessories that are not already there unless asked. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
     input.subject === "pet" ? "" : anatomy,
     toy,
     framing,

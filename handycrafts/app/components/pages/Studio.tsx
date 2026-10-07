@@ -239,7 +239,7 @@ export default function StudioPage() {
   }
 
   return (
-    <div className="min-h-screen bg-paper pb-32">
+    <div className="flex min-h-[100dvh] flex-col bg-paper">
       <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/95 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
           <Link href={href("/")} className="flex items-center gap-2">
@@ -277,7 +277,7 @@ export default function StudioPage() {
         </div>
       </header>
 
-      <main id="studio-main" className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 sm:pt-12">
+      <main id="studio-main" className="mx-auto w-full max-w-3xl px-4 pb-10 pt-8 sm:px-6 sm:pt-12">
         {step === 0 ? (
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">{s.chooseTitle}</h1>
@@ -456,23 +456,7 @@ export default function StudioPage() {
             <div className="relative mx-auto mt-8 aspect-square w-full max-w-lg overflow-hidden rounded-[2rem] bg-white shadow-[0_30px_70px_rgba(22,21,19,0.12)]">
               {preview && !busy ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <>
-                  <img src={preview.url} alt={s.previewAlt} className="h-full w-full object-cover" />
-                  {!added ? (
-                    <button
-                      type="button"
-                      onClick={() => window.dispatchEvent(new Event("handy-ai:open"))}
-                      className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full bg-ink/90 py-2 pl-2 pr-4 text-sm font-semibold text-paper shadow-[0_10px_30px_rgba(22,21,19,0.35)] backdrop-blur transition hover:bg-ink sm:bottom-5 sm:text-base"
-                    >
-                      <span className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-ember to-ember-deep" aria-hidden>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12 2l1.9 5.6L19.5 9.5 13.9 11.4 12 17l-1.9-5.6L4.5 9.5l5.6-1.9L12 2zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9L19 15z" />
-                        </svg>
-                      </span>
-                      {s.editWithAi}
-                    </button>
-                  ) : null}
-                </>
+                <img src={preview.url} alt={s.previewAlt} className="h-full w-full object-cover" />
               ) : (
                 <>
                   {busy ? <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-sand via-paper to-blush/60" /> : null}
@@ -597,11 +581,18 @@ export default function StudioPage() {
         {error && step !== 3 ? <p className="mt-6 text-center text-sm text-red-700">{error}</p> : null}
       </main>
 
-      <div id="studio-bar" className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white/95 px-4 py-3 backdrop-blur sm:py-4">
+      <div id="studio-bar" className="sticky bottom-0 z-40 mt-auto border-t border-ink/10 bg-white/95 px-4 py-3 backdrop-blur sm:py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
           <button
             type="button"
-            onClick={() => setStep((value) => Math.max(0, value - 1))}
+            onClick={() => {
+              // With Handy AI open, "Назад" closes the chat instead of leaving the preview.
+              if (document.body.classList.contains("hc-chat-open")) {
+                window.dispatchEvent(new Event("handy-ai:close"));
+                return;
+              }
+              setStep((value) => Math.max(0, value - 1));
+            }}
             disabled={step === 0 || busy}
             className="shrink-0 whitespace-nowrap rounded-full border border-ink/15 px-4 py-3 text-sm disabled:opacity-30"
           >

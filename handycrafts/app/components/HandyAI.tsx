@@ -28,7 +28,7 @@ const copy = {
       "Здравей! Аз съм Handy AI ✦ Кажи ми какво да променя по фигурката — коса, дрехи, поза, аксесоари — или ми прати още снимка, например на човек, който не е на първата.",
     ideas: [
       "По-дълга коса",
-      "Махни очилата",
+      "Друга прическа",
       "Друг цвят на дрехите",
       "По-широка усмивка",
     ],
@@ -71,7 +71,7 @@ const copy = {
       "Hi! I'm Handy AI ✦ Tell me what to change on the figurine — hair, clothes, pose, accessories — or send me another photo, for example of someone who isn't in the first one.",
     ideas: [
       "Longer hair",
-      "Remove the glasses",
+      "A different hairstyle",
       "Different clothes colour",
       "Bigger smile",
     ],
@@ -201,8 +201,13 @@ export default function HandyAI({
       setOpen(true);
       trackEvent("handy_ai_open", { from: "preview" });
     };
+    const hide = () => setOpen(false);
     window.addEventListener("handy-ai:open", show);
-    return () => window.removeEventListener("handy-ai:open", show);
+    window.addEventListener("handy-ai:close", hide);
+    return () => {
+      window.removeEventListener("handy-ai:open", show);
+      window.removeEventListener("handy-ai:close", hide);
+    };
   }, []);
 
   const versions = entries.filter(
@@ -264,13 +269,13 @@ export default function HandyAI({
     const lock = window.matchMedia("(max-width: 1279px)").matches;
     if (lock) document.body.style.overflow = "hidden";
     // On wide screens the studio slides left to make room for the panel (see globals.css).
-    document.body.classList.add("hc-ai-open");
+    document.body.classList.add("hc-ai-open", "hc-chat-open");
     return () => {
       observer?.disconnect();
       window.removeEventListener("resize", measure);
       window.removeEventListener("keydown", onKey);
       if (lock) document.body.style.overflow = "";
-      document.body.classList.remove("hc-ai-open");
+      document.body.classList.remove("hc-ai-open", "hc-chat-open");
     };
   }, [open]);
 

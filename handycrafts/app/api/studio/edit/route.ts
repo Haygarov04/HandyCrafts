@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
 import { editPrompt } from "@/lib/figurine";
+import { EDIT_LIMIT, readEdit } from "@/lib/handy-ai";
 import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
 import { incr } from "@/lib/kv";
 import { getDraft, saveDraft } from "@/lib/orders";
@@ -13,7 +14,7 @@ export const maxDuration = 90;
 
 const MAX_BYTES = 8 * 1024 * 1024;
 
-/** The studio chat: changes the current preview with the customer's words, optionally with one more photo. */
+/** Draws a change Handy AI approved: only with a ticket from /api/studio/assistant, optionally with one more photo. */
 export async function POST(req: Request) {
   const tr = translator(req);
   try {
@@ -33,9 +34,19 @@ export async function POST(req: Request) {
     }
 
     const form = await req.formData();
-    const base = await getDraft(String(form.get("draftId") || ""));
+    const ticket = readEdit(String(form.get("ticket") || ""));
+    if (!ticket) return NextResponse.json({ error: tr("Опитай пак да опишеш промяната.", "Please describe the change again.") }, { status: 400 });
+    // Each ticket draws once.
+    const ticketId = String(form.get("ticket")).split(".")[1];
+    if ((await incr(`edit-ticket:${ticketId}`, 20 * 60)) > 1) {
+      return NextResponse.json({ error: tr("Тази промяна вече е направена.", "This change has already been made.") }, { status: 409 });
+    }
+    const base = await getDraft(ticket.d);
     if (!base) return NextResponse.json({ error: tr("Визуализацията е изтекла. Направи нова.", "The preview has expired. Make a new one.") }, { status: 404 });
-    const request = cleanText(form.get("message"), 300);
+    if ((base.edits?.length || 0) >= EDIT_LIMIT) {
+      return NextResponse.json({ error: tr("Стигнахме лимита промени за тази визуализация.", "We've reached the change limit for this preview.") }, { status: 429 });
+    }
+    const request = cleanText(ticket.i, 300);
 
     let extra: ImageInput | null = null;
     const file = form.get("photo");
@@ -46,7 +57,6 @@ export async function POST(req: Request) {
       if (!contentType) return NextResponse.json({ error: tr("Качи снимка в JPG, PNG или WEBP.", "Please upload a JPG, PNG or WEBP photo.") }, { status: 400 });
       extra = { bytes, contentType };
     }
-    if (!request && !extra) return NextResponse.json({ error: tr("Напиши какво да променим.", "Tell us what to change.") }, { status: 400 });
 
     const current = await readStoredFile(base.preview);
     if (!current) return NextResponse.json({ error: tr("Визуализацията е изтекла. Направи нова.", "The preview has expired. Make a new one.") }, { status: 404 });
@@ -55,8 +65,7 @@ export async function POST(req: Request) {
     if (original) images.push({ bytes: await streamToBuffer(original.body), contentType: original.contentType });
     if (extra) images.push(extra);
 
-    const wish = request || tr("използвай новата снимка", "use the new photo");
-    const prompt = editPrompt({ product: base.product, subject: base.subject || "person", request: wish, extraPhoto: Boolean(extra), hasOriginal: Boolean(original) });
+    const prompt = editPrompt({ product: base.product, subject: base.subject || "person", request, extraPhoto: Boolean(extra), hasOriginal: Boolean(original) });
     const source = await editImage(key, prompt, images);
     const preview = source ? await pullImage(source) : null;
     if (!preview) {
@@ -73,10 +82,11 @@ export async function POST(req: Request) {
       preview: previewRef,
       root: base.root || base.id,
       cartAt: undefined,
-      edits: [...(base.edits || []), wish].slice(-20),
+      // The panel shows what the customer wrote, not the instruction sent to the model.
+      edits: [...(base.edits || []), cleanText(ticket.m, 300)].slice(-20),
       extras: extraRef ? [...(base.extras || []), extraRef].slice(-5) : base.extras,
     });
-    return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}` });
+    return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}`, editsLeft: Math.max(0, EDIT_LIMIT - (base.edits?.length || 0) - 1) });
   } catch (error) {
     console.error("PREVIEW_EDIT", error);
     return NextResponse.json({ error: tr("Нещо се обърка. Опитай пак.", "Something went wrong. Please try again.") }, { status: 500 });

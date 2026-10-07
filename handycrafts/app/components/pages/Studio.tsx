@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { trackEvent } from "@/app/components/Analytics";
 import { CartButton } from "@/app/components/Navbar";
-import PreviewChat from "@/app/components/PreviewChat";
+import HandyAI from "@/app/components/HandyAI";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
 import VisualTag from "@/app/components/VisualTag";
@@ -277,7 +277,7 @@ export default function StudioPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 sm:pt-12">
+      <main id="studio-main" className="mx-auto max-w-3xl px-4 pt-8 sm:px-6 sm:pt-12">
         {step === 0 ? (
           <section>
             <h1 className="text-center text-3xl sm:text-4xl">{s.chooseTitle}</h1>
@@ -479,13 +479,17 @@ export default function StudioPage() {
                 {s.previewNote}
               </p>
             ) : null}
-            {preview && !busy && !added ? (
+            {preview && !busy ? (
               <div className="mx-auto max-w-lg">
-                <PreviewChat
+                <HandyAI
                   lang={lang}
                   current={{ draftId: preview.draftId, url: preview.url }}
+                  added={added}
+                  checkoutHref={href("/cart")}
+                  onAddToCart={addToCart}
                   onVersion={(version) => {
                     setPreview({ ...preview, ...version });
+                    setAdded(false);
                     setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
                   }}
                 />
@@ -577,7 +581,7 @@ export default function StudioPage() {
         {error && step !== 3 ? <p className="mt-6 text-center text-sm text-red-700">{error}</p> : null}
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white/95 px-4 py-3 backdrop-blur sm:py-4">
+      <div id="studio-bar" className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-white/95 px-4 py-3 backdrop-blur sm:py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
           <button
             type="button"

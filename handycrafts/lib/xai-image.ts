@@ -27,7 +27,7 @@ const asUrl = (image: ImageInput) => ({ url: `data:${image.contentType};base64,$
  * Returns the URL or data URI of the result, or null when the model gave nothing back.
  */
 export async function editImage(key: string, prompt: string, images: ImageInput[]) {
-  const response = await fetch("https://api.x.ai/v1/images/edits", {
+  const response = await fetch(`${process.env.XAI_BASE_URL || "https://api.x.ai"}/v1/images/edits`, {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({

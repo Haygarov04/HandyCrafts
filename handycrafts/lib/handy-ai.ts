@@ -7,7 +7,7 @@ import type { Lang } from "@/lib/i18n";
 // what to do; the image edit runs later with an instruction the server signed here, so nothing
 // the customer types reaches the image model unchecked.
 
-export const EDIT_LIMIT = Number(process.env.EDIT_THREAD_LIMIT || 8);
+export const EDIT_LIMIT = Number(process.env.EDIT_THREAD_LIMIT || 5);
 
 export type ChatTurn = { role: "you" | "bot"; text: string };
 export type AssistantAction = "edit" | "answer" | "reject";

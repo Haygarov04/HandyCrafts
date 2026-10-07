@@ -35,7 +35,7 @@ export async function editImage(key: string, prompt: string, images: ImageInput[
       prompt,
       ...(images.length === 1 ? { image: asUrl(images[0]) } : { images: images.slice(0, 3).map(asUrl) }),
       aspect_ratio: "1:1",
-      resolution: "2k",
+      resolution: process.env.XAI_IMAGE_RESOLUTION || "2k",
     }),
     signal: AbortSignal.timeout(80_000),
   });

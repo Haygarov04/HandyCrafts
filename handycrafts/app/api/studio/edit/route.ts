@@ -22,14 +22,20 @@ export async function POST(req: Request) {
     const key = process.env.XAI_API_KEY;
     if (!key) return NextResponse.json({ error: tr("Промените не са включени.", "Edits aren't switched on.") }, { status: 503 });
 
-    if (!(await allow("preview-edit", req, Number(process.env.EDIT_HOURLY_LIMIT || 12), 3600))) {
+    if (!(await allow("preview-edit-day", req, Number(process.env.EDIT_PER_VISITOR_DAILY || 12), 86400))) {
+      return NextResponse.json(
+        { error: tr("За днес промените свършиха. Добави фигурката в количката и опиши останалото в бележката — ще го довършим на ръка.", "No more changes today. Add the figurine to your cart and describe the rest in the note — we'll finish it by hand.") },
+        { status: 429 }
+      );
+    }
+    if (!(await allow("preview-edit", req, Number(process.env.EDIT_HOURLY_LIMIT || 6), 3600))) {
       return NextResponse.json(
         { error: tr("Направи много промени за кратко. Опитай пак след около час или ни пиши.", "That's a lot of changes in a short time. Try again in about an hour or write to us.") },
         { status: 429 }
       );
     }
     const day = new Date().toISOString().slice(0, 10);
-    if ((await incr(`previews:${day}`, 60 * 60 * 26)) > Number(process.env.PREVIEW_DAILY_LIMIT || 300)) {
+    if ((await incr(`previews:${day}`, 60 * 60 * 26)) > Number(process.env.PREVIEW_DAILY_LIMIT || 150)) {
       return NextResponse.json({ error: tr("За днес визуализациите свършиха. Пиши ни.", "We've reached today's preview limit. Write to us.") }, { status: 429 });
     }
 

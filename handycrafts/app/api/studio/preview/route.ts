@@ -25,14 +25,21 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!(await allow("preview", req, Number(process.env.PREVIEW_HOURLY_LIMIT || 8), 3600))) {
+    // Each preview costs money at xAI: a few an hour per visitor, a handful a day, and a cap for the whole shop.
+    if (!(await allow("preview-day", req, Number(process.env.PREVIEW_PER_VISITOR_DAILY || 8), 86400))) {
+      return NextResponse.json(
+        { error: tr("За днес направи достатъчно визуализации 🙂 Избери най-добрата и я поръчай, или ни пиши и ще помогнем.", "That's enough previews for today 🙂 Pick the best one and order it, or write to us and we'll help.") },
+        { status: 429 }
+      );
+    }
+    if (!(await allow("preview", req, Number(process.env.PREVIEW_HOURLY_LIMIT || 4), 3600))) {
       return NextResponse.json(
         { error: tr("Направи много визуализации за кратко. Опитай пак след около час.", "You've made a lot of previews in a short time. Please try again in about an hour.") },
         { status: 429 }
       );
     }
     const day = new Date().toISOString().slice(0, 10);
-    if ((await incr(`previews:${day}`, 60 * 60 * 26)) > Number(process.env.PREVIEW_DAILY_LIMIT || 300)) {
+    if ((await incr(`previews:${day}`, 60 * 60 * 26)) > Number(process.env.PREVIEW_DAILY_LIMIT || 150)) {
       return NextResponse.json(
         { error: tr("За днес визуализациите свършиха. Пиши ни и ще я направим ръчно.", "We've reached today's preview limit. Write to us and we'll make it by hand.") },
         { status: 429 }

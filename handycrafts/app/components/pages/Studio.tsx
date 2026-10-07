@@ -49,6 +49,11 @@ export default function StudioPage() {
   const [preview, setPreview] = useState<Preview | null>(null);
   const [error, setError] = useState("");
   const [added, setAdded] = useState(false);
+  // Removed from the cart elsewhere (drawer, cart page): let the customer add it again.
+  useEffect(() => {
+    if (!added || !cart.ready || !preview) return;
+    if (!cart.items.some((item) => item.draftId === preview.draftId)) queueMicrotask(() => setAdded(false));
+  }, [added, cart.ready, cart.items, preview]);
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [restored, setRestored] = useState(false);
   const [converting, setConverting] = useState(false);

@@ -6,7 +6,7 @@ const kinds: Record<ProductId, string> = {
 };
 
 const framing =
-  "Framing: square image, the figurine centered and filling most of the frame, soft warm studio light, plain cream seamless background, gentle contact shadow, no text, no logo, no watermark.";
+  "Framing: square image, the figurine centered and filling most of the frame, soft warm studio light, plain cream seamless background, gentle contact shadow. No watermark and no text or logo floating on the image itself; logos, names and prints on the clothes or items are fine.";
 
 // Previews went wrong in the same few ways: extra feet when the photo pose was crouching,
 // busts instead of full bodies, and results that looked like a real child rather than a figurine.

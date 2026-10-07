@@ -26,7 +26,7 @@ import {
 /** Shared with checkout, so an email left here and the details typed there end up as one unfinished order. */
 const LEAD_KEY = "hc_lead_id";
 
-type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number };
+type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number; clothes?: string; pose?: string };
 
 export default function StudioPage() {
   const cart = useCart();
@@ -178,7 +178,7 @@ export default function StudioPage() {
       });
       setProgress(100);
       trackEvent("generate_preview", { product, subject });
-      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people });
+      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people, clothes, pose });
       setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
     } catch (issue) {
       setError(issue instanceof Error ? issue.message : s.wrong);
@@ -233,8 +233,14 @@ export default function StudioPage() {
     }
   }
 
+  // Back from "Промени детайлите" without changing anything: show the same preview, don't draw a new one.
+  const sameDetails = Boolean(
+    preview && preview.product === product && preview.subject === subject && (preview.people || 1) === people && (preview.clothes ?? "") === clothes && (preview.pose ?? "") === pose
+  );
+
   function next() {
-    if (step === 2) generate();
+    if (step === 2 && sameDetails) setStep(3);
+    else if (step === 2) generate();
     else setStep((value) => Math.min(3, value + 1));
   }
 
@@ -611,7 +617,7 @@ export default function StudioPage() {
               disabled={(step === 1 && ((!photoFile && !preview) || converting)) || (step === 2 && enabled === false)}
               className="shrink-0 whitespace-nowrap rounded-full bg-ember px-5 py-3 font-semibold text-ink transition hover:bg-ember-deep disabled:opacity-40 sm:px-7"
             >
-              {step === 2 ? s.create : s.next}
+              {step === 2 && !sameDetails ? s.create : s.next}
             </button>
           ) : (
             <button

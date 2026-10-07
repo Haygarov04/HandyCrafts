@@ -41,6 +41,7 @@ const copy = {
     selected: "Избрана",
     pick: "Избери",
     newVersion: (n: number) => `Ето версия ${n} ✨ Как ти се струва?`,
+    fresh: (n: number) => `Направих версия ${n} с новите детайли ✨ Предишните са тук, ако някоя ти харесва повече.`,
     quick: {
       cart: "Харесва ми — в количката",
       more: "Още промяна",
@@ -84,6 +85,7 @@ const copy = {
     selected: "Selected",
     pick: "Choose",
     newVersion: (n: number) => `Here's version ${n} ✨ What do you think?`,
+    fresh: (n: number) => `I made version ${n} with the new details ✨ The earlier ones are still here if you like one better.`,
     quick: {
       cart: "I love it — add to cart",
       more: "One more change",
@@ -107,19 +109,25 @@ const KEY = "hc_handy_ai_v1";
 type Saved = { first: string; entries: Entry[]; editsLeft: number | null };
 
 /** The saved conversation this version belongs to, so a reload keeps it. */
-function load(draftId: string): Saved | null {
+function load(): Saved | null {
   try {
-    const saved = JSON.parse(
-      sessionStorage.getItem(KEY) || "null",
-    ) as Saved | null;
-    return saved?.entries.some(
-      (e) => e.kind === "version" && e.version.draftId === draftId,
-    )
-      ? saved
-      : null;
+    return JSON.parse(sessionStorage.getItem(KEY) || "null") as Saved | null;
   } catch {
     return null;
   }
+}
+
+/** The saved conversation, with this preview added as a new version if it was made outside the chat. */
+function restore(lang: Lang, current: Version): Saved {
+  const saved = load();
+  if (!saved) return { first: current.draftId, entries: fresh(lang, current), editsLeft: null };
+  if (saved.entries.some((e) => e.kind === "version" && e.version.draftId === current.draftId)) return saved;
+  return { ...saved, entries: withNewPreview(lang, saved.entries, current), editsLeft: null };
+}
+
+function withNewPreview(lang: Lang, entries: Entry[], version: Version): Entry[] {
+  const n = entries.filter((e) => e.kind === "version").length + 1;
+  return [...entries, { kind: "version", version, n }, { kind: "bot", text: copy[lang].fresh(n), quick: ["cart", "more", "prev"] }];
 }
 
 function fresh(lang: Lang, version: Version): Entry[] {
@@ -175,15 +183,9 @@ export default function HandyAI({
 }: Props) {
   const c = copy[lang];
   const [open, setOpen] = useState(false);
-  const [first, setFirst] = useState(
-    () => load(current.draftId)?.first || current.draftId,
-  );
-  const [entries, setEntries] = useState<Entry[]>(
-    () => load(current.draftId)?.entries || fresh(lang, current),
-  );
-  const [editsLeft, setEditsLeft] = useState<number | null>(
-    () => load(current.draftId)?.editsLeft ?? null,
-  );
+  const [first] = useState(() => restore(lang, current).first);
+  const [entries, setEntries] = useState<Entry[]>(() => restore(lang, current).entries);
+  const [editsLeft, setEditsLeft] = useState<number | null>(() => restore(lang, current).editsLeft);
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState<{ file: File; url: string } | null>(null);
   const [phase, setPhase] = useState<"idle" | "thinking" | "drawing">("idle");
@@ -215,12 +217,11 @@ export default function HandyAI({
   );
   const busy = phase !== "idle";
 
-  // A brand-new preview made outside the chat ("Нов опит") starts a new conversation.
+  // A preview made outside the chat ("Нов опит", new details) joins the same conversation as a new version.
   useEffect(() => {
     if (versions.some((v) => v.version.draftId === current.draftId)) return;
     queueMicrotask(() => {
-      setFirst(current.draftId);
-      setEntries(fresh(lang, current));
+      setEntries((list) => withNewPreview(lang, list, current));
       setEditsLeft(null);
     });
   }, [current, versions, lang]);

@@ -11,7 +11,7 @@ export type StudioSaved = {
   cm: number;
   clothes: string;
   pose: string;
-  preview: { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number } | null;
+  preview: { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number; clothes?: string; pose?: string } | null;
   added: boolean;
 };
 

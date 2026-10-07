@@ -3,15 +3,14 @@ import type { ProductId } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 import { topicSlugs } from "@/lib/topic-slugs";
 
-type Img = "figurine" | "pet" | "keychain" | "hero" | "process" | "petKeychain";
+type Img = "figurine" | "pet" | "couple" | "hero" | "process";
 
 const images: Record<Img, { src: string; ratio: string }> = {
   figurine: { src: "/shop/figurine.webp", ratio: "aspect-[9/16] max-h-[36rem]" },
   pet: { src: "/shop/pet.webp", ratio: "aspect-[16/9]" },
-  keychain: { src: "/shop/keychain.webp", ratio: "aspect-[9/16] max-h-[36rem]" },
+  couple: { src: "/shop/people-2.webp", ratio: "aspect-[9/16] max-h-[36rem]" },
   hero: { src: "/shop/hero-mobile.webp", ratio: "aspect-[9/16] max-h-[36rem]" },
   process: { src: "/shop/process-mobile.webp", ratio: "aspect-[9/16] max-h-[36rem]" },
-  petKeychain: { src: "/shop/pet-keychain.webp", ratio: "aspect-[9/16] max-h-[36rem]" },
 };
 
 type Copy = {
@@ -36,12 +35,12 @@ type Topic = {
 };
 
 const priceBg = {
-  figurine: "Фигурка 10 см е 40 €, 15 см е 60 €, 20 см е 80 €.",
-  keychain: "Ключодържател 5 см е 30 €, 6 см е 40 €. За двама души е 40 € (6 см — 50 €), за трима — 60 € (6 см — 70 €).",
+  figurine: "Фигурка 14 см е 40 €, 17 см е 60 €, 20 см е 80 €.",
+  group: "Двама на една основа: 60 € / 80 € / 100 €, трима: 70 € / 90 € / 110 € (14 / 17 / 20 см).",
 };
 const priceEn = {
-  figurine: "A figurine is €40 for 10 cm, €60 for 15 cm and €80 for 20 cm.",
-  keychain: "A keychain is €30 for 5 cm and €40 for 6 cm. For two people it's €40 (6 cm — €50), for three €60 (6 cm — €70).",
+  figurine: "A figurine is €40 for 14 cm, €60 for 17 cm and €80 for 20 cm.",
+  group: "Two people on one base: €60 / €80 / €100, three: €70 / €90 / €110 (14 / 17 / 20 cm).",
 };
 
 const topics: Topic[] = [
@@ -58,7 +57,7 @@ const topics: Topic[] = [
       cta: "Направи фигурките",
       alt: "Фигурки на двойка по снимка за сватбена торта",
       sections: [
-        { title: "Как става", text: ["Качваш снимка на булката и отделно на младоженеца (студиото прави по един човек) и описваш роклята, костюма и позата. След минута виждаш визуализация на всяка фигурка.", "За тортата препоръчваме размер 10 или 15 см — достатъчно стабилни и лесни за поставяне."] },
+        { title: "Как става", text: ["Качваш снимка на булката и отделно на младоженеца (студиото прави по един човек) и описваш роклята, костюма и позата. След минута виждаш визуализация на всяка фигурка.", "За тортата препоръчваме размер 14 или 17 см — достатъчно стабилни и лесни за поставяне."] },
         { title: "Кога да поръчаш", text: ["Поръчай поне 3 седмици преди сватбата. Напиши датата в бележката към поръчката и ще се съобразим."] },
       ],
       faq: [
@@ -76,7 +75,7 @@ const topics: Topic[] = [
       cta: "Make the toppers",
       alt: "Couple figurines made from a photo as a wedding cake topper",
       sections: [
-        { title: "How it works", text: ["Upload a photo of the bride and a separate one of the groom (the studio makes one person at a time) and describe the dress, suit and pose. You see a preview of each figurine in a minute.", "For a cake we recommend 10 or 15 cm — stable and easy to place."] },
+        { title: "How it works", text: ["Upload a photo of the bride and a separate one of the groom (the studio makes one person at a time) and describe the dress, suit and pose. You see a preview of each figurine in a minute.", "For a cake we recommend 14 or 17 cm — stable and easy to place."] },
         { title: "When to order", text: ["Order at least 3 weeks before the wedding and add the date to the order note."] },
       ],
       faq: [
@@ -144,7 +143,7 @@ const topics: Topic[] = [
         { title: "Навреме", text: ["Изработката е 7–12 работни дни. Напиши датата на годишнината в бележката и ще ти кажем дали успяваме."] },
       ],
       faq: [
-        { q: "Какво да подаря за първа годишнина?", a: "Фигурка на двама ви (две фигурки) или ключодържател с мини версията му/ѝ." },
+        { q: "Какво да подаря за първа годишнина?", a: "Фигурка на двама ви на една основа — от 60 €." },
         { q: "Ще го види ли преди подаръка?", a: "Не. Визуализацията виждаш само ти." },
         { q: "Колко струва?", a: priceBg.figurine },
       ],
@@ -162,7 +161,7 @@ const topics: Topic[] = [
         { title: "On time", text: ["Making takes 7–12 working days. Add the anniversary date to the order note and we'll tell you if we can make it."] },
       ],
       faq: [
-        { q: "What should I give for a first anniversary?", a: "A figurine of the two of you (two figurines) or a keychain with a mini version of them." },
+        { q: "What should I give for a first anniversary?", a: "A figurine of the two of you on one base — from €60." },
         { q: "Will they see it before?", a: "No. Only you see the preview." },
         { q: "How much is it?", a: priceEn.figurine },
       ],
@@ -182,12 +181,12 @@ const topics: Topic[] = [
       alt: "Фигурка на момиче до снимката ѝ — подарък за рожден ден",
       sections: [
         { title: "Персонално до детайла", text: ["Опиши в студиото какво обича рожденикът — китара, топка, чаша кафе, любимата тениска — и то ще е във визуализацията."] },
-        { title: "За всяка възраст", text: ["За дете, приятелка, мама, татко или колега. Ако бюджетът е по-малък, ключодържателят е от 30 €."] },
+        { title: "За всяка възраст", text: ["За дете, приятелка, мама, татко или колега. Най-малката фигурка, 14 см, е 40 €."] },
       ],
       faq: [
         { q: "Ще стане ли до рождения ден?", a: "Изработката е 7–12 работни дни плюс 1–2 дни доставка. Напиши датата в бележката." },
         { q: "Може ли с надпис?", a: "Пиши ни за надпис върху основата и ще ти кажем възможно ли е." },
-        { q: "Колко струва?", a: priceBg.figurine + " " + priceBg.keychain },
+        { q: "Колко струва?", a: priceBg.figurine },
       ],
     },
     en: {
@@ -200,53 +199,53 @@ const topics: Topic[] = [
       alt: "Figurine of a girl next to her photo — a birthday gift",
       sections: [
         { title: "Personal down to the detail", text: ["Describe what they love in the studio — a guitar, a ball, a cup of coffee, a favourite T-shirt — and it will be in the preview."] },
-        { title: "For any age", text: ["For a child, a friend, mum, dad or a colleague. On a smaller budget, keychains start at €30."] },
+        { title: "For any age", text: ["For a child, a friend, mum, dad or a colleague. The smallest figurine, 14 cm, is €40."] },
       ],
       faq: [
         { q: "Will it arrive before the birthday?", a: "Making takes 7–12 working days plus 1–2 days delivery. Add the date to the note." },
         { q: "Can it have a name on it?", a: "Write to us about text on the base and we'll tell you if it's possible." },
-        { q: "How much is it?", a: priceEn.figurine + " " + priceEn.keychain },
+        { q: "How much is it?", a: priceEn.figurine },
       ],
     },
   },
   {
     slug: "podarak-za-sveti-valentin",
-    product: "keychain",
-    image: "keychain",
+    product: "figurine",
+    image: "couple",
     bg: {
       crumb: "Подарък за Свети Валентин",
       metaTitle: "Подарък за Свети Валентин — фигурка по снимка",
       kicker: "14 февруари",
       title: "Подарък за Свети Валентин по снимка",
-      lead: "Ключодържател с мини версията ти, за да си винаги с него/нея, или фигурка на двама ви за рафта.",
+      lead: "Фигурка на двама ви на една основа — по ваша обща снимка, за рафта или бюрото.",
       cta: "Направи подаръка",
-      alt: "Ключодържател по снимка като подарък за Свети Валентин",
+      alt: "Фигурка на двойка по снимка като подарък за Свети Валентин",
       sections: [
         { title: "Поръчай навреме", text: ["Около празника има много поръчки. Поръчай до края на януари, за да пристигне спокойно."] },
-        { title: "Две идеи", text: ["Ключодържател с твоята фигурка — малък, но много личен. Или две фигурки — ти и той/тя."] },
+        { title: "Двамата заедно", text: ["Качи снимка, на която сте двамата, избери „2 души“ и опиши дрехите. Ако нямате обща снимка, Handy AI в студиото може да добави втория човек от друга снимка."] },
       ],
       faq: [
         { q: "Кога да поръчам за 14 февруари?", a: "Най-късно до края на януари." },
         { q: "Може ли в подаръчна опаковка?", a: "Всяка фигурка е в кутия. Напиши в бележката, че е подарък, и няма да слагаме цената вътре." },
-        { q: "Колко струва?", a: priceBg.keychain + " " + priceBg.figurine },
+        { q: "Колко струва?", a: priceBg.group },
       ],
     },
     en: {
       crumb: "Valentine's Day gift",
-      metaTitle: "Valentine's Day gift — a figurine or keychain from a photo",
+      metaTitle: "Valentine's Day gift — a figurine of the two of you from a photo",
       kicker: "14 February",
       title: "A Valentine's Day gift from your photo",
-      lead: "A keychain with a mini you so you're always with them, or a figurine of the two of you for the shelf.",
+      lead: "A figurine of the two of you on one base — from a photo of you together, for the shelf or desk.",
       cta: "Make the gift",
-      alt: "Keychain from a photo as a Valentine's Day gift",
+      alt: "Couple figurine from a photo as a Valentine's Day gift",
       sections: [
         { title: "Order in time", text: ["There are many orders around the holiday. Order by the end of January so it arrives comfortably."] },
-        { title: "Two ideas", text: ["A keychain with your figurine — small but very personal. Or two figurines — you and them."] },
+        { title: "The two of you", text: ["Upload a photo of you both, choose “2 people” and describe the clothes. No photo together? Handy AI in the studio can add the second person from another photo."] },
       ],
       faq: [
         { q: "When should I order for 14 February?", a: "By the end of January at the latest." },
         { q: "Is it gift-wrapped?", a: "Every figurine comes in a box. Mention it's a gift in the note and we won't put the price inside." },
-        { q: "How much is it?", a: priceEn.keychain + " " + priceEn.figurine },
+        { q: "How much is it?", a: priceEn.group },
       ],
     },
   },
@@ -256,7 +255,7 @@ const topics: Topic[] = [
     image: "hero",
     bg: {
       crumb: "Коледен подарък",
-      metaTitle: "Коледен подарък по снимка — фигурка или ключодържател",
+      metaTitle: "Коледен подарък по снимка — фигурка",
       kicker: "Коледа",
       title: "Коледен подарък, направен по снимка",
       lead: "Фигурка на мама, татко, баба или на любимия домашен любимец под елхата. Виждаш я преди да поръчаш.",
@@ -264,17 +263,17 @@ const topics: Topic[] = [
       alt: "Фигурка по снимка като коледен подарък",
       sections: [
         { title: "Поръчай до началото на декември", text: ["Преди Коледа поръчките са най-много. Поръчай до 5 декември, за да пристигне преди празниците."] },
-        { title: "За цялото семейство", text: ["Можеш да поръчаш няколко фигурки или ключодържатели наведнъж — всяка по отделна снимка."] },
+        { title: "За цялото семейство", text: ["Можеш да поръчаш няколко фигурки наведнъж — всяка по отделна снимка, или до трима души на една основа."] },
       ],
       faq: [
         { q: "До кога да поръчам за Коледа?", a: "Най-добре до 5 декември." },
         { q: "Може ли в коледни дрехи?", a: "Да — опиши в студиото пуловер, шапка на Дядо Коледа или шал." },
-        { q: "Колко струва?", a: priceBg.figurine + " " + priceBg.keychain },
+        { q: "Колко струва?", a: priceBg.figurine },
       ],
     },
     en: {
       crumb: "Christmas gift",
-      metaTitle: "Christmas gift from a photo — a figurine or keychain",
+      metaTitle: "Christmas gift from a photo — a figurine",
       kicker: "Christmas",
       title: "A Christmas gift made from a photo",
       lead: "A figurine of mum, dad, grandma or the family pet under the tree. See it before you order.",
@@ -282,12 +281,12 @@ const topics: Topic[] = [
       alt: "Figurine from a photo as a Christmas gift",
       sections: [
         { title: "Order by early December", text: ["Orders peak before Christmas. Order by 5 December so it arrives before the holidays."] },
-        { title: "For the whole family", text: ["You can order several figurines or keychains at once — each from its own photo."] },
+        { title: "For the whole family", text: ["You can order several figurines at once — each from its own photo, or up to three people on one base."] },
       ],
       faq: [
         { q: "When should I order for Christmas?", a: "Ideally by 5 December." },
         { q: "Can they wear Christmas clothes?", a: "Yes — describe a jumper, a Santa hat or a scarf in the studio." },
-        { q: "How much is it?", a: priceEn.figurine + " " + priceEn.keychain },
+        { q: "How much is it?", a: priceEn.figurine },
       ],
     },
   },
@@ -540,40 +539,40 @@ const topics: Topic[] = [
   },
   {
     slug: "podarak-za-kolega",
-    product: "keychain",
-    image: "keychain",
+    product: "figurine",
+    image: "process",
     bg: {
       crumb: "Подарък за колега",
-      metaTitle: "Подарък за колега — ключодържател по снимка",
+      metaTitle: "Подарък за колега — фигурка по снимка",
       kicker: "Работа",
       title: "Подарък за колега, който ще го разсмее",
-      lead: "Ключодържател с мини версията на колегата — за рожден ден, напускане или добре свършен проект. От 30 €.",
-      cta: "Направи ключодържател",
-      alt: "Ключодържател по снимка на мъж с палец нагоре",
+      lead: "Фигурка на колегата за бюрото — за рожден ден, напускане или добре свършен проект. От 40 €.",
+      cta: "Направи фигурката",
+      alt: "Фигурка на човек по снимка",
       sections: [
-        { title: "За целия екип", text: ["Можеш да поръчаш по ключодържател за всеки от екипа — всеки по негова снимка. В количката добавяш до 5 бройки от всеки."] },
+        { title: "За целия екип", text: ["Можеш да поръчаш по фигурка за всеки от екипа — всяка по негова снимка. В количката добавяш до 5 бройки от всяка."] },
       ],
       faq: [
         { q: "Може ли в работно облекло?", a: "Да — опиши униформа, престилка или каска." },
         { q: "Правите ли по-големи количества?", a: "Пиши ни за повече от 5 бройки." },
-        { q: "Колко струва?", a: priceBg.keychain },
+        { q: "Колко струва?", a: priceBg.figurine },
       ],
     },
     en: {
       crumb: "Gift for a colleague",
-      metaTitle: "Gift for a colleague — a keychain from a photo",
+      metaTitle: "Gift for a colleague — a figurine from a photo",
       kicker: "Work",
       title: "A gift that will make your colleague laugh",
-      lead: "A keychain with a mini version of your colleague — for a birthday, a farewell or a job well done. From €30.",
-      cta: "Make a keychain",
-      alt: "Keychain from a photo of a man giving a thumbs up",
+      lead: "A figurine of your colleague for their desk — for a birthday, a farewell or a job well done. From €40.",
+      cta: "Make the figurine",
+      alt: "Figurine of a person made from a photo",
       sections: [
-        { title: "For the whole team", text: ["Order a keychain for everyone on the team — each from their own photo. You can add up to 5 of each in the cart."] },
+        { title: "For the whole team", text: ["Order a figurine for everyone on the team — each from their own photo. You can add up to 5 of each in the cart."] },
       ],
       faq: [
         { q: "Can it wear a work uniform?", a: "Yes — describe the uniform, apron or hard hat." },
         { q: "Do you do larger quantities?", a: "Write to us for more than 5." },
-        { q: "How much is it?", a: priceEn.keychain },
+        { q: "How much is it?", a: priceEn.figurine },
       ],
     },
   },
@@ -627,7 +626,7 @@ const topics: Topic[] = [
       metaTitle: "Оригинален подарък за мъж — фигурка по снимка",
       kicker: "За него",
       title: "Оригинален подарък за мъж",
-      lead: "Фигурка на него с любимия екип, китарата или кучето. Или ключодържател за ключовете от колата.",
+      lead: "Фигурка на него с любимия екип, китарата или кучето.",
       cta: "Направи подаръка",
       alt: "Фигурка на мъж до снимката му",
       sections: [
@@ -636,15 +635,15 @@ const topics: Topic[] = [
       faq: [
         { q: "Какво да подаря на мъж, който има всичко?", a: "Нещо, което не може да си купи — фигурка по негова снимка." },
         { q: "Може ли с кучето му?", a: "Студиото прави по един герой — поръчай фигурка на него и отделно на кучето." },
-        { q: "Колко струва?", a: priceBg.figurine + " " + priceBg.keychain },
+        { q: "Колко струва?", a: priceBg.figurine },
       ],
     },
     en: {
       crumb: "Gift for him",
-      metaTitle: "A unique gift for him — a figurine or keychain from a photo",
+      metaTitle: "A unique gift for him — a figurine from a photo",
       kicker: "For him",
       title: "A unique gift for him",
-      lead: "A figurine of him in his favourite kit, with his guitar or his dog. Or a keychain for his car keys.",
+      lead: "A figurine of him in his favourite kit, with his guitar or his dog.",
       cta: "Make the gift",
       alt: "Figurine of a man next to his photo",
       sections: [
@@ -653,7 +652,7 @@ const topics: Topic[] = [
       faq: [
         { q: "What do you give a man who has everything?", a: "Something he can't buy — a figurine from his photo." },
         { q: "Can his dog be in it?", a: "The studio makes one character at a time — order one of him and one of the dog." },
-        { q: "How much is it?", a: priceEn.figurine + " " + priceEn.keychain },
+        { q: "How much is it?", a: priceEn.figurine },
       ],
     },
   },
@@ -674,7 +673,7 @@ const topics: Topic[] = [
       ],
       faq: [
         { q: "Ще ѝ хареса ли как изглежда?", a: "Виждаш визуализацията преди поръчката и можеш да я пробваш няколко пъти." },
-        { q: "Може ли по-малък подарък?", a: "Ключодържателят е от 30 €." },
+        { q: "Колко е най-малката?", a: "Фигурка 14 см е 40 €." },
         { q: "Колко струва?", a: priceBg.figurine },
       ],
     },
@@ -691,7 +690,7 @@ const topics: Topic[] = [
       ],
       faq: [
         { q: "Will she like how it looks?", a: "You see the preview before ordering and can try it several times." },
-        { q: "Is there a smaller gift?", a: "Keychains start at €30." },
+        { q: "What is the smallest size?", a: "A 14 cm figurine is €40." },
         { q: "How much is it?", a: priceEn.figurine },
       ],
     },

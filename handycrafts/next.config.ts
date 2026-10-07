@@ -33,6 +33,9 @@ const nextConfig: NextConfig = {
       { source: "/services/:path*", destination: "/", permanent: true },
       { source: "/portfolio", destination: "/", permanent: true },
       { source: "/upload", destination: "/studio", permanent: true },
+      // Keychains are no longer made; their pages point to the figurine page.
+      { source: "/klyuchodarzhatel-po-snimka", destination: "/figurka-po-snimka", permanent: true },
+      { source: "/en/custom-keychain-from-photo", destination: "/en/custom-figurine-from-photo", permanent: true },
     ];
   },
 };

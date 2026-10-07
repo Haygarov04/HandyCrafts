@@ -28,7 +28,7 @@ export type Review = {
   /** Shown on the site, e.g. "Десислава". */
   name: string;
   city: string;
-  /** What was ordered, e.g. "Фигурка · 10 см". */
+  /** What was ordered, e.g. "Фигурка · 14 см". */
   product: string;
 };
 

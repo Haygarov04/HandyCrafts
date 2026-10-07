@@ -1,4 +1,4 @@
-import { catalog, currency, maxPeople, priceFor, type ProductId } from "@/lib/catalog";
+import { catalog, currency, maxPeople, priceFor, productIds, type ProductId } from "@/lib/catalog";
 
 export const siteName = "HandyCrafts";
 
@@ -31,9 +31,9 @@ export const business = {
 };
 
 
-/** `product: "all"` covers figurines and keychains together, so the lowest price shown is the keychain's. */
+/** `product: "all"` covers everything the shop sells now. */
 export function productJsonLd(input: { product: ProductId | "all"; name: string; description: string; image: string; url: string }) {
-  const products = input.product === "all" ? (Object.keys(catalog) as ProductId[]) : [input.product];
+  const products = input.product === "all" ? productIds : [input.product];
   // Group figurines (up to three people) set the top of the price range.
   const prices = products.flatMap((id) =>
     catalog[id].sizes.flatMap((size) => [size.price, priceFor(id, size.cm, maxPeople) ?? size.price])

@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
-import { itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
+import { currentCm, isOffered, itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
 import { sendCustomerEmail, sendNewOrderToShop } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
 import { deliveryLabel, isFullName, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
@@ -76,10 +76,15 @@ export async function POST(req: Request) {
         );
       }
       // The size can change after the preview, the product cannot.
-      const cm = Number(entry.cm) || draft.cm;
+      const cm = currentCm(draft.product, Number(entry.cm) || draft.cm);
       const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
-      const price = priceFor(draft.product, cm, people);
-      if (price === null) return NextResponse.json({ error: tr("Непознат размер.", "Unknown size.") }, { status: 400 });
+      const price = isOffered(draft.product, draft.subject || "person") ? priceFor(draft.product, cm, people) : null;
+      if (price === null) {
+        return NextResponse.json(
+          { error: tr("Един от продуктите в количката вече не се предлага. Махни го и направи нова фигурка.", "One of the items in your cart is no longer offered. Remove it and make a new figurine.") },
+          { status: 400 }
+        );
+      }
       const qty = Math.min(maxQty, Math.max(1, Math.floor(Number(entry.qty) || 1)));
       items.push({
         draftId: draft.id,

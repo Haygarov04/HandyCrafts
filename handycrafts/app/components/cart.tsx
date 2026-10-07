@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { maxQty, type ProductId } from "@/lib/catalog";
+import { currentCm, maxQty, type ProductId } from "@/lib/catalog";
 
 export type CartItem = {
   draftId: string;
@@ -39,8 +39,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE) || "[]");
+      // Older carts may hold the renamed sizes (10 → 14 cm, 15 → 17 cm); same price, new name.
       // eslint-disable-next-line react-hooks/set-state-in-effect -- hydrate from storage once
-      if (Array.isArray(saved)) setItems(saved.filter((item) => item && item.draftId));
+      if (Array.isArray(saved)) setItems(saved.filter((item) => item && item.draftId).map((item) => ({ ...item, cm: currentCm(item.product, item.cm) })));
     } catch {}
     setReady(true);
   }, []);

@@ -69,7 +69,7 @@ const occasionSlugs = [
 const productCards = [
   { image: "/shop/figurine.webp", position: "50% 50%", href: "/studio?product=figurine", product: "figurine" as const },
   { image: "/shop/pet.webp", position: "40% 50%", href: "/studio?product=figurine&subject=pet", product: "figurine" as const },
-  { image: "/shop/keychain.webp", position: "50% 50%", href: "/studio?product=keychain", product: "keychain" as const },
+  { image: "/shop/people-2.webp", position: "50% 45%", href: "/studio?product=figurine&people=2", product: "figurine" as const },
 ];
 
 export default function Home({ lang }: { lang: Lang }) {
@@ -83,7 +83,7 @@ export default function Home({ lang }: { lang: Lang }) {
       <JsonLd
         data={productJsonLd({
           product: "all",
-          name: lang === "en" ? "Custom figurines and keychains from a photo" : "Фигурки и ключодържатели по снимка",
+          name: lang === "en" ? "Custom figurines from a photo" : "Фигурки по снимка",
           description: t.meta.description,
           image: "/shop/hero-mobile.webp",
           url: href("/"),
@@ -96,15 +96,6 @@ export default function Home({ lang }: { lang: Lang }) {
           description: h.productFigurineText,
           image: "/shop/figurine.webp",
           url: href("/figurka-po-snimka"),
-        })}
-      />
-      <JsonLd
-        data={productJsonLd({
-          product: "keychain",
-          name: h.productKeychainName,
-          description: h.productKeychainText,
-          image: "/shop/keychain.webp",
-          url: href("/klyuchodarzhatel-po-snimka"),
         })}
       />
       <section className="hero-glow relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:flex lg:min-h-[max(40rem,min(92vh,52rem))] lg:items-center lg:pb-16 lg:pt-28">
@@ -305,6 +296,7 @@ export default function Home({ lang }: { lang: Lang }) {
                 <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-ink/70" /> {h.sizeKeychain}</span>
                 <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-ember" /> {h.sizeFigurine}</span>
               </p>
+
             </div>
             <div className="mt-6 flex items-end justify-around gap-2 border-b-2 border-ink sm:gap-4">
               {[...catalog.keychain.sizes.map((s) => ({ ...s, kind: "keychain" })), ...catalog.figurine.sizes.map((s) => ({ ...s, kind: "figurine" }))].map((size) => (
@@ -421,7 +413,7 @@ export default function Home({ lang }: { lang: Lang }) {
           <div className="relative mx-auto w-56 -rotate-2 sm:w-72">
             <div className="rounded-[1.4rem] bg-paper p-2.5">
               <div className="relative aspect-[9/16] overflow-hidden rounded-[1rem]">
-                <Image src="/shop/keychain.webp" alt={h.keychainAlt} fill className="object-cover" sizes="300px" />
+                <Image src="/shop/people-3.webp" alt={h.giftAlt} fill className="object-cover" sizes="300px" />
                 <VisualTag label={t.visual} className="left-2 top-2" />
               </div>
             </div>

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
+import { currentCm, itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
 import { getLead, isLeadId, saveLead, type Lead } from "@/lib/leads";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
 import { getDraft } from "@/lib/orders";
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   for (const entry of (Array.isArray(body.items) ? body.items.slice(0, 10) : []) as { draftId?: unknown; qty?: unknown; cm?: unknown }[]) {
     const draft = await getDraft(String(entry?.draftId || ""));
     if (!draft) continue;
-    const cm = Number(entry.cm) || draft.cm;
+    const cm = currentCm(draft.product, Number(entry.cm) || draft.cm);
     const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
     const price = priceFor(draft.product, cm, people);
     if (price === null) continue;

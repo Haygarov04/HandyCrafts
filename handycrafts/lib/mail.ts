@@ -99,8 +99,8 @@ export function button(label: string, href: string) {
 
 export function layout(lang: Lang, preheader: string, body: string) {
   const f = lang === "en"
-    ? { tagline: "Figurines and keychains from a photo · Ruse, Bulgaria", questions: "Questions? Just reply to this email." }
-    : { tagline: "Фигурки и ключодържатели по снимка · Русе", questions: "Въпроси? Просто отговори на този имейл." };
+    ? { tagline: "Figurines from a photo · Ruse, Bulgaria", questions: "Questions? Just reply to this email." }
+    : { tagline: "Фигурки по снимка · Русе", questions: "Въпроси? Просто отговори на този имейл." };
   return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;background:${paper};font-family:Arial,Helvetica,sans-serif;color:${ink}">
 <span style="display:none;max-height:0;overflow:hidden;opacity:0">${escapeHtml(preheader)}</span>

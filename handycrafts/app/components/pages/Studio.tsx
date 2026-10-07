@@ -19,6 +19,9 @@ import {
   normalizePeople,
   priceFor,
   productIds,
+  currentCm,
+  isOffered,
+  productsFor,
   type ProductId,
   type SubjectId,
 } from "@/lib/catalog";
@@ -68,19 +71,30 @@ export default function StudioPage() {
     if (saved && (saved.step > 0 || !requested)) {
       // Pick up where the customer left off. A preview that was still running is lost, so go back to the details.
       setStep(saved.step === 3 && !saved.preview ? 2 : saved.step);
-      setProduct(saved.product);
+      // Keychains are only for pets now: an old saved keychain of a person starts again as a figurine.
+      const kept = isOffered(saved.product, saved.subject) ? saved.product : "figurine";
+      const keptCm = currentCm(kept, saved.cm);
+      if (kept !== saved.product) {
+        setStep(0);
+        saved.preview = null;
+      }
+      setProduct(kept);
       setSubject(saved.subject);
       setPeopleChoice(saved.people || 1);
-      setCm(priceFor(saved.product, saved.cm) !== null ? saved.cm : catalog[saved.product].sizes[0].cm);
+      setCm(priceFor(kept, keptCm) !== null ? keptCm : catalog[kept].sizes[0].cm);
       setClothes(saved.clothes || "");
       setPose(saved.pose || "");
       setPreview(saved.preview);
       setAdded(Boolean(saved.added));
     } else {
       if (isSubjectId(who)) setSubject(who);
-      if (isProductId(requested)) {
+      const many = Number(params.get("people"));
+      if (many > 1 && who !== "pet") setPeopleChoice(Math.min(maxPeople, many));
+      if (isProductId(requested) && isOffered(requested, isSubjectId(who) ? who : requested === "keychain" ? "pet" : "person")) {
+        if (requested === "keychain") setSubject("pet");
         setProduct(requested);
-        setCm(priceFor(requested, size) !== null ? size : catalog[requested].sizes[0].cm);
+        const wanted = currentCm(requested, size);
+        setCm(priceFor(requested, wanted) !== null ? wanted : catalog[requested].sizes[0].cm);
       }
     }
     loadPhoto().then((file) => {
@@ -136,6 +150,8 @@ export default function StudioPage() {
 
   function chooseSubject(id: SubjectId) {
     setSubject(id);
+    // Keychains are only made of pets.
+    if (!isOffered(product, id)) chooseProduct("figurine");
     if (preview && preview.subject !== id) setPreview(null);
   }
 
@@ -317,17 +333,17 @@ export default function StudioPage() {
                 </button>
               ))}
             </div>
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4">
-              {productIds.map((id) => (
+            <div className={`mt-8 grid gap-3 sm:gap-4 ${productsFor(subject).length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
+              {productsFor(subject).map((id) => (
                 <button
                   key={id}
                   type="button"
                   onClick={() => chooseProduct(id)}
-                  className={`overflow-hidden rounded-[1.8rem] border-2 bg-white text-left transition ${
+                  className={`overflow-hidden rounded-[1.8rem] border-2 bg-white text-left transition ${productsFor(subject).length > 1 ? "" : "flex items-center"} ${
                     product === id ? "border-ember shadow-[0_16px_40px_rgba(255,122,0,0.18)]" : "border-transparent hover:border-ink/15"
                   }`}
                 >
-                  <span className="relative block aspect-[9/16] overflow-hidden bg-sand">
+                  <span className={`relative block overflow-hidden bg-sand ${productsFor(subject).length > 1 ? "aspect-[9/16]" : "aspect-[3/4] w-36 shrink-0 self-stretch sm:w-48"}`}>
                     <Image
                       src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
                       alt=""
@@ -338,10 +354,10 @@ export default function StudioPage() {
                     />
                     <VisualTag label={t.visual} className="left-2 top-2" />
                   </span>
-                  <span className="block p-3.5 sm:p-5">
+                  <span className="block min-w-0 p-3.5 sm:p-5">
                     <span className="block truncate text-base font-bold sm:font-display sm:text-xl sm:font-medium">{t.product[id].label}</span>
                     <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1) ?? 0)}</span>
-                    <span className="mt-1 hidden text-sm text-ink/60 sm:block">{t.product[id].short}</span>
+                    <span className={`mt-1 text-sm text-ink/60 ${productsFor(subject).length > 1 ? "hidden sm:block" : "block"}`}>{t.product[id].short}</span>
                   </span>
                 </button>
               ))}

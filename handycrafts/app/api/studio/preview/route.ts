@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
-import { isProductId, isSubjectId, normalizePeople, priceFor } from "@/lib/catalog";
+import { isOffered, isProductId, isSubjectId, normalizePeople, priceFor } from "@/lib/catalog";
 import { figurinePrompt } from "@/lib/figurine";
 import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
 import { incr } from "@/lib/kv";
@@ -47,7 +47,8 @@ export async function POST(req: Request) {
     const clothes = cleanText(form.get("clothes"), 500);
     const pose = cleanText(form.get("pose"), 300);
 
-    if (!isProductId(product) || priceFor(product, cm) === null) {
+    // Keychains are only made of pets now.
+    if (!isProductId(product) || !isOffered(product, subject) || priceFor(product, cm) === null) {
       return NextResponse.json({ error: tr("Избери продукт и размер.", "Choose a product and size.") }, { status: 400 });
     }
     const people = normalizePeople(product, subject, form.get("people"));

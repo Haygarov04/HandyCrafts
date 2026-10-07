@@ -53,10 +53,9 @@ export function refusal(lang: Lang, reason: ReturnType<typeof screen>) {
 
 function facts(lang: Lang) {
   const f = catalog.figurine.sizes.map((s) => `${s.cm} cm €${s.price} (2 people €${s.group[2]}, 3 people €${s.group[3]})`).join("; ");
-  const k = catalog.keychain.sizes.map((s) => `${s.cm} cm €${s.price} (2 people €${s.group[2]}, 3 people €${s.group[3]})`).join("; ");
   return [
-    "HandyCrafts is a small workshop in Ruse, Bulgaria that makes hand-painted 3D printed figurines and keychains from a customer's photo.",
-    `Figurines: ${f}. Keychains: ${k}.`,
+    "HandyCrafts is a small workshop in Ruse, Bulgaria that makes hand-painted 3D printed figurines from a customer's photo, and keychains of pets only (no keychains of people).",
+    `Figurines (14, 17 and 20 cm): ${f}. Pet keychains: 6 cm €30, 10 cm €40.`,
     "Made in 7–12 working days. Delivered across Bulgaria by Econt or Speedy at the courier's rate. Cash on delivery: the customer pays only when the parcel arrives and can check it in front of the courier.",
     "The preview is a guide: the real figurine is finished by hand from it, so small details can also be written in the order note.",
     "We confirm every order by phone before making it.",

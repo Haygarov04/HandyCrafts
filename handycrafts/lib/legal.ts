@@ -55,13 +55,13 @@ function bg(id: LegalId): LegalDoc {
       return {
         kicker: "Правна информация",
         title: "Общи условия",
-        description: "Общи условия за поръчка на персонализирани фигурки и ключодържатели по снимка от HandyCrafts.",
+        description: "Общи условия за поръчка на персонализирани фигурки по снимка от HandyCrafts.",
         sections: [
           { title: "Търговец", body: [...sellerLines("bg"), "Тези условия уреждат отношенията между търговеца и всеки, който поръчва през сайта handy-crafts.digital (наричан по-долу „клиент“)."] },
           {
             title: "Предмет",
             body: [
-              "Чрез сайта клиентът поръчва персонализирани фигурки и ключодържатели, изработени по негова снимка и указания. Преди поръчката сайтът създава ориентировъчна визуализация с помощта на изкуствен интелект.",
+              "Чрез сайта клиентът поръчва персонализирани фигурки, изработени по негова снимка и указания. Преди поръчката сайтът създава ориентировъчна визуализация с помощта на изкуствен интелект.",
               "Визуализацията показва стила, позата и облеклото. Готовото изделие се моделира, отпечатва с 3D принтер и довършва на ръка по нея и по оригиналната снимка, затова са възможни малки разлики в детайлите, цвета и пропорциите. Това не е несъответствие със стоката.",
             ],
           },
@@ -83,7 +83,7 @@ function bg(id: LegalId): LegalDoc {
           {
             title: "Право на отказ",
             body: [
-              "Съгласно чл. 57, т. 3 от Закона за защита на потребителите правото на отказ от договора в 14-дневен срок не се прилага за стоки, изработени по поръчка на потребителя или съобразени с неговите индивидуални изисквания. Фигурките и ключодържателите се изработват по снимка на клиента и попадат в това изключение.",
+              "Съгласно чл. 57, т. 3 от Закона за защита на потребителите правото на отказ от договора в 14-дневен срок не се прилага за стоки, изработени по поръчка на потребителя или съобразени с неговите индивидуални изисквания. Фигурките се изработват по снимка на клиента и попадат в това изключение.",
               "Клиентът може да откаже поръчката безплатно, докато тя не е потвърдена. Подробности има в страницата „Връщане и рекламации“.",
               "След потвърждението поръчката е обвързваща. Ако клиентът откаже или не потърси в срок пратка, която отговаря на поръчката, той дължи на търговеца направените разходи за изработката и за доставката в двете посоки. Търговецът може да потърси тези суми по законовия ред, включително чрез съда.",
             ],
@@ -216,7 +216,7 @@ function bg(id: LegalId): LegalDoc {
           {
             title: "Защо няма 14-дневно право на връщане",
             body: [
-              "Всяка фигурка и всеки ключодържател се изработват специално по твоя снимка. Съгласно чл. 57, т. 3 от Закона за защита на потребителите правото на отказ в 14-дневен срок не се прилага за такива персонализирани стоки. Не можем да препродадем фигурка на друг човек.",
+              "Всяка фигурка се изработва специално по твоя снимка. Съгласно чл. 57, т. 3 от Закона за защита на потребителите правото на отказ в 14-дневен срок не се прилага за такива персонализирани стоки. Не можем да препродадем фигурка на друг човек.",
               "Ако откажеш да получиш пратка, която отговаря на поръчката, имаме право да поискаме разходите за изработката и доставката.",
             ],
           },
@@ -294,13 +294,13 @@ function en(id: LegalId): LegalDoc {
       return {
         kicker: "Legal",
         title: "Terms and conditions",
-        description: "Terms for ordering custom figurines and keychains made from a photo from HandyCrafts.",
+        description: "Terms for ordering custom figurines made from a photo from HandyCrafts.",
         sections: [
           { title: "Seller", body: [...sellerLines("en"), "These terms govern the relationship between the seller and anyone who orders through handy-crafts.digital (the “customer”)."] },
           {
             title: "Subject",
             body: [
-              "Through the site the customer orders custom figurines and keychains made from their photo and instructions. Before ordering, the site creates an indicative preview with artificial intelligence.",
+              "Through the site the customer orders custom figurines made from their photo and instructions. Before ordering, the site creates an indicative preview with artificial intelligence.",
               "The preview shows the style, pose and clothes. The finished piece is modelled, 3D printed and finished by hand from it and from the original photo, so small differences in detail, colour and proportion are possible. They are not a lack of conformity.",
             ],
           },
@@ -322,7 +322,7 @@ function en(id: LegalId): LegalDoc {
           {
             title: "Right of withdrawal",
             body: [
-              "Under Art. 57(3) of the Bulgarian Consumer Protection Act, the 14-day right of withdrawal does not apply to goods made to the consumer's specifications or clearly personalised. Figurines and keychains are made from the customer's photo and fall under this exception.",
+              "Under Art. 57(3) of the Bulgarian Consumer Protection Act, the 14-day right of withdrawal does not apply to goods made to the consumer's specifications or clearly personalised. Figurines are made from the customer's photo and fall under this exception.",
               "The customer can cancel free of charge until the order is confirmed. See the “Returns and complaints” page.",
               "Once confirmed, the order is binding. If the customer refuses or does not collect a parcel that matches the order, they owe the merchant the costs of making the item and of delivery both ways. The merchant may recover these amounts through the legal process, including the courts.",
             ],
@@ -447,7 +447,7 @@ function en(id: LegalId): LegalDoc {
           {
             title: "Why there is no 14-day return",
             body: [
-              "Every figurine and keychain is made specially from your photo. Under Art. 57(3) of the Bulgarian Consumer Protection Act, the 14-day right of withdrawal does not apply to such personalised goods. We can't resell a figurine to someone else.",
+              "Every figurine is made specially from your photo. Under Art. 57(3) of the Bulgarian Consumer Protection Act, the 14-day right of withdrawal does not apply to such personalised goods. We can't resell a figurine to someone else.",
               "If you refuse a parcel that matches the order, we may ask you to cover the cost of making and shipping it.",
             ],
           },

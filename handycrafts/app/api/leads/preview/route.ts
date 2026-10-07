@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { itemLabel, normalizePeople, priceFor } from "@/lib/catalog";
+import { currentCm, itemLabel, normalizePeople, priceFor } from "@/lib/catalog";
 import { previewEmail } from "@/lib/lead-mail";
 import { getLead, isLeadId, saveLead, type Lead } from "@/lib/leads";
 import { mailReady, sendEmail } from "@/lib/mail";
@@ -29,7 +29,8 @@ export async function POST(req: Request) {
   }
 
   const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
-  const cm = priceFor(draft.product, Number(body?.cm), people) === null ? draft.cm : Number(body.cm);
+  const asked = currentCm(draft.product, Number(body?.cm));
+  const cm = priceFor(draft.product, asked, people) === null ? currentCm(draft.product, draft.cm) : asked;
   const item: Lead["items"][number] = {
     draftId: draft.id,
     product: draft.product,

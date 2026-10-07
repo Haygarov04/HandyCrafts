@@ -33,7 +33,7 @@ export default async function ReviewsPage({ searchParams }: Props) {
       <div>
         <h1 className="text-3xl">Отзиви</h1>
         <p className="mt-1 text-sm text-ink/55">
-          Идват от имейла, който се праща при статус „Приключена“. На сайта се показват само тези, които публикуваш.
+          Идват от молбата за отзив, която пращаш от поръчката. На сайта се показват само тези, които публикуваш.
           {published.length ? ` Публикувани: ${published.length} · средно ${average.toFixed(1)} ★` : ""}
         </p>
       </div>

@@ -52,5 +52,10 @@ export async function PATCH(req: Request, context: Context) {
     emailed = order.customer.email ? await sendCustomerEmail(order, type) : false;
     if (order.customer.email) await logEmail(id, type, emailed);
   }
-  return NextResponse.json({ order, emailed });
+  // The review request is never automatic: the workshop sends it with its own button.
+  if (body?.reviewRequest === true && order.customer.email) {
+    emailed = await sendCustomerEmail(order, "completed");
+    await logEmail(id, "completed", emailed);
+  }
+  return NextResponse.json({ order: (await getOrder(id)) || order, emailed });
 }

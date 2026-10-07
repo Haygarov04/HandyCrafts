@@ -6,6 +6,7 @@ import { getOrder } from "@/lib/orders";
 import { getReview, reviewStatusLabel, reviewUrl } from "@/lib/reviews";
 import OrderControls from "../order-controls";
 import ReviewLink from "./review-link";
+import ReviewRequest from "./review-request";
 
 export const dynamic = "force-dynamic";
 
@@ -92,10 +93,11 @@ export default async function OrderPage({ params }: Props) {
           ) : (
             <>
               <p className="mt-1 text-sm text-ink/55">
-                {c.email
-                  ? "Молбата за отзив тръгва по имейл при статус „Приключена“. Можеш да пратиш линка и във Viber:"
-                  : "Клиентът няма имейл — прати му линка за отзив във Viber:"}
+                {c.email ? "Помоли клиента за отзив по имейл или прати линка във Viber." : "Клиентът няма имейл — прати му линка за отзив във Viber."}
               </p>
+              {c.email ? (
+                <ReviewRequest id={order.id} sentAt={[...(order.emails || [])].reverse().find((mail) => mail.type === "completed" && mail.ok)?.at || ""} />
+              ) : null}
               <ReviewLink url={reviewUrl(order)} name={c.name.split(" ")[0]} />
             </>
           )}

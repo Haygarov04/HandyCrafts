@@ -13,7 +13,12 @@ const framing =
 const anatomy =
   "Correct anatomy for every figure: exactly two arms, two hands with five fingers, two legs and two feet each, no extra, merged or missing limbs.";
 const toy =
-  "It must clearly read as a small physical painted resin figurine, not a real person and not a photo: stylized sculpted forms, simplified smooth skin, painted details.";
+  "It must read as a small physical painted resin figurine, not a real person and not a photo: sculpted forms and painted details, but the faces stay a faithful portrait.";
+
+// Customers kept saying the faces looked nothing like them and that people came out slimmer and
+// prettier than in real life. Likeness comes first; the figurine look must not cost it.
+const likeness =
+  "Likeness is the most important thing: the face must be a faithful portrait of the real person in the photo — same face shape, jaw and chin, nose, eye shape and spacing, eyebrows, lips, ears, hairline, beard or stubble, wrinkles and age. Keep their real body build, height and weight: do not make anyone slimmer, younger, taller or prettier, and do not use a generic doll or cartoon face.";
 const fullBody = "Full body from the top of the head to the shoes, both feet resting flat on the base — never a bust or a half body.";
 
 export function figurinePrompt(input: {
@@ -44,11 +49,13 @@ export function figurinePrompt(input: {
     return [
       `Turn this photo into a studio product photo of one physical ${kinds[input.product].replace("a low plain round base", "one shared low plain round base")} showing exactly ${people} people from the photo together, about ${input.cm} cm tall${input.product === "keychain" ? ", with one metal ring on top" : ""}.`,
       "Keep every person recognizable: face shape, age, hairstyle, skin tone and distinguishing features. Add glasses only if the person clearly wears them in the photo — never invent glasses, jewellery or other accessories that are not there.",
+      likeness,
+      "Keep each person's relative height and size as in the photo, and keep children the age they are.",
       `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
       `Pose: ${pose}. All ${people} people fully visible, nothing cropped.`,
       input.product === "figurine" ? fullBody : "",
       anatomy,
-      "Style: premium hand-painted stylized resin miniature, soft matte finish, clean sculpted hair, slightly larger heads, friendly expressions, eyes sharp.",
+      "Style: premium hand-painted resin miniature with realistic proportions (not big heads, not chibi), soft matte finish, clean sculpted hair, natural expressions, eyes sharp.",
       toy,
       framing,
     ]
@@ -60,11 +67,12 @@ export function figurinePrompt(input: {
   return [
     `Turn this photo into a studio product photo of one physical full-body ${kinds[input.product]}, about ${input.cm} cm tall.`,
     "Keep this exact person recognizable: face shape, age, hairstyle, skin tone and distinguishing features. Add glasses only if the person clearly wears them in the photo — never invent glasses, jewellery or other accessories that are not there.",
+    likeness,
     `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
     `Pose: ${pose}. Full subject visible, nothing cropped.`,
     input.product === "figurine" ? fullBody : "",
     anatomy,
-    "Style: premium hand-painted stylized resin miniature, soft matte finish, clean sculpted hair, slightly larger head, friendly expression, eyes sharp.",
+    "Style: premium hand-painted resin miniature with realistic proportions (not a big head, not chibi), soft matte finish, clean sculpted hair, natural expression, eyes sharp.",
     toy,
     framing,
   ]
@@ -79,13 +87,16 @@ export function figurinePrompt(input: {
 export function editPrompt(input: { product: ProductId; subject: SubjectId; request: string; extraPhoto: boolean; hasOriginal: boolean }) {
   return [
     `<IMAGE_0> is a studio product photo of a custom ${kinds[input.product]}.`,
-    input.hasOriginal ? `<IMAGE_1> is the customer's reference photo: keep the likeness that <IMAGE_0> already has, use <IMAGE_1> only to keep it faithful.` : "",
+    input.hasOriginal
+      ? `<IMAGE_1> is the real photo of the ${input.subject === "pet" ? "pet" : "people"}: the figurine must look like <IMAGE_1>. If the request is about the face, likeness, weight or "real faces", resculpt those faces and bodies directly from <IMAGE_1>.`
+      : "",
     input.extraPhoto
-      ? `<IMAGE_${input.hasOriginal ? 2 : 1}> is an extra reference photo the customer added for this change — use it for what they describe.`
+      ? `<IMAGE_${input.hasOriginal ? 2 : 1}> is an extra photo the customer added for this change — use it for what they describe; if they say it shows the real face, copy that face faithfully.`
       : "",
     `Edit <IMAGE_0> to make exactly this change the customer asked for (it may be written in Bulgarian or English): "${input.request}".`,
     "Change only that. Do not add glasses or accessories that are not already there unless asked. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
     input.subject === "pet" ? "" : anatomy,
+    input.subject === "pet" ? "" : likeness,
     toy,
     framing,
   ]

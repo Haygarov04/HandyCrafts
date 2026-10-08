@@ -60,6 +60,10 @@ export default function StudioPage() {
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [restored, setRestored] = useState(false);
   const [converting, setConverting] = useState(false);
+  // Full previews made from this photo; after a few, changes go through Handy AI instead of starting over.
+  const [freshCount, setFreshCount] = useState(0);
+  const [aiRequest, setAiRequest] = useState<{ id: number; text: string } | null>(null);
+  const askAi = (text: string) => setAiRequest({ id: Date.now(), text });
   const [mail, setMail] = useState({ email: "", website: "", sending: false, sentTo: "", error: "" });
 
   useEffect(() => {
@@ -176,6 +180,7 @@ export default function StudioPage() {
     setPhotoUrl(URL.createObjectURL(file));
     setPreview(null);
     savePhoto(file);
+    setFreshCount(0);
   }
 
   async function generate() {
@@ -213,6 +218,7 @@ export default function StudioPage() {
       trackEvent("generate_preview", { product, subject });
       setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people, clothes, pose });
       setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
+      setFreshCount((n) => n + 1);
     } catch (issue) {
       setError(issue instanceof Error ? issue.message : s.wrong);
     } finally {
@@ -271,8 +277,22 @@ export default function StudioPage() {
     preview && preview.product === product && preview.subject === subject && (preview.people || 1) === people && (preview.clothes ?? "") === clothes && (preview.pose ?? "") === pose
   );
 
+  // Only the clothes or pose changed: refine the current preview with Handy AI instead of starting over.
+  const onlyLooks = Boolean(
+    preview && !sameDetails && preview.product === product && preview.subject === subject && (preview.people || 1) === people
+  );
+
   function next() {
     if (step === 2 && sameDetails) setStep(3);
+    else if (step === 2 && onlyLooks && preview) {
+      const parts = [
+        clothes !== (preview.clothes ?? "") ? `${s.clothesPrefix} ${clothes || s.asInPhoto}` : "",
+        pose !== (preview.pose ?? "") ? `${s.posePrefix} ${pose || s.asInPhoto}` : "",
+      ].filter(Boolean);
+      setPreview({ ...preview, clothes, pose });
+      setStep(3);
+      askAi(parts.join(". "));
+    }
     else if (step === 2) generate();
     else setStep((value) => Math.min(3, value + 1));
   }
@@ -537,6 +557,7 @@ export default function StudioPage() {
                   added={added}
                   checkoutHref={href("/cart")}
                   onAddToCart={addToCart}
+                  request={aiRequest}
                   onVersion={(version) => {
                     // Already in the cart: swap the cart item for the version just chosen, so the order matches it.
                     if (added && version.draftId !== preview.draftId) {
@@ -559,6 +580,23 @@ export default function StudioPage() {
                     setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
                   }}
                 />
+                <div className="mt-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink/40">{s.quickTitle}</p>
+                  <div className="-mx-4 mt-2 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+                    {copy[preview.subject].poses
+                      .filter((idea) => idea !== (preview.pose ?? ""))
+                      .map((idea) => (
+                        <button
+                          key={idea}
+                          type="button"
+                          onClick={() => askAi(`${s.posePrefix} ${idea}`)}
+                          className="shrink-0 rounded-full border border-ink/10 bg-white px-3.5 py-2 text-sm transition hover:border-ember"
+                        >
+                          {idea}
+                        </button>
+                      ))}
+                  </div>
+                </div>
               </div>
             ) : null}
 
@@ -566,14 +604,38 @@ export default function StudioPage() {
               <div className="mx-auto mt-6 max-w-lg">
                 {error && preview ? <p className="mb-3 text-center text-sm text-red-700">{error}</p> : null}
                 {preview ? <SizePicker product={preview.product} people={preview.people || 1} cm={cm} onChange={setCm} compact label={s.size} unit={t.cm} money={t.money} /> : null}
-                <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  <button type="button" onClick={() => setStep(2)} className="rounded-full border border-ink/15 bg-white px-5 py-3 font-semibold">
-                    {s.editDetails}
-                  </button>
-                  <button type="button" onClick={generate} className="rounded-full border border-ink/15 bg-white px-5 py-3 font-semibold">
-                    {s.retry}
-                  </button>
-                </div>
+                {preview ? (
+                  <p className="mt-5 text-center text-sm text-ink/50">
+                    {freshCount < 3 ? (
+                      <>
+                        {s.notAtAll}{" "}
+                        <button type="button" onClick={generate} className="font-semibold text-ink underline decoration-ink/25 underline-offset-4 hover:decoration-ember">
+                          {s.startOver}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {s.enoughFresh}{" "}
+                        <button
+                          type="button"
+                          onClick={() => window.dispatchEvent(new Event("handy-ai:open"))}
+                          className="font-semibold text-ink underline decoration-ember underline-offset-4"
+                        >
+                          {s.useAi}
+                        </button>
+                      </>
+                    )}
+                  </p>
+                ) : (
+                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <button type="button" onClick={() => setStep(2)} className="rounded-full border border-ink/15 bg-white px-5 py-3 font-semibold">
+                      {s.editDetails}
+                    </button>
+                    <button type="button" onClick={generate} className="rounded-full border border-ink/15 bg-white px-5 py-3 font-semibold">
+                      {s.retry}
+                    </button>
+                  </div>
+                )}
                 {preview && !added ? (
                   <div className="mt-5 rounded-3xl bg-white p-5">
                     {mail.sentTo ? (
@@ -677,7 +739,7 @@ export default function StudioPage() {
               disabled={(step === 1 && ((!photoFile && !preview) || converting)) || (step === 2 && enabled === false)}
               className="shrink-0 whitespace-nowrap rounded-full bg-ember px-5 py-3 font-semibold text-ink transition hover:bg-ember-deep disabled:opacity-40 sm:px-7"
             >
-              {step === 2 && !sameDetails ? s.create : s.next}
+              {step === 2 && onlyLooks ? s.applyAi : step === 2 && !sameDetails ? s.create : s.next}
             </button>
           ) : (
             <button

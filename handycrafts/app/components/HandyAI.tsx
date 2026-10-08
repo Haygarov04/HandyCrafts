@@ -191,6 +191,8 @@ type Props = {
   checkoutHref: string;
   onVersion: (version: Version) => void;
   onAddToCart: () => void;
+  /** A change the studio wants made (a pose chip, edited details): opens the chat and sends it. */
+  request?: { id: number; text: string } | null;
 };
 
 /**
@@ -204,6 +206,7 @@ export default function HandyAI({
   checkoutHref,
   onVersion,
   onAddToCart,
+  request,
 }: Props) {
   const c = copy[lang];
   const [open, setOpen] = useState(false);
@@ -258,6 +261,18 @@ export default function HandyAI({
       window.removeEventListener("handy-ai:close", hide);
     };
   }, []);
+
+  // Requests from the studio go through the same chat as typed messages, once each.
+  const sendRef = useRef<(text: string) => void>(() => undefined);
+  const handled = useRef(0);
+  useEffect(() => {
+    if (!request || request.id === handled.current) return;
+    handled.current = request.id;
+    queueMicrotask(() => {
+      setOpen(true);
+      sendRef.current(request.text);
+    });
+  }, [request]);
 
   const versions = entries.filter(
     (e): e is Extract<Entry, { kind: "version" }> => e.kind === "version",
@@ -440,6 +455,10 @@ export default function HandyAI({
       setPhase("idle");
     }
   }
+
+  useEffect(() => {
+    sendRef.current = (value: string) => void send(value);
+  });
 
   function quick(action: Quick) {
     if (busy) return;

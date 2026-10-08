@@ -88,7 +88,7 @@ export function editPrompt(input: { product: ProductId; subject: SubjectId; requ
   return [
     `<IMAGE_0> is a studio product photo of a custom ${kinds[input.product]}.`,
     input.hasOriginal
-      ? `<IMAGE_1> is the real photo of the ${input.subject === "pet" ? "pet" : "people"}: the figurine must look like <IMAGE_1>. If the request is about the face, likeness, weight or "real faces", resculpt those faces and bodies directly from <IMAGE_1>.`
+      ? `<IMAGE_1> is the real photo of the ${input.subject === "pet" ? "pet" : "people"}: the figurine must look like <IMAGE_1>. If the request is about the face, likeness, weight or "real faces", resculpt those faces and bodies directly from <IMAGE_1>. Whatever the request, every face that the request does not change must match <IMAGE_1> — if a face drifted from the photo, bring it back to the real person.`
       : "",
     input.extraPhoto
       ? `<IMAGE_${input.hasOriginal ? 2 : 1}> is an extra photo the customer added for this change — use it for what they describe; if they say it shows the real face, copy that face faithfully.`
@@ -97,6 +97,7 @@ export function editPrompt(input: { product: ProductId; subject: SubjectId; requ
     "Change only that. Do not add glasses or accessories that are not already there unless asked. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
     input.subject === "pet" ? "" : anatomy,
     input.subject === "pet" ? "" : likeness,
+    input.subject === "pet" ? "" : "The customer's request always wins over the rules above: if they ask to make someone slimmer, taller, shorter or different in build, or to put a face from a photo on a specific person, do exactly that for that person only, and keep them recognisable.",
     toy,
     framing,
   ]

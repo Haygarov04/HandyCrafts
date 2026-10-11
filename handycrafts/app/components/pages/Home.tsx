@@ -106,11 +106,11 @@ export default function Home({ lang }: { lang: Lang }) {
             alt={h.heroAlt}
             fill
             priority
-            className="object-cover [mask-image:linear-gradient(to_right,transparent,black_38%)]"
-            style={{ objectPosition: "70% 50%" }}
+            className="object-cover [mask-image:linear-gradient(to_right,transparent,black_18%)]"
+            style={{ objectPosition: "35% 50%" }}
             sizes="64vw"
           />
-          <VisualTag label={t.visual} className="right-6 top-24" />
+          <VisualTag label={t.realPieces} className="right-6 top-24" />
           <div className="absolute bottom-10 right-10 -rotate-6 rounded-xl bg-ink px-5 py-2.5 font-display text-2xl text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)]">
             {h.heroSticker}
           </div>
@@ -156,7 +156,7 @@ export default function Home({ lang }: { lang: Lang }) {
             <div className="relative rounded-[1.4rem] bg-white p-2 shadow-[0_30px_70px_rgba(22,21,19,0.16)] sm:p-3">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-sand">
                 <Image src="/shop/hero-mobile.webp" alt={h.heroAlt} fill priority className="object-cover" style={{ objectPosition: "50% 62%" }} sizes="(min-width: 640px) 448px, 95vw" />
-                <VisualTag label={t.visual} />
+                <VisualTag label={t.realPieces} />
               </div>
             </div>
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 -rotate-3 whitespace-nowrap rounded-xl bg-ink px-4 py-2 font-display text-lg text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:text-xl">

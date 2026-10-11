@@ -67,6 +67,8 @@ const bg = {
   from: "от",
   /** Marks example pictures that are generated previews, not photos of finished pieces. */
   visual: "Визуализация",
+  /** Marks photos of real finished pieces. */
+  realPieces: "Истински фигурки от нас",
   money: (value: number) => `${value} €`,
   itemLabel: (product: ProductId, subject: SubjectId = "person", people = 1) =>
     ({ figurine: "Фигурка", keychain: "Ключодържател" })[product] +
@@ -141,7 +143,7 @@ const bg = {
     howText: "От теб са три стъпки. Останалото го правим ние.",
     create: "Създай фигурка",
     pricesFrom: "Цени от",
-    heroAlt: "Семейство с куче държи фигурки, направени по техни снимки",
+    heroAlt: "Истински ръчно оцветени фигурки по снимки до 3D принтера в работилницата",
     heroBadge: "Фигурки по снимка",
     perks: [
       { icon: "◎", title: "Виждаш я преди да платиш", text: "Визуализация за около минута" },
@@ -393,6 +395,7 @@ const en: Dict = {
   cm: "cm",
   from: "from",
   visual: "Preview",
+  realPieces: "Real figurines we made",
   money: (value: number) => `€${value}`,
   itemLabel: (product, subject = "person", people = 1) =>
     people > 1
@@ -469,7 +472,7 @@ const en: Dict = {
     howText: "Three steps on your side. We do the rest.",
     create: "Create a figurine",
     pricesFrom: "Prices from",
-    heroAlt: "A family with their dog holding figurines made from their photos",
+    heroAlt: "Real hand-painted figurines made from photos, next to the 3D printer in our workshop",
     heroBadge: "Figurines from a photo",
     perks: [
       { icon: "◎", title: "See it before you pay", text: "A preview in about a minute" },

@@ -26,6 +26,16 @@ const tabs = [
     icon: <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />,
   },
   {
+    href: "/manage/expenses",
+    label: "Разходи",
+    icon: (
+      <>
+        <rect x="3" y="6" width="18" height="13" rx="2.5" />
+        <path d="M3 10h18M7 15h4" />
+      </>
+    ),
+  },
+  {
     href: "/manage/settings",
     label: "Настройки",
     icon: (
@@ -46,7 +56,7 @@ export default function BottomNav() {
 
   return (
     <nav className="shrink-0 border-t border-ink/10 bg-white pb-[env(safe-area-inset-bottom)]">
-      <ul className="mx-auto grid max-w-lg grid-cols-4">
+      <ul className="mx-auto grid max-w-lg grid-cols-5">
         {tabs.map((tab) => {
           const on = active(tab.href);
           return (

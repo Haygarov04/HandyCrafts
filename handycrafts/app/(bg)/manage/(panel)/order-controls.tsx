@@ -21,6 +21,7 @@ export default function OrderControls({
   tracking,
   hasEmail,
   emails,
+  manual = false,
 }: {
   id: string;
   status: OrderStatus;
@@ -28,13 +29,15 @@ export default function OrderControls({
   tracking?: Order["tracking"];
   hasEmail: boolean;
   emails: NonNullable<Order["emails"]>;
+  /** Orders added by hand do not email the customer unless the box is ticked. */
+  manual?: boolean;
 }) {
   const router = useRouter();
   const [current, setCurrent] = useState(status);
   const [note, setNote] = useState(internalNote);
   const [courier, setCourier] = useState<"econt" | "speedy">(tracking?.courier || "econt");
   const [number, setNumber] = useState(tracking?.number || "");
-  const [notify, setNotify] = useState(true);
+  const [notify, setNotify] = useState(!manual);
   const [state, setState] = useState("");
 
   async function save(change: Record<string, unknown>) {

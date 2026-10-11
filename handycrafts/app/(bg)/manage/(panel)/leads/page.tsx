@@ -3,7 +3,7 @@ import { after } from "next/server";
 import { money } from "@/lib/catalog";
 import { emailLabel, nextReminderAt, sendDueReminders } from "@/lib/lead-mail";
 import { leadLabel, leadTone, listLeads } from "@/lib/leads";
-import { deliveryLabel } from "@/lib/order-types";
+import { deliveryLabel, itemTitle } from "@/lib/order-types";
 import LeadControls from "./lead-controls";
 
 export const dynamic = "force-dynamic";
@@ -95,7 +95,7 @@ export default async function LeadsPage({ searchParams }: Props) {
                       {[c.phone, c.email].filter(Boolean).join(" · ")}
                     </p>
                     <p className="mt-1 text-sm">
-                      {lead.items.map((item) => `${item.label} ${item.cm} см${item.qty > 1 ? ` ×${item.qty}` : ""}`).join(", ")}
+                      {lead.items.map((item) => `${itemTitle(item)}${item.qty > 1 ? ` ×${item.qty}` : ""}`).join(", ")}
                       <span className="font-semibold"> · {money(lead.total)}</span>
                     </p>
                     <p className="mt-1 text-xs text-ink/45">

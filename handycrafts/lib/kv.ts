@@ -32,7 +32,8 @@ function redis() {
 
 type LocalEntry = { value: unknown; expires?: number };
 const localFile = path.join(process.cwd(), ".data", "kv.json");
-let localQueue: Promise<unknown> = Promise.resolve();
+// One queue per process, shared by every route bundle, so two requests never overwrite each other's writes.
+const localRef = globalThis as unknown as { hcLocalQueue?: Promise<unknown> };
 
 async function readLocal(): Promise<Record<string, LocalEntry>> {
   try {
@@ -48,14 +49,14 @@ async function readLocal(): Promise<Record<string, LocalEntry>> {
 }
 
 function withLocal<T>(fn: (data: Record<string, LocalEntry>) => T): Promise<T> {
-  const run = localQueue.then(async () => {
+  const run = (localRef.hcLocalQueue ?? Promise.resolve()).then(async () => {
     const data = await readLocal();
     const result = fn(data);
     await mkdir(path.dirname(localFile), { recursive: true });
     await writeFile(localFile, JSON.stringify(data));
     return result;
   });
-  localQueue = run.catch(() => undefined);
+  localRef.hcLocalQueue = run.catch(() => undefined);
   return run;
 }
 

@@ -1,4 +1,4 @@
-import { getJSON, incr, setJSON, zadd, zrem, zrevrange } from "@/lib/kv";
+import { del, getJSON, incr, setJSON, zadd, zrem, zrevrange } from "@/lib/kv";
 import type { Order, OrderStatus } from "@/lib/order-types";
 
 export type Draft = {
@@ -54,6 +54,16 @@ export async function createOrder(order: Order) {
   await setJSON(`order:${order.id}`, order);
   await zadd("orders", Date.parse(order.createdAt), order.id);
   return order;
+}
+
+/** Writes an order as it is, e.g. one added or edited by hand. Its date may have changed, so it is re-indexed. */
+export async function saveOrder(order: Order) {
+  return createOrder(order);
+}
+
+export async function deleteOrder(id: string) {
+  await del(`order:${id}`);
+  await zrem("orders", id);
 }
 
 export async function getOrder(id: string) {

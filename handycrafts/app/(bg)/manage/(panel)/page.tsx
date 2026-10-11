@@ -4,7 +4,7 @@ import { hasBlob } from "@/lib/files";
 import { hasRedis } from "@/lib/kv";
 import { listLeads } from "@/lib/leads";
 import { listReviews } from "@/lib/reviews";
-import { isStatus, orderStatuses, statusLabel, statusTone, type Order } from "@/lib/order-types";
+import { isStatus, itemTitle, orderStatuses, sourceLabel, statusLabel, statusTone, type Order } from "@/lib/order-types";
 import { listDrafts, listOrders, type Draft } from "@/lib/orders";
 
 export const dynamic = "force-dynamic";
@@ -57,6 +57,14 @@ export default async function ManagePage({ searchParams }: Props) {
           </div>
         ))}
       </div>
+
+      <Link
+        href="/manage/new"
+        className="flex items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-ink/15 px-5 py-4 font-semibold text-ink/70 transition hover:border-ember hover:text-ink"
+      >
+        <span className="grid h-7 w-7 place-items-center rounded-full bg-ember text-lg leading-none text-ink">+</span>
+        Ръчна поръчка от Facebook, TikTok, телефон…
+      </Link>
 
       <Link href="/manage/leads" className="flex items-center justify-between gap-3 rounded-3xl bg-white px-5 py-4 transition hover:shadow-md">
         <span>
@@ -114,13 +122,7 @@ export default async function ManagePage({ searchParams }: Props) {
           {shown.map((order) => (
             <li key={order.id}>
               <Link href={`/manage/${order.id}`} className="flex gap-4 rounded-3xl bg-white p-3 transition hover:shadow-md">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/api/orders/${order.id}/file?kind=preview&item=0`}
-                  alt=""
-                  loading="lazy"
-                  className="h-20 w-20 shrink-0 rounded-2xl bg-sand object-cover"
-                />
+                <Thumb order={order} />
                 <div className="min-w-0 flex-1 py-1">
                   <div className="flex items-start justify-between gap-2">
                     <p className="truncate font-semibold">{order.customer.name}</p>
@@ -129,11 +131,12 @@ export default async function ManagePage({ searchParams }: Props) {
                     </span>
                   </div>
                   <p className="mt-0.5 text-sm text-ink/55">
-                    {order.number} · {order.customer.city} ·{" "}
+                    {order.number} · {order.source ? `${sourceLabel[order.source]} · ` : ""}
+                    {order.customer.city ? `${order.customer.city} · ` : ""}
                     {new Date(order.createdAt).toLocaleString("bg-BG", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Sofia" })}
                   </p>
                   <p className="mt-1 text-sm">
-                    {order.items.map((item) => `${item.label} ${item.cm} см${item.qty > 1 ? ` ×${item.qty}` : ""}`).join(", ")}
+                    {order.items.map((item) => `${itemTitle(item)}${item.qty > 1 ? ` ×${item.qty}` : ""}`).join(", ")}
                     <span className="font-semibold"> · {money(order.total)}</span>
                   </p>
                 </div>
@@ -143,5 +146,20 @@ export default async function ManagePage({ searchParams }: Props) {
         </ul>
       )}
     </div>
+  );
+}
+
+/** The preview, or a tile with where a hand-made order came from when it has no picture. */
+function Thumb({ order }: { order: Order }) {
+  if (order.manual && !order.items[0]?.preview) {
+    return (
+      <span className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-sand px-1 text-center text-xs font-semibold text-ink/60">
+        {sourceLabel[order.source || "other"]}
+      </span>
+    );
+  }
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={`/api/orders/${order.id}/file?kind=preview&item=0`} alt="" loading="lazy" className="h-20 w-20 shrink-0 rounded-2xl bg-sand object-cover" />
   );
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { money } from "@/lib/catalog";
-import { deliveryLabel, type Order } from "@/lib/order-types";
+import { itemLabel, money } from "@/lib/catalog";
+import { expenseLabel, listExpenses } from "@/lib/expenses";
+import { deliveryLabel, itemTitle, sourceLabel, type Order } from "@/lib/order-types";
 import { listOrders } from "@/lib/orders";
 import { dayKey, visitSourceLabel, visitSources, visitsOnDays } from "@/lib/visits";
 import Chart from "./chart";
@@ -82,7 +83,9 @@ export default async function StatsPage({ searchParams }: Props) {
   const days = Array.from({ length: (toTime(range.to) - toTime(range.from)) / DAY + 1 }, (_, i) => toDay(toTime(range.from) + i * DAY));
   const daySet = new Set(days);
 
-  const [all, visitDays] = await Promise.all([listOrders(5000), visitsOnDays(days)]);
+  const [all, visitDays, allExpenses] = await Promise.all([listOrders(5000), visitsOnDays(days), listExpenses()]);
+  const expenses = allExpenses.filter((expense) => daySet.has(expense.date));
+  const spent = expenses.reduce((sum, e) => sum + e.amount, 0);
   const inRange = all.filter((order) => daySet.has(dayKey(new Date(order.createdAt))));
   const orders = inRange.filter((order) => order.status !== "cancelled");
 
@@ -97,10 +100,22 @@ export default async function StatsPage({ searchParams }: Props) {
   const cancelRate = inRange.length ? Math.round(((inRange.length - orders.length) / inRange.length) * 100) : 0;
   const visitTotal = visitDays.reduce((sum, d) => sum + d.total, 0);
   const tiktokTotal = visitDays.reduce((s, d) => s + d.bySource.tiktok, 0);
-  const conversion = visitTotal ? ((orders.length / visitTotal) * 100).toFixed(1) : "0";
+  // Orders typed in by hand came through messages, not the site, so they don't count towards conversion.
+  const siteOrders = orders.filter((o) => !o.manual);
+  const conversion = visitTotal ? ((siteOrders.length / visitTotal) * 100).toFixed(1) : "0";
+  const profit = Math.round((revenue - spent) * 100) / 100;
+  const margin = revenue > 0 ? Math.round((profit / revenue) * 100) : 0;
 
   const tiles = [
     { label: "Оборот", value: money(revenue), note: `${completed.length} приключени` },
+    { label: "Разходи", value: money(spent), note: `${expenses.length} ${expenses.length === 1 ? "запис" : "записа"}` },
+    {
+      label: "Печалба",
+      value: `${profit < 0 ? "−" : ""}${money(Math.abs(profit))}`,
+      note: revenue > 0 ? `${margin}% от оборота` : "оборот минус разходи",
+      tone: profit < 0 ? "text-red-700" : "text-emerald-700",
+      wide: true,
+    },
     { label: "Нови поръчки", value: String(orders.length), note: `за ${money(placed)}` },
     { label: "В процес", value: money(openValue), note: `${open.length} неприключени сега` },
     { label: "Средна поръчка", value: money(Math.round(average)), note: `отказани ${cancelRate}%` },
@@ -140,7 +155,7 @@ export default async function StatsPage({ searchParams }: Props) {
     const list = visitDays.filter((d) => set.has(d.day));
     const value = list.reduce((sum, d) => sum + d.total, 0);
     const tiktok = list.reduce((sum, d) => sum + d.bySource.tiktok, 0);
-    const got = orders.filter((o) => set.has(dayKey(new Date(o.createdAt)))).length;
+    const got = siteOrders.filter((o) => set.has(dayKey(new Date(o.createdAt)))).length;
     return {
       key: g.start,
       label: short(g.start),
@@ -154,14 +169,36 @@ export default async function StatsPage({ searchParams }: Props) {
       ] as [string, string][],
     };
   });
+  const expenseBars = groups.map((g) => {
+    const set = new Set(g.days);
+    const list = expenses.filter((e) => set.has(e.date));
+    const value = Math.round(list.reduce((sum, e) => sum + e.amount, 0) * 100) / 100;
+    const gained = completed.filter((o) => set.has(doneOn(o))).reduce((sum, o) => sum + o.total, 0);
+    return {
+      key: g.start,
+      label: short(g.start),
+      title: when(g),
+      value,
+      rows: [
+        ["Записи", String(list.length)],
+        ["Оборот", money(gained)],
+      ] as [string, string][],
+    };
+  });
   const per = weekly ? "седмици" : "дни";
 
   const sources = visitSources
     .map((source) => [visitSourceLabel[source], visitDays.reduce((sum, d) => sum + d.bySource[source], 0)] as [string, number])
     .filter(([, n]) => n > 0)
     .sort((a, b) => b[1] - a[1]);
-  const products = tally(orders, (o) => o.items.map((item) => item.label));
-  const sizes = tally(orders, (o) => o.items.map((item) => `${item.label} ${item.cm} см`));
+  // Hand-made orders carry a free description, so products are named from what was ordered, not the label.
+  const kind = (item: Order["items"][number]) => itemLabel(item.product, item.subject, item.people);
+  const products = tally(orders, (o) => o.items.map(kind));
+  const sizes = tally(orders, (o) => o.items.map((item) => itemTitle({ ...item, label: kind(item) })));
+  const channels = tally(orders, (o) => [sourceLabel[o.source || "site"]]);
+  const spentBy = new Map<string, number>();
+  for (const e of expenses) spentBy.set(expenseLabel[e.category], (spentBy.get(expenseLabel[e.category]) || 0) + e.amount);
+  const spending = [...spentBy.entries()].map(([name, n]) => [name, Math.round(n * 100) / 100] as [string, number]).sort((a, b) => b[1] - a[1]);
   const delivery = tally(orders, (o) => [deliveryLabel[o.customer.delivery]]);
   const cities = tally(orders, (o) => [o.customer.city.trim() || "—"]).slice(0, 5);
 
@@ -204,9 +241,9 @@ export default async function StatsPage({ searchParams }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         {tiles.map((tile) => (
-          <div key={tile.label} className="rounded-3xl bg-white p-4">
+          <div key={tile.label} className={`rounded-3xl bg-white p-4 ${"wide" in tile ? "col-span-2" : ""}`}>
             <p className="text-xs text-ink/55">{tile.label}</p>
-            <p className="mt-1 font-display text-2xl">{tile.value}</p>
+            <p className={`mt-1 font-display text-2xl ${tile.tone || ""}`}>{tile.value}</p>
             <p className="mt-0.5 text-xs text-ink/45">{tile.note}</p>
           </div>
         ))}
@@ -219,6 +256,14 @@ export default async function StatsPage({ searchParams }: Props) {
         totalNote="от приключените поръчки за периода"
         bars={revenueBars}
         empty="Още няма приключени поръчки в този период."
+      />
+      <Chart
+        title={`Разходи по ${per}`}
+        unit="money"
+        total={money(spent)}
+        totalNote={`печалба ${profit < 0 ? "−" : ""}${money(Math.abs(profit))} за периода`}
+        bars={expenseBars}
+        empty="Няма записани разходи в този период."
       />
       <Chart
         title={`Нови поръчки по ${per}`}
@@ -237,7 +282,9 @@ export default async function StatsPage({ searchParams }: Props) {
       />
 
       <div className="grid gap-5 md:grid-cols-2">
-        <Breakdown title="Откъде идват" rows={sources} />
+        <Breakdown title="Разходи по вид" rows={spending} money />
+        <Breakdown title="Канал на поръчките" rows={channels} />
+        <Breakdown title="Откъде идват посещенията" rows={sources} />
         <Breakdown title="Продукти" rows={products} />
         <Breakdown title="Размери" rows={sizes} />
         <Breakdown title="Доставка" rows={delivery} />
@@ -247,7 +294,7 @@ export default async function StatsPage({ searchParams }: Props) {
   );
 }
 
-function Breakdown({ title, rows }: { title: string; rows: [string, number][] }) {
+function Breakdown({ title, rows, money: asMoney = false }: { title: string; rows: [string, number][]; money?: boolean }) {
   const top = Math.max(1, ...rows.map(([, n]) => n));
   const sum = rows.reduce((total, [, n]) => total + n, 0);
   return (
@@ -262,7 +309,7 @@ function Breakdown({ title, rows }: { title: string; rows: [string, number][] })
               <div className="flex justify-between text-sm">
                 <span>{name}</span>
                 <span>
-                  <span className="font-semibold">{count}</span>
+                  <span className="font-semibold">{asMoney ? money(count) : count}</span>
                   <span className="ml-1.5 text-xs text-ink/45">{Math.round((count / sum) * 100)}%</span>
                 </span>
               </div>

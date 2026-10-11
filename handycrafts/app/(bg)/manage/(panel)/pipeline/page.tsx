@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { money } from "@/lib/catalog";
-import { nextStatus, orderStatuses, statusLabel, statusTone } from "@/lib/order-types";
+import { itemTitle, nextStatus, orderStatuses, sourceLabel, statusLabel, statusTone } from "@/lib/order-types";
 import { listOrders } from "@/lib/orders";
 import AdvanceButton from "./advance-button";
 
@@ -46,20 +46,26 @@ export default async function PipelinePage() {
                   {(stage === "completed" ? column.slice(0, 10) : column).map((order) => (
                     <li key={order.id} className="rounded-2xl bg-white p-3 shadow-sm">
                       <Link href={`/manage/${order.id}`} className="flex gap-3">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={`/api/orders/${order.id}/file?kind=preview&item=0`}
-                          alt=""
-                          loading="lazy"
-                          className="h-14 w-14 shrink-0 rounded-xl bg-sand object-cover"
-                        />
+                        {order.manual && !order.items[0]?.preview ? (
+                          <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-sand text-center text-[10px] font-semibold leading-tight text-ink/60">
+                            {sourceLabel[order.source || "other"]}
+                          </span>
+                        ) : (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={`/api/orders/${order.id}/file?kind=preview&item=0`}
+                            alt=""
+                            loading="lazy"
+                            className="h-14 w-14 shrink-0 rounded-xl bg-sand object-cover"
+                          />
+                        )}
                         <span className="min-w-0">
                           <span className="block truncate text-sm font-semibold">{order.customer.name}</span>
                           <span className="block text-xs text-ink/50">
                             {order.number} · {order.customer.city}
                           </span>
                           <span className="mt-0.5 block truncate text-xs">
-                            {order.items.map((item) => `${item.label} ${item.cm} см`).join(", ")} ·{" "}
+                            {order.items.map((item) => itemTitle(item)).join(", ")} ·{" "}
                             <b>{money(order.total)}</b>
                           </span>
                         </span>

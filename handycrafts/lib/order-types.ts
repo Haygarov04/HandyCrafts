@@ -50,6 +50,25 @@ export function isStatus(value: unknown): value is OrderStatus {
   return (orderStatuses as readonly unknown[]).includes(value);
 }
 
+/** Where an order came from. Orders placed on the site have no source. */
+export const orderSources = ["facebook", "instagram", "tiktok", "viber", "phone", "inperson", "other"] as const;
+export type OrderSource = (typeof orderSources)[number];
+
+export const sourceLabel: Record<OrderSource | "site", string> = {
+  site: "Сайт",
+  facebook: "Facebook",
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  viber: "Viber",
+  phone: "Телефон",
+  inperson: "На място",
+  other: "Друго",
+};
+
+export function isSource(value: unknown): value is OrderSource {
+  return (orderSources as readonly unknown[]).includes(value);
+}
+
 export type OrderItem = {
   draftId: string;
   product: "figurine" | "keychain";
@@ -93,9 +112,17 @@ export type Order = {
   tracking?: { courier: "econt" | "speedy"; number: string };
   /** When the order was marked "completed" — revenue counts on this day. */
   completedAt?: string;
+  /** Added by hand in the panel (an order from Facebook, TikTok, the phone…). */
+  manual?: boolean;
+  source?: OrderSource;
   /** Emails sent to the customer, newest last. */
   emails?: { type: string; at: string; ok: boolean }[];
 };
+
+/** "Фигурка 17 см ×2" — a size only when there is one (orders added by hand may have none). */
+export function itemTitle(item: Pick<OrderItem, "label" | "cm" | "qty">, separator = " ") {
+  return `${item.label}${item.cm ? `${separator}${item.cm} см` : ""}`;
+}
 
 /** The stage an order normally moves to next; null at the end of the line. */
 export const nextStatus: Record<OrderStatus, OrderStatus | null> = {

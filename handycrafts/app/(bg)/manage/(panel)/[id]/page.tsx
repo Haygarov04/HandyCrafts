@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { money } from "@/lib/catalog";
-import { deliveryLabel, statusLabel, statusTone } from "@/lib/order-types";
+import { deliveryLabel, itemTitle, sourceLabel, statusLabel, statusTone } from "@/lib/order-types";
 import { getOrder } from "@/lib/orders";
 import { getReview, reviewStatusLabel, reviewUrl } from "@/lib/reviews";
 import OrderControls from "../order-controls";
@@ -39,6 +39,18 @@ export default async function OrderPage({ params }: Props) {
         <span className={`rounded-full px-3 py-1.5 text-sm font-semibold ${statusTone[order.status]}`}>{statusLabel[order.status]}</span>
       </div>
 
+      {order.manual ? (
+        <div className="flex items-center justify-between gap-3 rounded-3xl bg-sand/70 px-5 py-3 text-sm">
+          <span>
+            Ръчна поръчка · <span className="font-semibold">{sourceLabel[order.source || "other"]}</span>
+          </span>
+          <Link href={`/manage/${order.id}/edit`} className="font-semibold underline decoration-ember underline-offset-4">
+            Редактирай
+          </Link>
+        </div>
+      ) : null}
+
+      {phone ? (
       <div className="grid grid-cols-2 gap-3">
         <a href={`tel:${phone}`} className="rounded-full bg-ink py-3 text-center font-semibold text-paper">
           Обади се
@@ -47,15 +59,16 @@ export default async function OrderPage({ params }: Props) {
           Viber
         </a>
       </div>
+      ) : null}
 
       <section className="rounded-3xl bg-white p-5">
         <dl className="grid gap-2 text-sm">
-          <Row label="Телефон" value={c.phone} />
+          <Row label="Телефон" value={c.phone || "—"} />
           <Row label="Имейл" value={c.email || "—"} />
           <Row label="Доставка" value={deliveryLabel[c.delivery]} />
-          <Row label="Град" value={c.city} />
-          <Row label={c.delivery === "address" ? "Адрес" : "Офис"} value={c.address} />
-          <Row label="Плащане" value={`Наложен платеж · ${money(order.total)}`} />
+          <Row label="Град" value={c.city || "—"} />
+          <Row label={c.delivery === "address" ? "Адрес" : "Офис"} value={c.address || "—"} />
+          <Row label={order.manual ? "Сума" : "Плащане"} value={order.manual ? money(order.total) : `Наложен платеж · ${money(order.total)}`} />
           <Row label="Език" value={order.lang === "en" ? "Английски" : "Български"} />
         </dl>
         {order.note ? (
@@ -73,6 +86,7 @@ export default async function OrderPage({ params }: Props) {
         tracking={order.tracking}
         hasEmail={Boolean(c.email)}
         emails={order.emails || []}
+        manual={Boolean(order.manual)}
       />
 
       {askReview || review ? (
@@ -105,22 +119,23 @@ export default async function OrderPage({ params }: Props) {
       ) : null}
 
       {order.items.map((item, index) => (
-        <section key={item.draftId} className="rounded-3xl bg-white p-5">
+        <section key={item.draftId || index} className="rounded-3xl bg-white p-5">
           <div className="flex items-center justify-between">
             <p className="font-display text-lg">
-              {item.label} · {item.cm} см {item.qty > 1 ? `× ${item.qty}` : ""}
+              {itemTitle(item, " · ")} {item.qty > 1 ? `× ${item.qty}` : ""}
             </p>
             <p className="font-semibold">{money(item.price * item.qty)}</p>
           </div>
-          <div className="mt-4 grid grid-cols-2 gap-3">
-            {(["preview", "photo"] as const).map((kind) => (
+          {order.manual && !item.photo ? null : (
+          <div className={`mt-4 grid gap-3 ${order.manual ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2"}`}>
+            {(order.manual ? (["photo"] as const) : (["preview", "photo"] as const)).map((kind) => (
               <figure key={kind}>
                 <a href={file(kind, index)} target="_blank" rel="noreferrer">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={file(kind, index)} alt="" className="aspect-square w-full rounded-2xl bg-sand object-cover" />
                 </a>
                 <figcaption className="mt-2 flex justify-between text-xs text-ink/50">
-                  {kind === "preview" ? "Визуализация" : "Снимка на клиента"}
+                  {kind === "preview" ? "Визуализация" : order.manual ? "Снимка" : "Снимка на клиента"}
                   <a href={`${file(kind, index)}&download=1`} className="font-semibold text-ink underline decoration-ember underline-offset-2">
                     Свали
                   </a>
@@ -128,6 +143,7 @@ export default async function OrderPage({ params }: Props) {
               </figure>
             ))}
           </div>
+          )}
           {item.extras?.length ? (
             <div className="mt-3 grid grid-cols-3 gap-3">
               {item.extras.map((_, n) => (

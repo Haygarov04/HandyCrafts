@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     text,
     name,
     city: cleanText(order.customer.city.replace(/,.*$/, ""), 60),
-    product: first ? `${itemLabel(first.product, first.subject, first.people)} · ${first.cm} см` : "",
+    product: first ? `${itemLabel(first.product, first.subject, first.people)}${first.cm ? ` · ${first.cm} см` : ""}` : "",
   });
   await notifyAll({ title: `Нов отзив ${"★".repeat(rating)}`, body: `${name}: ${text.slice(0, 120)}`, url: "/manage/reviews" }).catch(() => undefined);
   return NextResponse.json({ ok: true, google: process.env.GOOGLE_REVIEW_URL || "" });

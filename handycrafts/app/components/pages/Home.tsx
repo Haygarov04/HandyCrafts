@@ -167,7 +167,7 @@ export default function Home({ lang }: { lang: Lang }) {
             >
               {realPieces.map((piece) => (
                 <figure key={piece.result} className="group">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.2rem] bg-sand sm:rounded-[1.6rem]">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[1.2rem] bg-sand sm:rounded-[1.6rem]">
                     <Image
                       src={piece.result}
                       alt={piece.caption[lang]}
@@ -183,17 +183,19 @@ export default function Home({ lang }: { lang: Lang }) {
                       </div>
                     ) : null}
                   </div>
-                  <figcaption className="mt-2.5 px-1">
-                    <span className="block text-sm font-semibold sm:text-base">{piece.caption[lang]}</span>
-                    {piece.note ? <span className="block text-xs text-ink/55 sm:text-sm">{piece.note[lang]}</span> : null}
-                  </figcaption>
+                  {piece.showCaption || piece.note ? (
+                    <figcaption className="mt-2.5 px-1">
+                      {piece.showCaption ? <span className="block text-sm font-semibold sm:text-base">{piece.caption[lang]}</span> : null}
+                      {piece.note ? <span className="block text-xs text-ink/55 sm:text-sm">{piece.note[lang]}</span> : null}
+                    </figcaption>
+                  ) : null}
                 </figure>
               ))}
               {realPieces.length < 3 ? (
                 // Fills the row on wider screens while there are only a few real photos.
                 <Link
                   href={href("/studio")}
-                  className="hidden aspect-[4/5] flex-col justify-between rounded-[1.6rem] bg-ember p-6 text-ink transition hover:bg-ember-deep sm:flex"
+                  className="hidden aspect-[3/4] flex-col justify-between rounded-[1.6rem] bg-ember p-6 text-ink transition hover:bg-ember-deep sm:flex"
                 >
                   <span className="font-display text-2xl leading-tight lg:text-3xl">{h.realNext}</span>
                   <span className="inline-flex items-center gap-2 text-lg font-bold">

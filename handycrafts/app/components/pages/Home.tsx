@@ -98,24 +98,8 @@ export default function Home({ lang }: { lang: Lang }) {
           url: href("/figurka-po-snimka"),
         })}
       />
-      <section className="hero-glow relative overflow-hidden border-b border-ink/10 px-4 pb-12 pt-[5.5rem] sm:px-6 sm:pt-32 lg:flex lg:min-h-[max(40rem,min(92vh,52rem))] lg:items-center lg:pb-16 lg:pt-28">
-        {/* Desktop: the wide photo fills the right side and fades into the page behind the text. */}
-        <div className="absolute inset-y-0 right-0 hidden w-[58%] lg:block xl:w-[64%]">
-          <Image
-            src="/shop/hero.webp"
-            alt={h.heroAlt}
-            fill
-            priority
-            className="object-cover [mask-image:linear-gradient(to_right,transparent,black_18%)]"
-            style={{ objectPosition: "35% 50%" }}
-            sizes="64vw"
-          />
-          <VisualTag label={t.realPieces} className="right-6 top-24" />
-          <div className="absolute bottom-10 right-10 -rotate-6 rounded-xl bg-ink px-5 py-2.5 font-display text-2xl text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)]">
-            {h.heroSticker}
-          </div>
-        </div>
-        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-6">
+      <section className="hero-glow relative overflow-hidden border-b border-ink/10 px-4 pb-16 pt-[5.5rem] sm:px-6 sm:pt-32 lg:flex lg:min-h-[max(40rem,min(92vh,52rem))] lg:items-center lg:pb-16 lg:pt-28">
+        <div className="relative mx-auto grid w-full max-w-6xl items-center gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-12">
           <div className="lg:max-w-[33rem]">
             <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-ink/15 bg-paper/80 px-3 py-1 text-xs font-semibold text-ink/70 sm:mb-0 sm:py-1.5 sm:text-[13px]">
               <span className="h-2 w-2 rounded-full bg-emerald-500" />
@@ -152,14 +136,15 @@ export default function Home({ lang }: { lang: Lang }) {
             </div>
           </div>
 
-          <div className="relative -mx-1 sm:mx-auto sm:w-full sm:max-w-md lg:hidden">
+          {/* A photo of real pieces from the workshop, shown whole on every screen. */}
+          <div className="relative -mx-1 sm:mx-auto sm:w-full sm:max-w-xl lg:mx-0 lg:max-w-none lg:rotate-1">
             <div className="relative rounded-[1.4rem] bg-white p-2 shadow-[0_30px_70px_rgba(22,21,19,0.16)] sm:p-3">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1rem] bg-sand">
-                <Image src="/shop/hero-mobile.webp" alt={h.heroAlt} fill priority className="object-cover" style={{ objectPosition: "50% 62%" }} sizes="(min-width: 640px) 448px, 95vw" />
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[1rem] bg-sand">
+                <Image src="/shop/workshop.webp" alt={h.heroAlt} fill priority className="object-cover" sizes="(min-width: 1024px) 640px, (min-width: 640px) 576px, 95vw" />
                 <VisualTag label={t.realPieces} />
               </div>
             </div>
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 -rotate-3 whitespace-nowrap rounded-xl bg-ink px-4 py-2 font-display text-lg text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:text-xl">
+            <div className="absolute -bottom-11 left-1/2 -translate-x-1/2 -rotate-3 whitespace-nowrap rounded-xl bg-ink px-4 py-2 font-display text-lg text-paper shadow-[0_12px_30px_rgba(22,21,19,0.3)] sm:text-xl lg:-bottom-6 lg:left-auto lg:right-8 lg:translate-x-0 lg:px-5 lg:py-2.5 lg:text-2xl">
               {h.heroSticker}
             </div>
           </div>

@@ -10,13 +10,13 @@ export const runtime = "nodejs";
 /** Published reviews for the site. Cached for a few minutes, so a newly published one shows up shortly after. */
 export async function GET() {
   const reviews = (await listReviews()).filter((review) => review.status === "approved");
-  const list: PublicReview[] = reviews.slice(0, 24).map(({ id, rating, text, name, city, product, createdAt, lang }) => ({
+  // The site shows what was ordered but never the customer's city or the size.
+  const list: PublicReview[] = reviews.slice(0, 24).map(({ id, rating, text, name, product, createdAt, lang }) => ({
     id,
     rating,
     text,
     name,
-    city,
-    product,
+    product: product.replace(/\s*·\s*\d+\s*(см|cm)$/, ""),
     createdAt,
     lang,
   }));

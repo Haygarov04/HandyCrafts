@@ -39,10 +39,7 @@ export default function ReviewsSection({ lang }: { lang: Lang }) {
                 <span className="text-ink/15">{"★".repeat(5 - review.rating)}</span>
               </p>
               <p className="mt-4 whitespace-pre-line leading-7 text-ink/80">{review.text}</p>
-              <p className="mt-5 font-semibold">
-                {review.name}
-                {review.city ? <span className="font-normal text-ink/55"> · {review.city}</span> : null}
-              </p>
+              <p className="mt-5 font-semibold">{review.name}</p>
               {review.product ? <p className="text-sm text-ink/45">{review.product}</p> : null}
             </li>
           ))}

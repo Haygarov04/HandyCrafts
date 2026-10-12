@@ -33,7 +33,7 @@ export type Review = {
 };
 
 /** The part of a review the public site gets. */
-export type PublicReview = Pick<Review, "id" | "rating" | "text" | "name" | "city" | "product" | "createdAt" | "lang">;
+export type PublicReview = Pick<Review, "id" | "rating" | "text" | "name" | "product" | "createdAt" | "lang">;
 
 export function isReviewStatus(value: unknown): value is ReviewStatus {
   return (reviewStatuses as readonly unknown[]).includes(value);

@@ -79,7 +79,7 @@ export async function listOrders(limit = 300) {
 
 export async function updateOrder(
   id: string,
-  change: { status?: OrderStatus; internalNote?: string; tracking?: Order["tracking"] | null }
+  change: { status?: OrderStatus; internalNote?: string; tracking?: Order["tracking"] | null; price?: { item: number; value: number } }
 ) {
   const order = await getOrder(id);
   if (!order) return null;
@@ -90,6 +90,11 @@ export async function updateOrder(
   }
   if (change.internalNote !== undefined) order.internalNote = change.internalNote;
   if (change.tracking !== undefined) order.tracking = change.tracking || undefined;
+  // A price agreed by hand (e.g. extra for a car): the item's price per piece, and the total follows.
+  if (change.price && order.items[change.price.item]) {
+    order.items[change.price.item].price = change.price.value;
+    order.total = Math.round(order.items.reduce((sum, item) => sum + item.price * item.qty, 0) * 100) / 100;
+  }
   order.updatedAt = new Date().toISOString();
   await setJSON(`order:${id}`, order);
   return order;

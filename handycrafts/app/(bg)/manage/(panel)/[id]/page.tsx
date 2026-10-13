@@ -5,6 +5,7 @@ import { deliveryLabel, itemTitle, sourceLabel, statusLabel, statusTone } from "
 import { getOrder } from "@/lib/orders";
 import { getReview, reviewStatusLabel, reviewUrl } from "@/lib/reviews";
 import OrderControls from "../order-controls";
+import PriceEdit from "./price-edit";
 import ReviewLink from "./review-link";
 import ReviewRequest from "./review-request";
 
@@ -124,7 +125,7 @@ export default async function OrderPage({ params }: Props) {
             <p className="font-display text-lg">
               {itemTitle(item, " · ")} {item.qty > 1 ? `× ${item.qty}` : ""}
             </p>
-            <p className="font-semibold">{money(item.price * item.qty)}</p>
+            <PriceEdit id={order.id} item={index} price={item.price} qty={item.qty} />
           </div>
           {order.manual && !item.photo ? null : (
           <div className={`mt-4 grid gap-3 ${order.manual ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2"}`}>

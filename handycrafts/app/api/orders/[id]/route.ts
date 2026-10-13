@@ -31,6 +31,14 @@ export async function PATCH(req: Request, context: Context) {
     }
     change.status = body.status;
   }
+  if (body?.price && typeof body.price === "object") {
+    const value = Math.round(Number(String(body.price.value).replace(",", ".")) * 100) / 100;
+    const item = Number(body.price.item);
+    if (!Number.isFinite(value) || value < 0 || value > 100000 || !Number.isInteger(item) || item < 0) {
+      return NextResponse.json({ error: "Невалидна цена." }, { status: 400 });
+    }
+    change.price = { item, value };
+  }
   if (typeof body?.internalNote === "string") change.internalNote = cleanText(body.internalNote, 2000);
   if (body?.tracking === null) change.tracking = null;
   if (body?.tracking && typeof body.tracking === "object") {

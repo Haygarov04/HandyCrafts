@@ -18,7 +18,6 @@ import {
   maxPeople,
   normalizePeople,
   priceFor,
-  vehicleExtra,
   productIds,
   currentCm,
   isOffered,
@@ -140,9 +139,7 @@ export default function StudioPage() {
 
   // Only person figurines can have more than one person; other choices fall back to one.
   const people = normalizePeople(product, subject, peopleChoice);
-  const basePrice = priceFor(product, cm, people) ?? 0;
-  // A car or other vehicle in the preview is made extra.
-  const price = basePrice + (preview?.vehicle ? vehicleExtra : 0);
+  const price = priceFor(product, cm, people) ?? 0;
 
   function choosePeople(n: number) {
     setPeopleChoice(n);
@@ -570,7 +567,7 @@ export default function StudioPage() {
               <div className="mx-auto mt-3 flex max-w-lg flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl bg-blush/60 px-4 py-3 text-sm leading-6">
                 <p className="min-w-0 flex-1">
                   <span aria-hidden>🚗 </span>
-                  {s.vehicleNote(t.money(vehicleExtra))}
+                  {s.vehicleNote}
                 </p>
                 <button
                   type="button"
@@ -601,7 +598,7 @@ export default function StudioPage() {
                         people: preview.people || 1,
                         label: t.itemLabel(preview.product, preview.subject, preview.people || 1) + (version.vehicle ? t.withVehicle : ""),
                         cm,
-                        price: basePrice + (version.vehicle ? vehicleExtra : 0),
+                        price,
                         qty: 1,
                         previewUrl: version.url,
                       });

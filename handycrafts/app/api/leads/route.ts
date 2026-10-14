@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { currentCm, itemLabel, maxQty, normalizePeople, priceFor, vehicleExtra } from "@/lib/catalog";
+import { currentCm, itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
 import { getLead, isLeadId, saveLead, type Lead } from "@/lib/leads";
 import { deliveryLabel, type Delivery } from "@/lib/order-types";
 import { getDraft } from "@/lib/orders";
@@ -31,9 +31,8 @@ export async function POST(req: Request) {
     if (!draft) continue;
     const cm = currentCm(draft.product, Number(entry.cm) || draft.cm);
     const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
-    const base = priceFor(draft.product, cm, people);
-    if (base === null) continue;
-    const price = base + (draft.vehicle ? vehicleExtra : 0);
+    const price = priceFor(draft.product, cm, people);
+    if (price === null) continue;
     items.push({
       draftId: draft.id,
       product: draft.product,

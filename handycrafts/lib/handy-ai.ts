@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "crypto";
-import { catalog, vehicleExtra, type ProductId, type SubjectId } from "@/lib/catalog";
+import { catalog, type ProductId, type SubjectId } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 
 // Handy AI: the studio chat that turns a customer's words into one safe edit of their preview,
@@ -56,7 +56,7 @@ function facts(lang: Lang) {
   return [
     "HandyCrafts is a small workshop in Ruse, Bulgaria that makes hand-painted 3D printed figurines from a customer's photo, and keychains of pets only (no keychains of people).",
     `Figurines (14, 17 and 20 cm): ${f}. Pet keychains: 6 cm €30, 10 cm €40.`,
-    `A car, motorbike or other vehicle in the figurine is sculpted and painted extra: +€${vehicleExtra} per piece. The site adds it to the price automatically when the preview shows one; asking to remove the vehicle removes the extra.`,
+    "A car, motorbike or other vehicle in the figurine is made and charged extra; the price for it is agreed when we call to confirm the order. A figurine with a vehicle has no round base. The customer can ask to remove the vehicle.",
     "Made in 7–12 working days. Delivered across Bulgaria by Econt or Speedy at the courier's rate. Cash on delivery: the customer pays only when the parcel arrives and can check it in front of the courier.",
     "The preview is a guide: the real figurine is finished by hand from it, so small details can also be written in the order note.",
     "We confirm every order by phone before making it.",

@@ -86,7 +86,7 @@ export type OrderItem = {
   edits?: string[];
   /** Extra photos the customer added in the chat. */
   extras?: string[];
-  /** Includes a car or other vehicle, charged extra and already in `price`. */
+  /** Includes a car or other vehicle: charged extra, agreed by phone and added to `price` by hand. */
   vehicle?: boolean;
 };
 

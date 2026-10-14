@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
-import { currentCm, itemLabel, normalizePeople, priceFor, vehicleExtra } from "@/lib/catalog";
+import { currentCm, itemLabel, normalizePeople, priceFor } from "@/lib/catalog";
 import { previewEmail } from "@/lib/lead-mail";
 import { getLead, isLeadId, saveLead, type Lead } from "@/lib/leads";
 import { mailReady, sendEmail } from "@/lib/mail";
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     vehicle: draft.vehicle,
     cm,
     qty: 1,
-    price: (priceFor(draft.product, cm, people) ?? 0) + (draft.vehicle ? vehicleExtra : 0),
+    price: priceFor(draft.product, cm, people) ?? 0,
     preview: draft.preview,
   };
 

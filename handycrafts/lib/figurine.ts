@@ -19,7 +19,10 @@ const toy =
 // prettier than in real life. Likeness comes first; the figurine look must not cost it.
 const likeness =
   "Likeness is the most important thing: the face must be a faithful portrait of the real person in the photo — same face shape, jaw and chin, nose, eye shape and spacing, eyebrows, lips, ears, hairline, beard or stubble, wrinkles and age. Keep their real body build, height and weight: do not make anyone slimmer, younger, taller or prettier, and do not use a generic doll or cartoon face.";
-const fullBody = "Full body from the top of the head to the shoes, both feet resting flat on the base — never a bust or a half body.";
+const fullBody = "Full body from the top of the head to the shoes, both feet resting flat on the base (or on the ground next to a vehicle) — never a bust or a half body.";
+// A car (or motorbike…) in the photo becomes part of the figurine, and then it stands on its own wheels.
+const vehicle =
+  "If the person is posing with a car, motorbike or other vehicle and it is part of the figurine, sculpt the vehicle as part of the same piece and use no round base, podium or pedestal at all: the vehicle and the person stand directly on the plain surface.";
 
 export function figurinePrompt(input: {
   product: ProductId;
@@ -54,6 +57,7 @@ export function figurinePrompt(input: {
       `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
       `Pose: ${pose}. All ${people} people fully visible, nothing cropped.`,
       input.product === "figurine" ? fullBody : "",
+      input.product === "figurine" ? vehicle : "",
       anatomy,
       "Style: premium hand-painted resin miniature with realistic proportions (not big heads, not chibi), soft matte finish, clean sculpted hair, natural expressions, eyes sharp.",
       toy,
@@ -71,6 +75,7 @@ export function figurinePrompt(input: {
     `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
     `Pose: ${pose}. Full subject visible, nothing cropped.`,
     input.product === "figurine" ? fullBody : "",
+    input.product === "figurine" ? vehicle : "",
     anatomy,
     "Style: premium hand-painted resin miniature with realistic proportions (not a big head, not chibi), soft matte finish, clean sculpted hair, natural expression, eyes sharp.",
     toy,
@@ -97,6 +102,9 @@ export function editPrompt(input: { product: ProductId; subject: SubjectId; requ
     "Change only that. Do not add glasses or accessories that are not already there unless asked. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
     input.subject === "pet" ? "" : anatomy,
     input.subject === "pet" ? "" : likeness,
+    input.subject === "pet" || input.product !== "figurine"
+      ? ""
+      : "A figurine with a car or other vehicle has no round base or podium — the vehicle and the person stand directly on the surface. If the change removes the vehicle, put the person on a low plain round base.",
     input.subject === "pet" ? "" : "The customer's request always wins over the rules above: if they ask to make someone slimmer, taller, shorter or different in build, or to put a face from a photo on a specific person, do exactly that for that person only, and keep them recognisable.",
     toy,
     framing,

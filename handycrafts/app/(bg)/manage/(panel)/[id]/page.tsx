@@ -127,6 +127,11 @@ export default async function OrderPage({ params }: Props) {
             </p>
             <PriceEdit id={order.id} item={index} price={item.price} qty={item.qty} />
           </div>
+          {item.vehicle ? (
+            <p className="mt-3 rounded-2xl bg-amber-50 px-4 py-2.5 text-sm text-amber-950">
+              🚗 Във фигурката има кола — уговори цената ѝ с клиента и я добави към цената с моливчето.
+            </p>
+          ) : null}
           {order.manual && !item.photo ? null : (
           <div className={`mt-4 grid gap-3 ${order.manual ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-2"}`}>
             {(order.manual ? (["photo"] as const) : (["preview", "photo"] as const)).map((kind) => (

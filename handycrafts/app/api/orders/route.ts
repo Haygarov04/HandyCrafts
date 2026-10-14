@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
-import { currentCm, isOffered, itemLabel, maxQty, normalizePeople, priceFor, vehicleExtra } from "@/lib/catalog";
+import { currentCm, isOffered, itemLabel, maxQty, normalizePeople, priceFor } from "@/lib/catalog";
 import { sendCustomerEmail, sendNewOrderToShop } from "@/lib/mail";
 import { manageAllowed } from "@/lib/manage-auth";
 import { deliveryLabel, isFullName, type Delivery, type Order, type OrderItem } from "@/lib/order-types";
@@ -78,8 +78,8 @@ export async function POST(req: Request) {
       // The size can change after the preview, the product cannot.
       const cm = currentCm(draft.product, Number(entry.cm) || draft.cm);
       const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
-      const base = isOffered(draft.product, draft.subject || "person") ? priceFor(draft.product, cm, people) : null;
-      const price = base === null ? null : base + (draft.vehicle ? vehicleExtra : 0);
+      // A car in the figurine is priced separately: the workshop calls to agree it.
+      const price = isOffered(draft.product, draft.subject || "person") ? priceFor(draft.product, cm, people) : null;
       if (price === null) {
         return NextResponse.json(
           { error: tr("Един от продуктите в количката вече не се предлага. Махни го и направи нова фигурка.", "One of the items in your cart is no longer offered. Remove it and make a new figurine.") },

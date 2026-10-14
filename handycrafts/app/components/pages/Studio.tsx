@@ -18,6 +18,7 @@ import {
   maxPeople,
   normalizePeople,
   priceFor,
+  vehicleExtra,
   productIds,
   currentCm,
   isOffered,
@@ -29,7 +30,7 @@ import {
 /** Shared with checkout, so an email left here and the details typed there end up as one unfinished order. */
 const LEAD_KEY = "hc_lead_id";
 
-type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number; clothes?: string; pose?: string };
+type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number; clothes?: string; pose?: string; vehicle?: boolean };
 
 export default function StudioPage() {
   const cart = useCart();
@@ -139,7 +140,9 @@ export default function StudioPage() {
 
   // Only person figurines can have more than one person; other choices fall back to one.
   const people = normalizePeople(product, subject, peopleChoice);
-  const price = priceFor(product, cm, people) ?? 0;
+  const basePrice = priceFor(product, cm, people) ?? 0;
+  // A car or other vehicle in the preview is made extra.
+  const price = basePrice + (preview?.vehicle ? vehicleExtra : 0);
 
   function choosePeople(n: number) {
     setPeopleChoice(n);
@@ -216,7 +219,7 @@ export default function StudioPage() {
       });
       setProgress(100);
       trackEvent("generate_preview", { product, subject });
-      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people, clothes, pose });
+      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people, clothes, pose, vehicle: Boolean(data.vehicle) });
       setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
       setFreshCount((n) => n + 1);
     } catch (issue) {
@@ -234,7 +237,7 @@ export default function StudioPage() {
       product: preview.product,
       subject: preview.subject,
       people: preview.people || 1,
-      label: t.itemLabel(preview.product, preview.subject, preview.people || 1),
+      label: t.itemLabel(preview.product, preview.subject, preview.people || 1) + (preview.vehicle ? t.withVehicle : ""),
       cm,
       price,
       qty: 1,
@@ -563,6 +566,21 @@ export default function StudioPage() {
                 </p>
               </div>
             ) : null}
+            {preview && !busy && preview.vehicle ? (
+              <div className="mx-auto mt-3 flex max-w-lg flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl bg-blush/60 px-4 py-3 text-sm leading-6">
+                <p className="min-w-0 flex-1">
+                  <span aria-hidden>🚗 </span>
+                  {s.vehicleNote(t.money(vehicleExtra))}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => askAi(s.vehicleRemoveAsk)}
+                  className="shrink-0 rounded-full border border-ink/15 bg-white px-4 py-2 text-sm font-semibold transition hover:border-ink"
+                >
+                  {s.vehicleRemove}
+                </button>
+              </div>
+            ) : null}
             {preview && !busy ? (
               <div className="mx-auto max-w-lg">
                 <HandyAI
@@ -581,16 +599,16 @@ export default function StudioPage() {
                         product: preview.product,
                         subject: preview.subject,
                         people: preview.people || 1,
-                        label: t.itemLabel(preview.product, preview.subject, preview.people || 1),
+                        label: t.itemLabel(preview.product, preview.subject, preview.people || 1) + (version.vehicle ? t.withVehicle : ""),
                         cm,
-                        price,
+                        price: basePrice + (version.vehicle ? vehicleExtra : 0),
                         qty: 1,
                         previewUrl: version.url,
                       });
                       // A quiet swap: don't pop the cart open over the chat.
                       cart.setOpen(false);
                     }
-                    setPreview({ ...preview, ...version });
+                    setPreview({ ...preview, ...version, vehicle: Boolean(version.vehicle) });
                     setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
                   }}
                 />

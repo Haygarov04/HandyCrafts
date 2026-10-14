@@ -91,7 +91,7 @@ export function reminderEmail(lead: Lead, step: number) {
     .map(
       (item) => `<tr>
 <td width="84" style="padding:10px 12px 10px 0;vertical-align:top"><img src="${absolute(`/api/studio/draft/${item.draftId}`)}" width="76" height="76" alt="" style="display:block;border-radius:12px;object-fit:cover;background:#f6f1e8"></td>
-<td style="padding:10px 0;vertical-align:top"><b>${escapeHtml(item.product ? t.itemLabel(item.product, item.subject, item.people) : item.label)}</b><br><span style="color:#8a847b">${item.cm} ${t.cm}${item.qty > 1 ? ` · ${item.qty} ×` : ""}</span></td>
+<td style="padding:10px 0;vertical-align:top"><b>${escapeHtml(item.product ? t.itemLabel(item.product, item.subject, item.people) + (item.vehicle ? t.withVehicle : "") : item.label)}</b><br><span style="color:#8a847b">${item.cm} ${t.cm}${item.qty > 1 ? ` · ${item.qty} ×` : ""}</span></td>
 <td align="right" style="padding:10px 0;vertical-align:top;font-weight:700;white-space:nowrap">${t.money(item.price * item.qty)}</td></tr>`
     )
     .join("");
@@ -132,7 +132,7 @@ export function previewEmail(lead: Lead) {
   const body = `<h1 style="margin:0 0 12px;font-size:24px;line-height:1.25">${escapeHtml(c.title)}</h1>
 <p style="margin:0">${escapeHtml(c.text)}</p>
 <img src="${absolute(`/api/studio/draft/${item.draftId}`)}" width="480" alt="" style="display:block;width:100%;max-width:480px;height:auto;margin:18px 0 6px;border-radius:18px;background:#f6f1e8">
-<p style="margin:0;color:#8a847b">${escapeHtml(item.product ? t.itemLabel(item.product, item.subject, item.people) : item.label)} · ${item.cm} ${t.cm} · ${t.money(item.price)}</p>
+<p style="margin:0;color:#8a847b">${escapeHtml(item.product ? t.itemLabel(item.product, item.subject, item.people) + (item.vehicle ? t.withVehicle : "") : item.label)} · ${item.cm} ${t.cm} · ${t.money(item.price)}</p>
 ${button(c.cta, resumeUrl(lead))}
 <p style="margin:18px 0 0">${escapeHtml(c.later)}</p>
 <p style="margin:18px 0 0;font-size:12px;color:#8a847b">${

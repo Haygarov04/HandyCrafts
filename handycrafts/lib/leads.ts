@@ -44,6 +44,7 @@ export type Lead = {
     qty: number;
     price: number;
     preview?: string;
+    vehicle?: boolean;
   }[];
   total: number;
   internalNote?: string;

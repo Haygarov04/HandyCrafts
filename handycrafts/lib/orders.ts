@@ -23,6 +23,8 @@ export type Draft = {
   extras?: string[];
   /** The photo later chat edits keep the likeness from: the latest one the customer added, else `photo`. */
   likeness?: string;
+  /** The preview shows a car or other vehicle, which costs extra (`vehicleExtra`). */
+  vehicle?: boolean;
 };
 
 const DRAFT_TTL = 60 * 60 * 24 * 30;

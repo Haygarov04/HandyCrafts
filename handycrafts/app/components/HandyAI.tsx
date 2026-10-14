@@ -7,7 +7,7 @@ import { trackEvent } from "@/app/components/Analytics";
 import { preparePhoto } from "@/app/components/prepare-photo";
 import type { Lang } from "@/lib/i18n";
 
-type Version = { draftId: string; url: string };
+type Version = { draftId: string; url: string; vehicle?: boolean };
 type Quick = "cart" | "more" | "prev" | `idea:${string}`;
 type Entry =
   | { kind: "bot"; text: string; quick?: Quick[]; checkout?: boolean }
@@ -436,7 +436,7 @@ export default function HandyAI({
         img.src = result.previewUrl;
       });
       setProgress(100);
-      const version = { draftId: result.draftId, url: result.previewUrl };
+      const version = { draftId: result.draftId, url: result.previewUrl, vehicle: Boolean(result.vehicle) };
       const n = versions.length + 1;
       if (typeof result.editsLeft === "number") setEditsLeft(result.editsLeft);
       setEntries((list) => [

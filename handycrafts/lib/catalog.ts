@@ -89,6 +89,9 @@ export function priceFor(product: ProductId, cm: number, people = 1) {
   return factor === 1 ? size.price : Math.round((size.price * factor) / 5) * 5;
 }
 
+/** A car, motorbike or other vehicle in the figurine is sculpted and painted extra, per piece. */
+export const vehicleExtra = Number(process.env.NEXT_PUBLIC_VEHICLE_EXTRA || 20);
+
 export function fromPrice(product: ProductId) {
   return Math.min(...catalog[product].sizes.map((item) => item.price));
 }

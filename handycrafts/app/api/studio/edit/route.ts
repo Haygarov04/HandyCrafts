@@ -7,6 +7,7 @@ import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
 import { incr } from "@/lib/kv";
 import { getDraft, saveDraft } from "@/lib/orders";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
+import { hasVehicle } from "@/lib/vision";
 import { editImage, streamToBuffer, type ImageInput } from "@/lib/xai-image";
 
 export const runtime = "nodejs";
@@ -80,8 +81,11 @@ export async function POST(req: Request) {
     }
 
     const id = randomUUID();
-    const previewRef = await saveFile(`drafts/${id}`, "preview", preview.bytes, preview.contentType);
-    const extraRef = extra ? await saveFile(`drafts/${id}`, "extra", extra.bytes, extra.contentType) : null;
+    const [vehicle, previewRef, extraRef] = await Promise.all([
+      hasVehicle(key, preview),
+      saveFile(`drafts/${id}`, "preview", preview.bytes, preview.contentType),
+      extra ? saveFile(`drafts/${id}`, "extra", extra.bytes, extra.contentType) : Promise.resolve(null),
+    ]);
     await saveDraft({
       ...base,
       id,
@@ -93,8 +97,9 @@ export async function POST(req: Request) {
       edits: [...(base.edits || []), cleanText(ticket.m, 300)].slice(-20),
       extras: extraRef ? [...(base.extras || []), extraRef].slice(-5) : base.extras,
       likeness: extraRef || base.likeness,
+      vehicle: vehicle || undefined,
     });
-    return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}`, editsLeft: Math.max(0, EDIT_LIMIT - (base.edits?.length || 0) - 1) });
+    return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}`, vehicle, editsLeft: Math.max(0, EDIT_LIMIT - (base.edits?.length || 0) - 1) });
   } catch (error) {
     console.error("PREVIEW_EDIT", error);
     return NextResponse.json({ error: tr("Нещо се обърка. Опитай пак.", "Something went wrong. Please try again.") }, { status: 500 });

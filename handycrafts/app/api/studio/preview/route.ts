@@ -7,6 +7,7 @@ import { pullImage, readStoredFile, saveFile, sniffImage } from "@/lib/files";
 import { incr } from "@/lib/kv";
 import { getDraft, saveDraft } from "@/lib/orders";
 import { allow, cleanText } from "@/lib/security";
+import { hasVehicle } from "@/lib/vision";
 import { editImage, streamToBuffer } from "@/lib/xai-image";
 
 export const runtime = "nodejs";
@@ -100,8 +101,13 @@ export async function POST(req: Request) {
     }
 
     const id = randomUUID();
-    if (!photoRef) photoRef = await saveFile(`drafts/${id}`, "photo", photo.bytes, photo.contentType);
-    const previewRef = await saveFile(`drafts/${id}`, "preview", preview.bytes, preview.contentType);
+    // A car or other vehicle in the figurine is charged extra; checked while the files are saved.
+    const [vehicle, savedPhoto, previewRef] = await Promise.all([
+      hasVehicle(key, preview),
+      photoRef ? Promise.resolve(photoRef) : saveFile(`drafts/${id}`, "photo", photo.bytes, photo.contentType),
+      saveFile(`drafts/${id}`, "preview", preview.bytes, preview.contentType),
+    ]);
+    photoRef = savedPhoto;
 
     await saveDraft({
       id,
@@ -115,9 +121,10 @@ export async function POST(req: Request) {
       photo: photoRef,
       preview: previewRef,
       root: previous ? previous.root || previous.id : undefined,
+      vehicle: vehicle || undefined,
     });
 
-    return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}` });
+    return NextResponse.json({ draftId: id, previewUrl: `/api/studio/draft/${id}`, vehicle });
   } catch (error) {
     console.error("PREVIEW", error);
     return NextResponse.json({ error: tr("Нещо се обърка. Опитай пак.", "Something went wrong. Please try again.") }, { status: 500 });

@@ -16,5 +16,6 @@ export const realPieces: RealPiece[] = [
   { result: "/real/man.webp", caption: { bg: "Фигурка на мъж с татуировки, оцветена на ръка", en: "Hand-painted figurine of a man with tattoos" } },
   { result: "/real/sisters.webp", caption: { bg: "Фигурка на сестра и братче", en: "Figurine of a sister and her little brother" } },
   { result: "/real/boy-hat.webp", caption: { bg: "Фигурка на момченце с шапка", en: "Figurine of a little boy in a hat" } },
+  { result: "/real/gd-sport.webp", caption: { bg: "Фигурка на жена с табела за юбилей на клуб", en: "Figurine of a woman holding a club anniversary sign" } },
   { result: "/real/girl-jeans.webp", caption: { bg: "Фигурка на момиче с къдрава коса", en: "Figurine of a girl with curly hair" } },
 ];

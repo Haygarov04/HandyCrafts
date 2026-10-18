@@ -40,8 +40,8 @@ function sellerLines(lang: Lang) {
   ];
 }
 
-/** Google Analytics / Ads are on only when their IDs are configured. */
-const tracking = Boolean(process.env.NEXT_PUBLIC_GA_ID || process.env.NEXT_PUBLIC_GOOGLE_ADS_ID);
+/** Google Analytics / Ads and the Meta Pixel; the pixel is on unless its ID is set to empty. */
+const tracking = Boolean(process.env.NEXT_PUBLIC_GA_ID || process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || (process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "1426817696297029"));
 
 const days = { bg: "7–12 работни дни", en: "7–12 working days" };
 
@@ -186,7 +186,7 @@ function bg(id: LegalId): LegalDoc {
               ...(tracking
                 ? [
                     "Количката и напредъкът в създаването на фигурка се пазят в паметта на браузъра ти (localStorage и IndexedDB). При вход в панела за поръчки се използва една необходима бисквитка за сесия.",
-                    "Ако натиснеш „Приемам“ в банера, използваме Google Analytics и Google Ads (Google Ireland Ltd.), за да измерваме посещенията и кои реклами водят до поръчки. Без съгласие тези бисквитки не се записват. Можеш да промениш избора си, като изтриеш данните на сайта от браузъра — банерът ще се покаже отново.",
+                    "Ако натиснеш „Приемам“ в банера, използваме Google Analytics и Google Ads (Google Ireland Ltd.) и Meta Pixel (Meta Platforms Ireland Ltd. — Facebook и Instagram), за да измерваме посещенията и кои реклами водят до поръчки. Без съгласие тези бисквитки не се записват. Можеш да промениш избора си, като изтриеш данните на сайта от браузъра — банерът ще се покаже отново.",
                   ]
                 : [
                     "Сайтът не използва рекламни или проследяващи бисквитки. Количката се пази в паметта на браузъра ти (localStorage), а при вход в панела за поръчки се използва една необходима бисквитка за сесия. Затова не показваме банер за бисквитки.",
@@ -420,7 +420,7 @@ function en(id: LegalId): LegalDoc {
               ...(tracking
                 ? [
                     "Your cart and your progress in the studio are stored in your browser (localStorage and IndexedDB). One necessary session cookie is used when logging in to the order panel.",
-                    "If you click \"Accept\" in the banner, we use Google Analytics and Google Ads (Google Ireland Ltd.) to measure visits and which ads lead to orders. Without consent these cookies are not set. You can change your choice by clearing the site's data in your browser — the banner will appear again.",
+                    "If you click \"Accept\" in the banner, we use Google Analytics and Google Ads (Google Ireland Ltd.) and the Meta Pixel (Meta Platforms Ireland Ltd. — Facebook and Instagram) to measure visits and which ads lead to orders. Without consent these cookies are not set. You can change your choice by clearing the site's data in your browser — the banner will appear again.",
                   ]
                 : [
                     "The site uses no advertising or tracking cookies. Your cart is stored in your browser (localStorage), and one necessary session cookie is used when logging in to the order panel. That's why there is no cookie banner.",

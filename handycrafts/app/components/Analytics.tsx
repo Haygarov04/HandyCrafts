@@ -63,6 +63,8 @@ export function trackEvent(name: string, params: Record<string, unknown> = {}) {
 export default function Analytics() {
   const { lang, href } = useLang();
   const [ask, setAsk] = useState(false);
+  // Height of a fixed bar at the bottom of the page (the studio's), so the strip never covers it.
+  const [lift, setLift] = useState(0);
   const pathname = usePathname();
   const firstPage = useRef(true);
 
@@ -86,6 +88,18 @@ export default function Analytics() {
     const timer = window.setTimeout(() => setAsk(true), 1200);
     return () => window.clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!ask) return;
+    const measure = () => setLift(document.getElementById("studio-bar")?.offsetHeight || 0);
+    measure();
+    const timer = window.setInterval(measure, 800);
+    window.addEventListener("resize", measure);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("resize", measure);
+    };
+  }, [ask, pathname]);
 
   if (!trackingEnabled) return null;
 
@@ -132,20 +146,25 @@ ${configs}`}
       {hasGoogle ? <Script src={`https://www.googletagmanager.com/gtag/js?id=${first}`} strategy="afterInteractive" /> : null}
 
       {ask ? (
-        <div className="fixed inset-x-3 bottom-3 z-[70] mx-auto max-w-md rounded-2xl border border-ink/10 bg-white p-4 shadow-[0_20px_50px_rgba(22,21,19,0.2)] sm:left-auto sm:right-5 sm:bottom-5">
-          <p className="text-sm leading-6 text-ink/75">
-            {lang === "en"
-              ? "We use cookies from Google and Meta (Facebook, Instagram) to see which ads bring visitors and to improve the site. "
-              : "Използваме бисквитки на Google и Meta (Facebook, Instagram), за да виждаме кои реклами водят посетители и да подобряваме сайта. "}
-            <Link href={href("/poveritelnost")} className="font-semibold underline decoration-ember underline-offset-4">
-              {lang === "en" ? "Privacy" : "Поверителност"}
+        // A slim strip at the bottom that never blocks the page; it sits above the studio's bottom bar.
+        <div
+          role="region"
+          aria-label={lang === "en" ? "Cookies" : "Бисквитки"}
+          className="pointer-events-none fixed inset-x-0 z-[70] flex justify-center px-3"
+          style={{ bottom: `calc(${lift}px + 0.75rem + env(safe-area-inset-bottom))` }}
+        >
+          <div className="hc-pop pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-full border border-ink/10 bg-white/95 py-2 pl-4 pr-2 shadow-[0_12px_32px_rgba(22,21,19,0.14)] backdrop-blur">
+            <Link
+              href={href("/poveritelnost")}
+              className="flex min-w-0 flex-1 items-center gap-2 whitespace-nowrap text-[13px] text-ink/70 hover:text-ink"
+            >
+              <span aria-hidden className="text-lg leading-none">🍪</span>
+              {lang === "en" ? "We use cookies" : "Използваме бисквитки"}
             </Link>
-          </p>
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            <button type="button" onClick={() => answer(false)} className="rounded-xl border border-ink/15 px-4 py-2.5 text-sm font-semibold">
-              {lang === "en" ? "Decline" : "Отказвам"}
+            <button type="button" onClick={() => answer(false)} className="shrink-0 rounded-full px-3 py-2 text-[13px] font-semibold text-ink/55 transition hover:text-ink">
+              {lang === "en" ? "No" : "Не"}
             </button>
-            <button type="button" onClick={() => answer(true)} className="rounded-xl bg-ink px-4 py-2.5 text-sm font-semibold text-paper">
+            <button type="button" onClick={() => answer(true)} className="shrink-0 rounded-full bg-ink px-4 py-2 text-[13px] font-semibold text-paper transition hover:bg-ink/85">
               {lang === "en" ? "Accept" : "Приемам"}
             </button>
           </div>

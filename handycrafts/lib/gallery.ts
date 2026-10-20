@@ -18,4 +18,11 @@ export const realPieces: RealPiece[] = [
   { result: "/real/boy-hat.webp", caption: { bg: "Фигурка на момченце с шапка", en: "Figurine of a little boy in a hat" } },
   { result: "/real/gd-sport.webp", caption: { bg: "Фигурка на жена с табела за юбилей на клуб", en: "Figurine of a woman holding a club anniversary sign" } },
   { result: "/real/girl-jeans.webp", caption: { bg: "Фигурка на момиче с къдрава коса", en: "Figurine of a girl with curly hair" } },
+  { result: "/real/woman-green.webp", caption: { bg: "Фигурка на жена със зелен гащеризон", en: "Figurine of a woman in a green jumpsuit" } },
+  { result: "/real/girl-waving.webp", caption: { bg: "Фигурка на момиченце с розова рокля, което маха", en: "Figurine of a little girl in a pink dress waving" } },
+  { result: "/real/couple-30.webp", caption: { bg: "Фигурка на двойка с табела за 30 години заедно", en: "Figurine of a couple with a 30 years together sign" } },
+  { result: "/real/girl-blue.webp", caption: { bg: "Фигурка на момиче с дънков гащеризон", en: "Figurine of a girl in denim overalls" } },
+  { result: "/real/girl-skirt.webp", caption: { bg: "Фигурка на момиче с пола на точки", en: "Figurine of a girl in a polka dot skirt" } },
+  { result: "/real/woman-black.webp", caption: { bg: "Фигурка на жена с черно яке и дънки", en: "Figurine of a woman in a black jacket and jeans" } },
+  { result: "/real/sister-yana.webp", caption: { bg: "Фигурка на жена с табела за сестра", en: "Figurine of a woman holding a sign for her sister" } },
 ];

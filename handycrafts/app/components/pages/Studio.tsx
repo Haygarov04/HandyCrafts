@@ -357,19 +357,22 @@ export default function StudioPage() {
                 </button>
               ))}
             </div>
-            <div className={`mt-8 grid gap-3 sm:gap-4 ${["grid-cols-1", "grid-cols-2", "grid-cols-3"][productsFor(subject).length - 1]}`}>
-              {productsFor(subject).map((id) => (
+            {/* Two products side by side; a lone one, or a third (the pet kit), runs across the whole row. */}
+            <div className={`mt-8 grid gap-3 sm:gap-4 ${productsFor(subject).length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
+              {productsFor(subject).map((id, index, offered) => {
+                const wide = offered.length === 1 || (offered.length === 3 && index === 2);
+                return (
                 <button
                   key={id}
                   type="button"
                   onClick={() => chooseProduct(id)}
-                  className={`overflow-hidden rounded-[1.8rem] border-2 bg-white text-left transition ${productsFor(subject).length > 1 ? "" : "flex items-center"} ${
+                  className={`overflow-hidden rounded-[1.8rem] border-2 bg-white text-left transition ${wide ? "col-span-full flex items-center" : ""} ${
                     product === id ? "border-ember shadow-[0_16px_40px_rgba(255,122,0,0.18)]" : "border-transparent hover:border-ink/15"
                   }`}
                 >
-                  <span className={`relative block overflow-hidden bg-sand ${productsFor(subject).length > 1 ? "aspect-[9/16]" : "aspect-[3/4] w-36 shrink-0 self-stretch sm:w-48"}`}>
+                  <span className={`relative block overflow-hidden bg-sand ${wide ? "aspect-[3/4] w-36 shrink-0 self-stretch sm:w-48" : "aspect-[9/16]"}`}>
                     <Image
-                      src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : id === "kit" ? (subject === "pet" ? "/shop/kit-pet.webp" : `/shop/kit-${Math.min(people, kitImages)}.webp`) : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
+                      src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : id === "kit" ? (subject === "pet" ? "/shop/kit-dog.webp" : `/shop/kit-${Math.min(people, kitImages)}.webp`) : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
                       alt=""
                       fill
                       style={{ objectPosition: subject === "pet" ? "40% 50%" : "50% 50%" }}
@@ -379,12 +382,13 @@ export default function StudioPage() {
                     <VisualTag label={t.visual} className="left-2 top-2" />
                   </span>
                   <span className="block min-w-0 p-3.5 sm:p-5">
-                    <span className={`block font-bold sm:font-display sm:text-xl sm:font-medium ${productsFor(subject).length > 2 ? "text-sm leading-tight" : "truncate text-base"}`}>{t.product[id].label}</span>
+                    <span className="block truncate text-base font-bold sm:font-display sm:text-xl sm:font-medium">{t.product[id].label}</span>
                     <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1, subject) ?? 0)}</span>
-                    <span className={`mt-1 text-sm text-ink/60 ${productsFor(subject).length > 1 ? "hidden sm:block" : "block"}`}>{t.product[id].short}</span>
+                    <span className={`mt-1 text-sm text-ink/60 ${wide ? "block" : "hidden sm:block"}`}>{t.product[id].short}</span>
                   </span>
                 </button>
-              ))}
+                );
+              })}
             </div>
             {subject === "person" ? (
               <div className="mt-8">

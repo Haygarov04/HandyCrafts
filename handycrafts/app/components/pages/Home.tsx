@@ -293,7 +293,7 @@ export default function Home({ lang }: { lang: Lang }) {
                 />
               </span>
               <span className="grid grid-cols-3 gap-px bg-ink">
-                {["/shop/kit-1.webp", "/shop/kit-3.webp", "/shop/kit-pet.webp"].map((src) => (
+                {["/shop/kit-1.webp", "/shop/kit-3.webp", "/shop/kit-dog.webp"].map((src) => (
                   <span key={src} className="relative block aspect-square overflow-hidden bg-sand">
                     <Image src={src} alt="" fill className="object-cover" sizes="(min-width: 768px) 17vw, 33vw" />
                   </span>

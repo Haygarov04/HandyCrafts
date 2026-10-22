@@ -21,14 +21,15 @@ export const catalog = {
       { cm: 10, price: 40, group: { 2: 40, 3: 40 } },
     ],
   },
-  // The same figurine sent unpainted, white with primer, with little pots of paint and brushes to paint it at home.
+  // The same figurine sent unpainted, white with primer, with a strip of six pots filled with its own colours,
+  // two brushes and a printed colour guide, to paint it at home.
   kit: {
     label: "Оцвети сам",
     short: "Бяла фигурка с бои и четки",
-    line: "Фигурката идва бяла, грундирана, с бои и четки. Оцветяваш я сам или с детето.",
+    line: "Фигурката идва бяла, грундирана, с нейните бои, две четки и шаблон за оцветяване. Оцветяваш я сам или с детето.",
     sizes: [
-      { cm: 14, price: 30, group: { 2: 40, 3: 60 } },
-      { cm: 17, price: 40, group: { 2: 50, 3: 60 } },
+      { cm: 17, price: 30, group: { 2: 40, 3: 50 } },
+      { cm: 20, price: 35, group: { 2: 45, 3: 55 } },
     ],
   },
 } as const;

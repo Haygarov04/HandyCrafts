@@ -164,8 +164,8 @@ const bg = {
     kit: {
       badge: "Ново",
       title: ["Оцвети", "сам"],
-      text: "Същата фигурка по твоя снимка, но идва бяла, грундирана и готова за боя. В кутията има бои и четки — оцветяваш я сам, с детето или с половинката.",
-      points: ["Персонализирана по твоя снимка", "Бяла фигурка, 14 или 17 см, грундирана", "Бои и четки в комплекта"],
+      text: "Същата фигурка по твоя снимка, но идва бяла, грундирана и готова за боя. В кутията има нейните бои, две четки и шаблон кое с какъв цвят е — оцветяваш я сам, с детето или с половинката.",
+      points: ["Персонализирана по твоя снимка", "Бяла, грундирана, 17 или 20 см", "Нейните бои, 2 четки и шаблон за оцветяване"],
       price: (kit: string, painted: string) => `${kit} вместо ${painted} за оцветена`,
       cta: "Направи своя комплект",
       alt: "Бяла неоцветена фигурка по снимка с бои и четки",
@@ -509,8 +509,8 @@ const en: Dict = {
     kit: {
       badge: "New",
       title: ["Paint it", "yourself"],
-      text: "The same figurine from your photo, but it arrives white, primed and ready for paint. Paints and brushes are in the box — paint it yourself, with your kids or with your partner.",
-      points: ["Made from your photo", "White 14 or 17 cm figurine, primed", "Paints and brushes included"],
+      text: "The same figurine from your photo, but it arrives white, primed and ready for paint. The box has its own paints, two brushes and a guide to which colour goes where — paint it yourself, with your kids or with your partner.",
+      points: ["Made from your photo", "White and primed, 17 or 20 cm", "Its own paints, 2 brushes and a colour guide"],
       price: (kit: string, painted: string) => `${kit} instead of ${painted} painted`,
       cta: "Make your kit",
       alt: "Unpainted white figurine from a photo with paints and brushes",

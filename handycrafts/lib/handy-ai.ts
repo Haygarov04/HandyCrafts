@@ -56,7 +56,7 @@ function facts(lang: Lang) {
   return [
     "HandyCrafts is a small workshop in Ruse, Bulgaria that makes hand-painted 3D printed figurines from a customer's photo, and keychains of pets only (no keychains of people).",
     `Figurines (14, 17 and 20 cm): ${f}. Pet keychains: 6 cm €30, 10 cm €40.`,
-    `"Paint it yourself" kit: the same personalised figurine, sent unpainted in white primer with small pots of acrylic paint and brushes, for the customer (or their child) to paint at home: ${catalog.kit.sizes.map((s) => `${s.cm} cm €${s.price} (2 people €${s.group[2]}, 3 people €${s.group[3]})`).join("; ")}.`,
+    `"Paint it yourself" kit: the same personalised figurine, sent white in primer with a strip of six pots filled with its own paint colours, two brushes and a printed colour guide, for the customer (or their child) to paint at home: ${catalog.kit.sizes.map((s) => `${s.cm} cm €${s.price} (2 people €${s.group[2]}, 3 people €${s.group[3]})`).join("; ")}.`,
     "A car, motorbike or other vehicle in the figurine is made and charged extra; the price for it is agreed when we call to confirm the order. A figurine with a vehicle has no round base. The customer can ask to remove the vehicle.",
     "Made in 7–12 working days. Delivered across Bulgaria by Econt or Speedy at the courier's rate. Cash on delivery: the customer pays only when the parcel arrives and can check it in front of the courier.",
     "The preview is a guide: the real figurine is finished by hand from it, so small details can also be written in the order note.",
@@ -69,7 +69,7 @@ function systemPrompt(input: { lang: Lang; product: ProductId; subject: SubjectI
   return [
     "You are Handy AI, the friendly assistant inside the HandyCrafts studio. The customer is looking at an AI preview of their custom figurine and chats with you to change it or ask questions.",
     facts(input.lang),
-    `Their item: ${({ figurine: "figurine", keychain: "keychain", kit: "paint-it-yourself figurine, shown unpainted in white primer (colour changes cannot be shown, they paint it themselves)" })[input.product]} of a ${input.subject === "pet" ? "pet" : "person"}. Changes left in this chat: ${input.editsLeft}.`,
+    `Their item: ${({ figurine: "figurine", keychain: "keychain", kit: "paint-it-yourself figurine (sent white with its paints, brushes and a colour guide; the preview shows it painted, as it will look from the guide, so colour changes are fine)" })[input.product]} of a ${input.subject === "pet" ? "pet" : "person"}. Changes left in this chat: ${input.editsLeft}.`,
     input.hasPhoto ? "The customer attached an extra photo with this message." : "",
     "Decide one action:",
     '- "edit": they ask for a visual change to the figurine (hair, face details, glasses, clothes, colours, pose, accessories, adding someone from the attached photo, etc.). Write "instruction": one clear English sentence describing only that visual change, max 40 words. Logos, names, numbers and prints on clothes, balls or other items are fine (e.g. a club crest, a brand logo, a name on a shirt) — describe them exactly. Name exactly who each change is for (e.g. "the man", "the girl on the left") and keep every detail they asked for (taller, slimmer, which face goes on whom). If they say the faces do not look like the real people, the instruction is to resculpt every face faithfully from the original photo — same face shape, nose, eyes, eyebrows, lips, hair and age. Never make the figurine look like a famous person.',

@@ -3,12 +3,13 @@ import type { ProductId, SubjectId } from "@/lib/catalog";
 const kinds: Record<ProductId, string> = {
   figurine: "collectible resin figurine standing on a low plain round base",
   keychain: "small chunky keychain figurine with a large head and a metal ring attached to the top",
-  kit: "unpainted collectible resin figurine, sprayed all over in plain matte white primer, standing on a low plain round base",
+  kit: "collectible resin figurine standing on a low plain round base",
 };
 
-// The paint-it-yourself kit: the same figurine, but sent white, so the preview must show it unpainted.
-const unpainted =
-  "It is NOT painted: the whole figurine, base included, is one uniform matte white primer color — no skin tones, no colored clothes, hair or eyes, no printed logos. All the detail (face, hair, folds of the clothes, shoes, logos as relief) is sculpted, so the person is recognisable from the shapes alone. Next to the base stand three or four tiny open pots of acrylic paint in bright colors and two small paintbrushes.";
+// The paint-it-yourself kit: the preview shows the figurine painted, as it will look once they paint it from the
+// colour guide, with the kit's strip of paint pots and two brushes next to it.
+const paintKit =
+  "Next to the base lies a strip of six small clear plastic paint pots with hinged lids, joined in a row, open and filled with the figurine's own colours (skin, hair, each piece of clothing, shoes), and two thin paintbrushes.";
 
 const framing =
   "Framing: square image, the figurine centered and filling most of the frame, soft warm studio light, plain cream seamless background, gentle contact shadow. No watermark and no text or logo floating on the image itself; logos, names and prints on the clothes or items are fine.";
@@ -29,10 +30,9 @@ const fullBody = "Full body from the top of the head to the shoes, both feet res
 const vehicle =
   "If the person is posing with a car, motorbike or other vehicle and it is part of the figurine, sculpt the vehicle as part of the same piece and use no round base, podium or pedestal at all: the vehicle and the person stand directly on the plain surface.";
 
-/** A kit's prompt is the figurine's one without any paint, and the pots of paint added. */
+/** A kit's prompt is the figurine's one with its paint pots and brushes added. */
 function forKit(product: ProductId, prompt: string) {
-  if (product !== "kit") return prompt;
-  return `${prompt.replaceAll("hand-painted ", "").replace("sculpted forms and painted details", "sculpted forms and details")} ${unpainted}`;
+  return product === "kit" ? `${prompt} ${paintKit}` : prompt;
 }
 
 type FigurineInput = {

@@ -26,6 +26,9 @@ import {
   type SubjectId,
 } from "@/lib/catalog";
 
+/** Pictures of the kit for one person, two… (`/shop/kit-1.webp`, …); more people show the last one. */
+const kitImages = 2;
+
 /** Shared with checkout, so an email left here and the details typed there end up as one unfinished order. */
 const LEAD_KEY = "hc_lead_id";
 
@@ -365,7 +368,7 @@ export default function StudioPage() {
                 >
                   <span className={`relative block overflow-hidden bg-sand ${productsFor(subject).length > 1 ? "aspect-[9/16]" : "aspect-[3/4] w-36 shrink-0 self-stretch sm:w-48"}`}>
                     <Image
-                      src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : id === "kit" ? "/shop/kit.webp" : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
+                      src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : id === "kit" ? `/shop/kit-${subject === "person" ? Math.min(people, kitImages) : 1}.webp` : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
                       alt=""
                       fill
                       style={{ objectPosition: subject === "pet" ? "40% 50%" : "50% 50%" }}

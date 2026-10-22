@@ -283,7 +283,7 @@ export default function Home({ lang }: { lang: Lang }) {
           >
             <span className="relative block aspect-square overflow-hidden bg-sand">
               <Image
-                src="/shop/kit.webp"
+                src="/shop/kit-2.webp"
                 alt={h.kit.alt}
                 fill
                 className="object-cover transition duration-700 group-hover:scale-[1.04]"

@@ -71,9 +71,16 @@ const bg = {
   visual: "Визуализация",
   /** Marks photos of real finished pieces. */
   realPieces: "Истински фигурки от нас",
+  /** What comes in the paint-it-yourself box. */
+  kitIncludes: [
+    { title: "Фигурката", text: "Бяла, грундирана, готова за боя" },
+    { title: "6 бои", text: "Точно в нейните цветове" },
+    { title: "2 четки", text: "Тънка за лицето, по-дебела за дрехите" },
+    { title: "Шаблон", text: "Кое с какъв цвят е" },
+  ],
   money: (value: number) => `${value} €`,
   itemLabel: (product: ProductId, subject: SubjectId = "person", people = 1) =>
-    ({ figurine: "Фигурка", keychain: "Ключодържател", kit: "Оцвети сам · фигурка" })[product] +
+    ({ figurine: "Фигурка", keychain: "Ключодържател", kit: "Оцвети сам · неоцветена фигурка" })[product] +
     (people > 1 ? ` на ${people} души` : subject === "pet" ? " на любимец" : ""),
   product: {
     figurine: { label: "Фигурка", short: "Цяла фигура върху основа" },
@@ -162,13 +169,13 @@ const bg = {
       { title: "Двойки и семейства", text: "До трима души на една основа — на по-ниска цена от отделни фигурки." },
     ],
     kit: {
-      badge: "Ново",
-      title: ["Оцвети", "сам"],
-      text: "Същата фигурка по твоя снимка, но идва бяла, грундирана и готова за боя. В кутията има нейните бои, две четки и шаблон кое с какъв цвят е — оцветяваш я сам, с детето или с половинката.",
-      points: ["Персонализирана по твоя снимка", "Бяла, грундирана, 17 или 20 см", "Нейните бои, 2 четки и шаблон за оцветяване"],
-      price: (kit: string, painted: string) => `${kit} вместо ${painted} за оцветена`,
+      badge: "Ново · Оцвети сам",
+      title: ["Подарете си", "време заедно"],
+      text: "Фигурка по ваша снимка, която оцветявате сами — с детето, с половинката или с цялото семейство. Получавате я бяла и грундирана, с нейните бои, четки и шаблон. На снимката до нея виждате как ще изглежда, когато я завършите.",
+      boxTitle: "В кутията",
+      price: "от 30 € за хора · от 20 € за любимец",
       cta: "Направи своя комплект",
-      alt: "Бяла неоцветена фигурка по снимка с бои и четки",
+      alt: "Бяла фигурка за оцветяване по снимка с бои, четки и шаблон",
     },
     sizeTitle: "Колко голяма е?",
     sizeKeychain: "ключодържател на любимец",
@@ -273,6 +280,9 @@ const bg = {
     aboutMinute: "Около минута",
     noPreview: "Няма визуализация.",
     previewBadge: "AI визуализация",
+    kitBadge: "Така ще изглежда, когато я оцветиш",
+    kitPreview: "Поръчваш я неоцветена: получаваш я бяла и грундирана, с всичко нужно, за да я оцветиш сам. Визуализацията показва как ще изглежда накрая — по нея правим шаблона и подбираме боите.",
+    kitBoxTitle: "Какво получаваш",
     previewNotReal: "Това е компютърна визуализация, а не снимка на готовата фигурка. Фигурката се изработва и оцветява на ръка по нея, затова детайлите и цветовете може леко да се различават.",
     previewSeeReal: "Виж снимки на истински готови фигурки",
     vehicleNote: "Във фигурката има кола — тя се таксува допълнително. Ще се свържем с вас за цената, преди да започнем.",
@@ -414,6 +424,12 @@ const en: Dict = {
   from: "from",
   visual: "Preview",
   realPieces: "Real figurines we made",
+  kitIncludes: [
+    { title: "The figurine", text: "White, primed, ready for paint" },
+    { title: "6 paints", text: "In its very own colours" },
+    { title: "2 brushes", text: "A fine one for the face, a wider one for clothes" },
+    { title: "Colour guide", text: "Which colour goes where" },
+  ],
   money: (value: number) => `€${value}`,
   itemLabel: (product, subject = "person", people = 1) =>
     people > 1
@@ -507,13 +523,13 @@ const en: Dict = {
       { title: "Couples and families", text: "Up to three people on one base — for less than separate figurines." },
     ],
     kit: {
-      badge: "New",
-      title: ["Paint it", "yourself"],
-      text: "The same figurine from your photo, but it arrives white, primed and ready for paint. The box has its own paints, two brushes and a guide to which colour goes where — paint it yourself, with your kids or with your partner.",
-      points: ["Made from your photo", "White and primed, 17 or 20 cm", "Its own paints, 2 brushes and a colour guide"],
-      price: (kit: string, painted: string) => `${kit} instead of ${painted} painted`,
+      badge: "New · Paint it yourself",
+      title: ["Give yourselves", "time together"],
+      text: "A figurine from your photo that you paint yourselves — with your kids, your partner or the whole family. It arrives white and primed, with its own paints, brushes and a colour guide. The card next to it shows how it will look once you finish.",
+      boxTitle: "In the box",
+      price: "from €30 for people · from €20 for a pet",
       cta: "Make your kit",
-      alt: "Unpainted white figurine from a photo with paints and brushes",
+      alt: "White figurine to paint, made from a photo, with paints, brushes and a colour guide",
     },
     sizeTitle: "How big is it?",
     sizeKeychain: "pet keychain",
@@ -618,6 +634,9 @@ const en: Dict = {
     aboutMinute: "About a minute",
     noPreview: "No preview yet.",
     previewBadge: "AI preview",
+    kitBadge: "How it will look once you paint it",
+    kitPreview: "You order it unpainted: it arrives white and primed, with everything you need to paint it yourself. The preview shows how it will look in the end — we make the colour guide and pick the paints from it.",
+    kitBoxTitle: "What you get",
     previewNotReal: "This is a computer-made preview, not a photo of the finished figurine. It is made and painted by hand from it, so details and colours may differ slightly.",
     previewSeeReal: "See photos of real finished figurines",
     vehicleNote: "The figurine includes a car — it is charged extra. We'll contact you about the price before we start.",

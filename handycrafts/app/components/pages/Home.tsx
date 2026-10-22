@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import FaqList from "../FaqList";
 import VisualTag from "../VisualTag";
+import KitBox from "../KitBox";
 import JsonLd from "../JsonLd";
 import NewsletterBox from "../NewsletterBox";
 import ReviewsSection from "../ReviewsSection";
-import { catalog, fromPrice, priceFor } from "@/lib/catalog";
+import { catalog, fromPrice } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
 import { realPieces } from "@/lib/gallery";
@@ -276,19 +277,28 @@ export default function Home({ lang }: { lang: Lang }) {
             ))}
           </div>
 
-          {/* The paint-it-yourself kit: the same figurine, sent white with paints and brushes. */}
+          {/* The paint-it-yourself kit: the same figurine, sent white with its paints, brushes and a colour guide. */}
           <Link
             href={href("/studio?product=kit")}
             className="lift-card group mt-8 grid overflow-hidden rounded-[1.6rem] bg-ink text-paper md:grid-cols-2"
           >
-            <span className="relative block aspect-square overflow-hidden bg-sand">
-              <Image
-                src="/shop/kit-2.webp"
-                alt={h.kit.alt}
-                fill
-                className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                sizes="(min-width: 768px) 50vw, 100vw"
-              />
+            <span className="block">
+              <span className="relative block aspect-square overflow-hidden bg-sand">
+                <Image
+                  src="/shop/kit-2.webp"
+                  alt={h.kit.alt}
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                />
+              </span>
+              <span className="grid grid-cols-3 gap-px bg-ink">
+                {["/shop/kit-1.webp", "/shop/kit-3.webp", "/shop/kit-pet.webp"].map((src) => (
+                  <span key={src} className="relative block aspect-square overflow-hidden bg-sand">
+                    <Image src={src} alt="" fill className="object-cover" sizes="(min-width: 768px) 17vw, 33vw" />
+                  </span>
+                ))}
+              </span>
             </span>
             <span className="flex flex-col justify-center p-6 sm:p-10">
               <span className="w-fit rounded-full bg-ember px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink">{h.kit.badge}</span>
@@ -296,17 +306,11 @@ export default function Home({ lang }: { lang: Lang }) {
                 {h.kit.title[0]} <span className="text-ember">{h.kit.title[1]}</span>
               </span>
               <span className="mt-4 block text-[15px] leading-7 text-paper/75 sm:text-lg">{h.kit.text}</span>
-              <span className="mt-5 grid gap-2">
-                {h.kit.points.map((point) => (
-                  <span key={point} className="flex items-center gap-2.5 text-[15px]">
-                    <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-ember text-[11px] font-bold text-ink">✓</span>
-                    {point}
-                  </span>
-                ))}
-              </span>
-              <span className="mt-6 block text-paper/70">
-                {h.kit.price(t.money(fromPrice("kit")), t.money(priceFor("figurine", catalog.kit.sizes[0].cm) ?? 0))}
-              </span>
+              <span className="mt-6 block text-xs font-bold uppercase tracking-wider text-paper/50">{h.kit.boxTitle}</span>
+              <div className="mt-3">
+                <KitBox items={t.kitIncludes} dark />
+              </div>
+              <span className="mt-6 block font-display text-xl">{h.kit.price}</span>
               <span className="mt-4 inline-flex w-fit items-center gap-2 rounded-xl bg-ember px-6 py-3.5 font-extrabold text-ink transition group-hover:bg-ember-deep">
                 {h.kit.cta} →
               </span>

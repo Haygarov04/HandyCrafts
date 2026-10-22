@@ -9,6 +9,7 @@ import HandyAI from "@/app/components/HandyAI";
 import { useCart } from "@/app/components/cart";
 import { useLang } from "@/app/components/lang";
 import VisualTag from "@/app/components/VisualTag";
+import KitBox from "@/app/components/KitBox";
 import { INPUT_MAX, preparePhoto } from "@/app/components/prepare-photo";
 import { loadPhoto, loadState, savePhoto, saveState } from "@/app/components/studio-store";
 import {
@@ -414,6 +415,14 @@ export default function StudioPage() {
               </div>
             ) : null}
             <SizePicker product={product} subject={subject} people={people} cm={cm} onChange={setCm} label={s.size} unit={t.cm} money={t.money} />
+            {product === "kit" ? (
+              <div className="mt-8">
+                <p className="text-sm font-semibold">{s.kitBoxTitle}</p>
+                <div className="mt-3">
+                  <KitBox items={t.kitIncludes} />
+                </div>
+              </div>
+            ) : null}
           </section>
         ) : null}
 
@@ -532,7 +541,7 @@ export default function StudioPage() {
                 <>
                   <img src={preview.url} alt={s.previewAlt} className="h-full w-full object-cover" />
                   <span className="absolute left-3 top-3 rounded-full bg-ink/75 px-3 py-1 text-xs font-semibold text-paper backdrop-blur">
-                    {s.previewBadge}
+                    {preview.product === "kit" ? s.kitBadge : s.previewBadge}
                   </span>
                 </>
               ) : (
@@ -559,11 +568,16 @@ export default function StudioPage() {
                   <path d="M12 16v-4M12 8h.01" />
                 </svg>
                 <p>
-                  {s.previewNotReal}{" "}
+                  {preview.product === "kit" ? s.kitPreview : s.previewNotReal}{" "}
                   <a href={href("/#real")} target="_blank" rel="noreferrer" className="font-semibold text-ink underline decoration-ember underline-offset-4">
                     {s.previewSeeReal} →
                   </a>
                 </p>
+              </div>
+            ) : null}
+            {preview && !busy && preview.product === "kit" ? (
+              <div className="mx-auto mt-3 max-w-lg">
+                <KitBox items={t.kitIncludes} />
               </div>
             ) : null}
             {preview && !busy && preview.vehicle ? (

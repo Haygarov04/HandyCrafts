@@ -79,7 +79,7 @@ export async function POST(req: Request) {
       const cm = currentCm(draft.product, Number(entry.cm) || draft.cm);
       const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
       // A car in the figurine is priced separately: the workshop calls to agree it.
-      const price = isOffered(draft.product, draft.subject || "person") ? priceFor(draft.product, cm, people) : null;
+      const price = isOffered(draft.product, draft.subject || "person") ? priceFor(draft.product, cm, people, draft.subject) : null;
       if (price === null) {
         return NextResponse.json(
           { error: tr("Един от продуктите в количката вече не се предлага. Махни го и направи нова фигурка.", "One of the items in your cart is no longer offered. Remove it and make a new figurine.") },

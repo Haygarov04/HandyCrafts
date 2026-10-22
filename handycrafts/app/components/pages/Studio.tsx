@@ -27,7 +27,7 @@ import {
 } from "@/lib/catalog";
 
 /** Pictures of the kit for one person, two… (`/shop/kit-1.webp`, …); more people show the last one. */
-const kitImages = 2;
+const kitImages = 3;
 
 /** Shared with checkout, so an email left here and the details typed there end up as one unfinished order. */
 const LEAD_KEY = "hc_lead_id";
@@ -142,7 +142,7 @@ export default function StudioPage() {
 
   // Only person figurines can have more than one person; other choices fall back to one.
   const people = normalizePeople(product, subject, peopleChoice);
-  const price = priceFor(product, cm, people) ?? 0;
+  const price = priceFor(product, cm, people, subject) ?? 0;
 
   function choosePeople(n: number) {
     setPeopleChoice(n);
@@ -368,7 +368,7 @@ export default function StudioPage() {
                 >
                   <span className={`relative block overflow-hidden bg-sand ${productsFor(subject).length > 1 ? "aspect-[9/16]" : "aspect-[3/4] w-36 shrink-0 self-stretch sm:w-48"}`}>
                     <Image
-                      src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : id === "kit" ? `/shop/kit-${subject === "person" ? Math.min(people, kitImages) : 1}.webp` : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
+                      src={id === "figurine" && subject === "person" ? `/shop/people-${people}.webp` : id === "kit" ? (subject === "pet" ? "/shop/kit-pet.webp" : `/shop/kit-${Math.min(people, kitImages)}.webp`) : `/shop/${subject === "pet" ? "pet-" : ""}${id}.webp`}
                       alt=""
                       fill
                       style={{ objectPosition: subject === "pet" ? "40% 50%" : "50% 50%" }}
@@ -379,7 +379,7 @@ export default function StudioPage() {
                   </span>
                   <span className="block min-w-0 p-3.5 sm:p-5">
                     <span className={`block font-bold sm:font-display sm:text-xl sm:font-medium ${productsFor(subject).length > 2 ? "text-sm leading-tight" : "truncate text-base"}`}>{t.product[id].label}</span>
-                    <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1) ?? 0)}</span>
+                    <span className="mt-0.5 block text-sm text-ink/55">{t.from} {t.money(priceFor(id, catalog[id].sizes[0].cm, subject === "person" ? people : 1, subject) ?? 0)}</span>
                     <span className={`mt-1 text-sm text-ink/60 ${productsFor(subject).length > 1 ? "hidden sm:block" : "block"}`}>{t.product[id].short}</span>
                   </span>
                 </button>
@@ -413,7 +413,7 @@ export default function StudioPage() {
                 </div>
               </div>
             ) : null}
-            <SizePicker product={product} people={people} cm={cm} onChange={setCm} label={s.size} unit={t.cm} money={t.money} />
+            <SizePicker product={product} subject={subject} people={people} cm={cm} onChange={setCm} label={s.size} unit={t.cm} money={t.money} />
           </section>
         ) : null}
 
@@ -635,7 +635,7 @@ export default function StudioPage() {
             {!busy ? (
               <div className="mx-auto mt-6 max-w-lg">
                 {error && preview ? <p className="mb-3 text-center text-sm text-red-700">{error}</p> : null}
-                {preview ? <SizePicker product={preview.product} people={preview.people || 1} cm={cm} onChange={setCm} compact label={s.size} unit={t.cm} money={t.money} /> : null}
+                {preview ? <SizePicker product={preview.product} subject={preview.subject} people={preview.people || 1} cm={cm} onChange={setCm} compact label={s.size} unit={t.cm} money={t.money} /> : null}
                 {preview ? (
                   <p className="mt-5 text-center text-sm text-ink/50">
                     {freshCount < 3 ? (
@@ -791,6 +791,7 @@ export default function StudioPage() {
 
 function SizePicker({
   product,
+  subject,
   people = 1,
   cm,
   onChange,
@@ -800,6 +801,7 @@ function SizePicker({
   money,
 }: {
   product: ProductId;
+  subject: SubjectId;
   people?: number;
   cm: number;
   onChange: (cm: number) => void;
@@ -822,7 +824,7 @@ function SizePicker({
             }`}
           >
             <span className="block font-display text-xl">{size.cm} {unit}</span>
-            <span className="text-sm text-ink/60">{money(priceFor(product, size.cm, people) ?? size.price)}</span>
+            <span className="text-sm text-ink/60">{money(priceFor(product, size.cm, people, subject) ?? size.price)}</span>
           </button>
         ))}
       </div>

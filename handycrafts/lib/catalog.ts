@@ -28,8 +28,8 @@ export const catalog = {
     short: "Бяла фигурка с бои и четки",
     line: "Фигурката идва бяла, грундирана, с нейните бои, две четки и шаблон за оцветяване. Оцветяваш я сам или с детето.",
     sizes: [
-      { cm: 17, price: 30, group: { 2: 40, 3: 50 } },
-      { cm: 20, price: 35, group: { 2: 45, 3: 55 } },
+      { cm: 17, price: 30, pet: 20, group: { 2: 40, 3: 50 } },
+      { cm: 20, price: 35, pet: 25, group: { 2: 45, 3: 55 } },
     ],
   },
 } as const;
@@ -92,16 +92,18 @@ export function isProductId(value: unknown): value is ProductId {
   return typeof value === "string" && value in catalog;
 }
 
-export function priceFor(product: ProductId, cm: number, people = 1) {
+/** A kit of a pet costs less than one of a person (`pet` on its sizes). */
+export function priceFor(product: ProductId, cm: number, people = 1, subject: SubjectId = "person") {
   const size = catalog[product].sizes.find((item) => item.cm === cm);
   if (!size) return null;
+  if (subject === "pet" && "pet" in size) return size.pet;
   if (people > 1 && "group" in size) return size.group[people as 2 | 3] ?? size.price;
   const factor = peopleFactor[people] ?? 1;
   return factor === 1 ? size.price : Math.round((size.price * factor) / 5) * 5;
 }
 
-export function fromPrice(product: ProductId) {
-  return Math.min(...catalog[product].sizes.map((item) => item.price));
+export function fromPrice(product: ProductId, subject: SubjectId = "person") {
+  return Math.min(...catalog[product].sizes.map((item) => priceFor(product, item.cm, 1, subject) ?? item.price));
 }
 
 export function money(value: number) {

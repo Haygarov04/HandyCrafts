@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     if (!draft) continue;
     const cm = currentCm(draft.product, Number(entry.cm) || draft.cm);
     const people = normalizePeople(draft.product, draft.subject || "person", draft.people);
-    const price = priceFor(draft.product, cm, people);
+    const price = priceFor(draft.product, cm, people, draft.subject);
     if (price === null) continue;
     items.push({
       draftId: draft.id,

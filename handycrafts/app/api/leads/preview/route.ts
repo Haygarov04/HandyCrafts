@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     vehicle: draft.vehicle,
     cm,
     qty: 1,
-    price: priceFor(draft.product, cm, people) ?? 0,
+    price: priceFor(draft.product, cm, people, draft.subject) ?? 0,
     preview: draft.preview,
   };
 

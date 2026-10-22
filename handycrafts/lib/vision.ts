@@ -31,12 +31,14 @@ export async function hasVehicle(key: string, image: { bytes: Buffer; contentTyp
       ],
     },
   ];
+  // One budget for every model tried, so a slow vision model can't push the preview past its time limit.
+  const signal = AbortSignal.timeout(12_000);
   for (const model of workingModel ? [workingModel] : models()) {
     const response = await fetch(`${process.env.XAI_BASE_URL || "https://api.x.ai"}/v1/chat/completions`, {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({ model, messages, temperature: 0, max_tokens: 20 }),
-      signal: AbortSignal.timeout(15_000),
+      signal,
     }).catch(() => null);
     if (!response) continue;
     if (!response.ok) {

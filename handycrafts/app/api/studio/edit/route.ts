@@ -11,7 +11,8 @@ import { hasVehicle } from "@/lib/vision";
 import { editImage, streamToBuffer, type ImageInput } from "@/lib/xai-image";
 
 export const runtime = "nodejs";
-export const maxDuration = 90;
+// The image model alone can take up to 80 s; saving and the vehicle check come after it.
+export const maxDuration = 150;
 
 const MAX_BYTES = 8 * 1024 * 1024;
 

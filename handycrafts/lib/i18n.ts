@@ -317,7 +317,7 @@ const bg = {
     addedShort: "Добавено ✓",
     badType: "Не успяхме да отворим тази снимка. Опитай с друга или със скрийншот от нея.",
     tooBig: "Файлът е над 50 MB. Избери по-малка снимка.",
-    failed: "Визуализацията не се получи.",
+    failed: "Визуализацията отне твърде дълго и не се получи. Натисни „Нов опит“ — обикновено става от втория път.",
     wrong: "Нещо се обърка.",
     copy: {
       person: {
@@ -671,7 +671,7 @@ const en: Dict = {
     addedShort: "Added ✓",
     badType: "We couldn't open this photo. Try another one or a screenshot of it.",
     tooBig: "The file is over 50 MB. Choose a smaller photo.",
-    failed: "The preview didn't work.",
+    failed: "The preview took too long and didn't work. Press \"Try again\" — it usually works the second time.",
     wrong: "Something went wrong.",
     copy: {
       person: {

@@ -21,6 +21,13 @@ export const catalog = {
       { cm: 10, price: 40, group: { 2: 40, 3: 40 } },
     ],
   },
+  // The same figurine sent unpainted, white with primer, with little pots of paint and brushes to paint it at home.
+  kit: {
+    label: "Оцвети сам",
+    short: "Бяла фигурка с бои и четки",
+    line: "Фигурката идва бяла, грундирана, с бои и четки. Оцветяваш я сам или с детето.",
+    sizes: [{ cm: 17, price: 40, group: { 2: 55, 3: 65 } }],
+  },
 } as const;
 
 export type ProductId = keyof typeof catalog;
@@ -55,7 +62,7 @@ export function itemLabel(product: ProductId, subject: SubjectId = "person", peo
 }
 
 /** What the shop sells now. Keychains are only for pets — see `isOffered`. */
-export const productIds: ProductId[] = ["figurine", "keychain"];
+export const productIds: ProductId[] = ["figurine", "keychain", "kit"];
 
 /** Products on offer for a subject: keychains only of pets. */
 export function productsFor(subject: SubjectId): ProductId[] {

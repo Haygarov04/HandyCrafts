@@ -3,7 +3,12 @@ import type { ProductId, SubjectId } from "@/lib/catalog";
 const kinds: Record<ProductId, string> = {
   figurine: "collectible resin figurine standing on a low plain round base",
   keychain: "small chunky keychain figurine with a large head and a metal ring attached to the top",
+  kit: "unpainted collectible resin figurine, sprayed all over in plain matte white primer, standing on a low plain round base",
 };
+
+// The paint-it-yourself kit: the same figurine, but sent white, so the preview must show it unpainted.
+const unpainted =
+  "It is NOT painted: the whole figurine, base included, is one uniform matte white primer color — no skin tones, no colored clothes, hair or eyes, no printed logos. All the detail (face, hair, folds of the clothes, shoes, logos as relief) is sculpted, so the person is recognisable from the shapes alone. Next to the base stand three or four tiny open pots of acrylic paint in bright colors and two small paintbrushes.";
 
 const framing =
   "Framing: square image, the figurine centered and filling most of the frame, soft warm studio light, plain cream seamless background, gentle contact shadow. No watermark and no text or logo floating on the image itself; logos, names and prints on the clothes or items are fine.";
@@ -24,14 +29,26 @@ const fullBody = "Full body from the top of the head to the shoes, both feet res
 const vehicle =
   "If the person is posing with a car, motorbike or other vehicle and it is part of the figurine, sculpt the vehicle as part of the same piece and use no round base, podium or pedestal at all: the vehicle and the person stand directly on the plain surface.";
 
-export function figurinePrompt(input: {
+/** A kit's prompt is the figurine's one without any paint, and the pots of paint added. */
+function forKit(product: ProductId, prompt: string) {
+  if (product !== "kit") return prompt;
+  return `${prompt.replaceAll("hand-painted ", "").replace("sculpted forms and painted details", "sculpted forms and details")} ${unpainted}`;
+}
+
+type FigurineInput = {
   product: ProductId;
   subject: SubjectId;
   people?: number;
   cm: number;
   clothes: string;
   pose: string;
-}) {
+};
+
+export function figurinePrompt(input: FigurineInput) {
+  return forKit(input.product, paintedPrompt(input));
+}
+
+function paintedPrompt(input: FigurineInput) {
   const extras = input.clothes.trim();
 
   if (input.subject === "pet") {
@@ -56,8 +73,8 @@ export function figurinePrompt(input: {
       "Keep each person's relative height and size as in the photo, and keep children the age they are.",
       `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
       `Pose: ${pose}. All ${people} people fully visible, nothing cropped.`,
-      input.product === "figurine" ? fullBody : "",
-      input.product === "figurine" ? vehicle : "",
+      input.product !== "keychain" ? fullBody : "",
+      input.product !== "keychain" ? vehicle : "",
       anatomy,
       "Style: premium hand-painted resin miniature with realistic proportions (not big heads, not chibi), soft matte finish, clean sculpted hair, natural expressions, eyes sharp.",
       toy,
@@ -74,8 +91,8 @@ export function figurinePrompt(input: {
     likeness,
     `Clothes and details: ${extras || "the clothes visible in the photo"}.`,
     `Pose: ${pose}. Full subject visible, nothing cropped.`,
-    input.product === "figurine" ? fullBody : "",
-    input.product === "figurine" ? vehicle : "",
+    input.product !== "keychain" ? fullBody : "",
+    input.product !== "keychain" ? vehicle : "",
     anatomy,
     "Style: premium hand-painted resin miniature with realistic proportions (not a big head, not chibi), soft matte finish, clean sculpted hair, natural expression, eyes sharp.",
     toy,
@@ -90,7 +107,7 @@ export function figurinePrompt(input: {
  * original photo (for the likeness) and <IMAGE_2>, if there is one, a photo they just added.
  */
 export function editPrompt(input: { product: ProductId; subject: SubjectId; request: string; extraPhoto: boolean; hasOriginal: boolean }) {
-  return [
+  return forKit(input.product, [
     `<IMAGE_0> is a studio product photo of a custom ${kinds[input.product]}.`,
     input.hasOriginal
       ? `<IMAGE_1> is the real photo of the ${input.subject === "pet" ? "pet" : "people"}: the figurine must look like <IMAGE_1>. If the request is about the face, likeness, weight or "real faces", resculpt those faces and bodies directly from <IMAGE_1>. Whatever the request, every face that the request does not change must match <IMAGE_1> — if a face drifted from the photo, bring it back to the real person.`
@@ -102,7 +119,7 @@ export function editPrompt(input: { product: ProductId; subject: SubjectId; requ
     "Change only that. Do not add glasses or accessories that are not already there unless asked. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
     input.subject === "pet" ? "" : anatomy,
     input.subject === "pet" ? "" : likeness,
-    input.subject === "pet" || input.product !== "figurine"
+    input.subject === "pet" || input.product === "keychain"
       ? ""
       : "A figurine with a car or other vehicle has no round base or podium — the vehicle and the person stand directly on the surface. If the change removes the vehicle, put the person on a low plain round base.",
     input.subject === "pet" ? "" : "The customer's request always wins over the rules above: if they ask to make someone slimmer, taller, shorter or different in build, or to put a face from a photo on a specific person, do exactly that for that person only, and keep them recognisable.",
@@ -110,5 +127,5 @@ export function editPrompt(input: { product: ProductId; subject: SubjectId; requ
     framing,
   ]
     .filter(Boolean)
-    .join(" ");
+    .join(" "));
 }

@@ -1,10 +1,11 @@
 import { del, getJSON, incr, setJSON, zadd, zrem, zrevrange } from "@/lib/kv";
 import type { Order, OrderStatus } from "@/lib/order-types";
+import type { ProductId } from "@/lib/catalog";
 
 export type Draft = {
   id: string;
   createdAt: string;
-  product: "figurine" | "keychain";
+  product: ProductId;
   subject?: "person" | "pet";
   /** People on one base; missing means 1. */
   people?: number;

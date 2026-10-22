@@ -5,7 +5,7 @@ import VisualTag from "../VisualTag";
 import JsonLd from "../JsonLd";
 import NewsletterBox from "../NewsletterBox";
 import ReviewsSection from "../ReviewsSection";
-import { catalog, fromPrice } from "@/lib/catalog";
+import { catalog, fromPrice, priceFor } from "@/lib/catalog";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import { faqJsonLd, productJsonLd } from "@/lib/site";
 import { realPieces } from "@/lib/gallery";
@@ -275,6 +275,43 @@ export default function Home({ lang }: { lang: Lang }) {
               </Link>
             ))}
           </div>
+
+          {/* The paint-it-yourself kit: the same figurine, sent white with paints and brushes. */}
+          <Link
+            href={href("/studio?product=kit")}
+            className="lift-card group mt-8 grid overflow-hidden rounded-[1.6rem] bg-ink text-paper md:grid-cols-2"
+          >
+            <span className="relative block aspect-square overflow-hidden bg-sand">
+              <Image
+                src="/shop/kit.webp"
+                alt={h.kit.alt}
+                fill
+                className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                sizes="(min-width: 768px) 50vw, 100vw"
+              />
+            </span>
+            <span className="flex flex-col justify-center p-6 sm:p-10">
+              <span className="w-fit rounded-full bg-ember px-3 py-1 text-xs font-bold uppercase tracking-wide text-ink">{h.kit.badge}</span>
+              <span className="mt-4 block font-display text-[2rem] leading-[1.1] tracking-[-0.03em] sm:text-5xl">
+                {h.kit.title[0]} <span className="text-ember">{h.kit.title[1]}</span>
+              </span>
+              <span className="mt-4 block text-[15px] leading-7 text-paper/75 sm:text-lg">{h.kit.text}</span>
+              <span className="mt-5 grid gap-2">
+                {h.kit.points.map((point) => (
+                  <span key={point} className="flex items-center gap-2.5 text-[15px]">
+                    <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-ember text-[11px] font-bold text-ink">✓</span>
+                    {point}
+                  </span>
+                ))}
+              </span>
+              <span className="mt-6 block text-paper/70">
+                {h.kit.price(t.money(fromPrice("kit")), t.money(priceFor("figurine", catalog.kit.sizes[0].cm) ?? 0))}
+              </span>
+              <span className="mt-4 inline-flex w-fit items-center gap-2 rounded-xl bg-ember px-6 py-3.5 font-extrabold text-ink transition group-hover:bg-ember-deep">
+                {h.kit.cta} →
+              </span>
+            </span>
+          </Link>
 
           <div className="mt-8 rounded-[1.6rem] border border-ink/10 bg-white p-6 sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-2">

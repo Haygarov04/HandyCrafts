@@ -73,11 +73,12 @@ const bg = {
   realPieces: "Истински фигурки от нас",
   money: (value: number) => `${value} €`,
   itemLabel: (product: ProductId, subject: SubjectId = "person", people = 1) =>
-    ({ figurine: "Фигурка", keychain: "Ключодържател" })[product] +
+    ({ figurine: "Фигурка", keychain: "Ключодържател", kit: "Оцвети сам · фигурка" })[product] +
     (people > 1 ? ` на ${people} души` : subject === "pet" ? " на любимец" : ""),
   product: {
     figurine: { label: "Фигурка", short: "Цяла фигура върху основа" },
     keychain: { label: "Ключодържател", short: "Мини фигурка на любимеца, с халка" },
+    kit: { label: "Оцвети сам", short: "Бяла фигурка с бои и четки — оцветяваш я ти" },
   } as Record<ProductId, { label: string; short: string }>,
   delivery: { econt: "Офис на Еконт", speedy: "Офис на Спиди", address: "До адрес" },
   meta: {
@@ -160,6 +161,15 @@ const bg = {
       { title: "Любимци", text: "Кучето или котката ти, с петната и нашийника — като фигурка или ключодържател." },
       { title: "Двойки и семейства", text: "До трима души на една основа — на по-ниска цена от отделни фигурки." },
     ],
+    kit: {
+      badge: "Ново",
+      title: ["Оцвети", "сам"],
+      text: "Същата фигурка по твоя снимка, но идва бяла, грундирана и готова за боя. В кутията има бои и четки — оцветяваш я сам, с детето или с половинката.",
+      points: ["Персонализирана по твоя снимка", "Бяла фигурка, 17 см, грундирана", "Бои и четки в комплекта"],
+      price: (kit: string, painted: string) => `${kit} вместо ${painted} за оцветена`,
+      cta: "Направи своя комплект",
+      alt: "Бяла неоцветена фигурка по снимка с бои и четки",
+    },
     sizeTitle: "Колко голяма е?",
     sizeKeychain: "ключодържател на любимец",
     sizeFigurine: "фигурка",
@@ -407,13 +417,14 @@ const en: Dict = {
   money: (value: number) => `€${value}`,
   itemLabel: (product, subject = "person", people = 1) =>
     people > 1
-      ? `${({ figurine: "Figurine", keychain: "Keychain" })[product]} of ${people} people`
+      ? `${({ figurine: "Figurine", keychain: "Keychain", kit: "Paint-it-yourself figurine" })[product]} of ${people} people`
       : subject === "pet"
-      ? ({ figurine: "Pet figurine", keychain: "Pet keychain" })[product]
-      : ({ figurine: "Figurine", keychain: "Keychain" })[product],
+      ? ({ figurine: "Pet figurine", keychain: "Pet keychain", kit: "Paint-it-yourself pet figurine" })[product]
+      : ({ figurine: "Figurine", keychain: "Keychain", kit: "Paint-it-yourself figurine" })[product],
   product: {
     figurine: { label: "Figurine", short: "Full figure on a base" },
     keychain: { label: "Keychain", short: "A mini figure of your pet, on a ring" },
+    kit: { label: "Paint it yourself", short: "A white figurine with paints and brushes — you paint it" },
   },
   delivery: { econt: "Econt office", speedy: "Speedy office", address: "To an address" },
   meta: {
@@ -495,6 +506,15 @@ const en: Dict = {
       { title: "Pets", text: "Your dog or cat, with its spots and collar — as a figurine or a keychain." },
       { title: "Couples and families", text: "Up to three people on one base — for less than separate figurines." },
     ],
+    kit: {
+      badge: "New",
+      title: ["Paint it", "yourself"],
+      text: "The same figurine from your photo, but it arrives white, primed and ready for paint. Paints and brushes are in the box — paint it yourself, with your kids or with your partner.",
+      points: ["Made from your photo", "White 17 cm figurine, primed", "Paints and brushes included"],
+      price: (kit: string, painted: string) => `${kit} instead of ${painted} painted`,
+      cta: "Make your kit",
+      alt: "Unpainted white figurine from a photo with paints and brushes",
+    },
     sizeTitle: "How big is it?",
     sizeKeychain: "pet keychain",
     sizeFigurine: "figurine",

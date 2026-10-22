@@ -1,3 +1,4 @@
+import type { ProductId } from "@/lib/catalog";
 export const orderStatuses = [
   "new",
   "confirmed",
@@ -71,7 +72,7 @@ export function isSource(value: unknown): value is OrderSource {
 
 export type OrderItem = {
   draftId: string;
-  product: "figurine" | "keychain";
+  product: ProductId;
   subject: "person" | "pet";
   people?: number;
   label: string;

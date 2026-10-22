@@ -39,7 +39,8 @@ export async function manualOrderFromForm(form: FormData, existing?: Order): Pro
   if (day && !isDay(day)) return "Невалидна дата.";
   const rawSource = text("source");
   const source = isSource(rawSource) ? rawSource : "other";
-  const label = text("label", 120) || (product === "keychain" ? "Ключодържател" : people > 1 ? `Фигурка · ${people} души` : "Фигурка");
+  const kind = product === "kit" ? "Оцвети сам" : "Фигурка";
+  const label = text("label", 120) || (product === "keychain" ? "Ключодържател" : people > 1 ? `${kind} · ${people} души` : kind);
 
   let photo = existing?.items[0]?.photo;
   const file = form.get("photo");
@@ -80,7 +81,7 @@ export async function manualOrderFromForm(form: FormData, existing?: Order): Pro
         draftId: "",
         product,
         subject: product === "keychain" ? "pet" : subject,
-        people: product === "figurine" && subject === "person" ? people : undefined,
+        people: product !== "keychain" && subject === "person" ? people : undefined,
         label,
         cm,
         price,

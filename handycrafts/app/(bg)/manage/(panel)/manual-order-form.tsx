@@ -91,7 +91,10 @@ export default function ManualOrderForm({ order }: { order?: Order }) {
           <button type="button" onClick={() => setProduct("keychain")} className={pill(product === "keychain")}>
             Ключодържател
           </button>
-          {product === "figurine" ? (
+          <button type="button" onClick={() => setProduct("kit")} className={pill(product === "kit")}>
+            Оцвети сам
+          </button>
+          {product !== "keychain" ? (
             <>
               <span className="mx-1 w-px bg-ink/10" />
               <button type="button" onClick={() => setSubject("person")} className={pill(subject === "person")}>
@@ -108,7 +111,7 @@ export default function ManualOrderForm({ order }: { order?: Order }) {
           <input name="label" defaultValue={item?.label || ""} placeholder="напр. Фигурка на двойка с куче" className={field} />
         </label>
         <div className="grid grid-cols-3 gap-3">
-          {product === "figurine" && subject === "person" ? (
+          {product !== "keychain" && subject === "person" ? (
             <label className={caption}>
               Души
               <input name="people" type="number" min={1} max={3} defaultValue={item?.people || 1} className={field} />

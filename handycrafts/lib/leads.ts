@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { del, getJSON, setJSON, zadd, zrem, zrevrange } from "@/lib/kv";
 import type { Delivery } from "@/lib/order-types";
+import type { ProductId } from "@/lib/catalog";
 
 // Checkouts where someone typed a phone or email but never pressed "Order",
 // and previews someone asked us to email them from the studio.
@@ -36,7 +37,7 @@ export type Lead = {
   customer: { name: string; phone: string; email: string; city: string; delivery: Delivery; address: string };
   items: {
     draftId: string;
-    product?: "figurine" | "keychain";
+    product?: ProductId;
     subject?: "person" | "pet";
     people?: number;
     label: string;

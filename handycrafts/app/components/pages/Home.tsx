@@ -279,8 +279,9 @@ export default function Home({ lang }: { lang: Lang }) {
 
           {/* The paint-it-yourself kit: the same figurine, sent white with its paints, brushes and a colour guide. */}
           <Link
+            id="kit"
             href={href("/studio?product=kit")}
-            className="lift-card group mt-8 grid overflow-hidden rounded-[1.6rem] bg-ink text-paper md:grid-cols-2"
+            className="lift-card group mt-8 grid scroll-mt-24 overflow-hidden rounded-[1.6rem] bg-ink text-paper md:grid-cols-2"
           >
             <span className="block">
               <span className="relative block aspect-square overflow-hidden bg-sand">

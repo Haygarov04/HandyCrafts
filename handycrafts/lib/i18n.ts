@@ -159,7 +159,7 @@ const bg = {
       { icon: "◎", title: "Виждаш я преди да платиш", text: "Визуализация за около минута" },
       { icon: "€", title: "Плащаш при получаване", text: "Наложен платеж" },
       { icon: "✦", title: "Оцветена на ръка", text: "Всяка я боядисваме ние" },
-      { icon: "➜", title: "Готова за 7–12 дни", text: "С Еконт или Спиди" },
+      { icon: "➜", title: "Готова за 10–15 дни", text: "С Еконт или Спиди" },
     ],
     productsTitle: ["Какво", "правим."],
     productsText: "Фигурка за рафта — на теб, на вас двамата или на любимеца ти.",
@@ -229,7 +229,7 @@ const bg = {
     },
     {
       q: "За колко време става?",
-      a: "Обикновено 7–12 работни дни от потвърждението по телефона до изпращането. Ако ти трябва за конкретна дата, напиши го в бележката към поръчката.",
+      a: "Обикновено 10–15 работни дни от потвърждението по телефона до изпращането. Ако ти трябва за конкретна дата, напиши го в бележката към поръчката.",
     },
     {
       q: "Колко точно ще прилича готовата фигурка на визуализацията?",
@@ -370,7 +370,7 @@ const bg = {
     shipping: "Доставка",
     shippingValue: "по тарифа на куриера",
     total: "Общо",
-    timing: "Изработка и изпращане: 7–12 работни дни.",
+    timing: "Изработка и изпращане: 10–15 работни дни.",
     addMore: "+ Добави още една фигурка",
   },
   thanks: {
@@ -378,7 +378,7 @@ const bg = {
     accepted: (n: string) => ["Поръчка", n, "е приета."],
     steps: [
       "① Ще ти се обадим в работно време, за да потвърдим поръчката.",
-      "② Изработваме фигурката на ръка — 7–12 работни дни.",
+      "② Изработваме фигурката на ръка — 10–15 работни дни.",
       "③ Изпращаме с куриер. Плащаш при получаване.",
     ],
     home: "Към началото",
@@ -409,7 +409,7 @@ const bg = {
     steps: [
       ["01", "Качваш снимка", "Една ясна снимка стига. Можеш да опишеш дрехи, поза или аксесоари."],
       ["02", "Виждаш визуализация", "За около минута. Не ти харесва? Промени описанието и опитай пак."],
-      ["03", "Поръчваш с наложен платеж", "Потвърждаваме по телефона, изработваме за 7–12 работни дни и пращаме с куриер."],
+      ["03", "Поръчваш с наложен платеж", "Потвърждаваме по телефона, изработваме за 10–15 работни дни и пращаме с куриер."],
     ],
   },
 };
@@ -513,7 +513,7 @@ const en: Dict = {
       { icon: "◎", title: "See it before you pay", text: "A preview in about a minute" },
       { icon: "€", title: "Pay when it arrives", text: "Cash on delivery" },
       { icon: "✦", title: "Painted by hand", text: "We paint every one ourselves" },
-      { icon: "➜", title: "Ready in 7–12 days", text: "With Econt or Speedy" },
+      { icon: "➜", title: "Ready in 10–15 days", text: "With Econt or Speedy" },
     ],
     productsTitle: ["What", "we make."],
     productsText: "A figurine for the shelf — of you, the two of you or your pet.",
@@ -583,7 +583,7 @@ const en: Dict = {
     },
     {
       q: "How long does it take?",
-      a: "Usually 7–12 working days from the phone confirmation to shipping. If you need it by a certain date, add it to the order note.",
+      a: "Usually 10–15 working days from the phone confirmation to shipping. If you need it by a certain date, add it to the order note.",
     },
     {
       q: "How closely will the finished figurine match the preview?",
@@ -724,7 +724,7 @@ const en: Dict = {
     shipping: "Delivery",
     shippingValue: "courier rate",
     total: "Total",
-    timing: "Making and shipping: 7–12 working days.",
+    timing: "Making and shipping: 10–15 working days.",
     addMore: "+ Add another figurine",
   },
   thanks: {
@@ -732,7 +732,7 @@ const en: Dict = {
     accepted: (n) => ["Order", n, "is confirmed."],
     steps: [
       "① We'll call you during working hours to confirm the order.",
-      "② We make the figurine by hand — 7–12 working days.",
+      "② We make the figurine by hand — 10–15 working days.",
       "③ We ship it by courier. You pay when it arrives.",
     ],
     home: "Back to home",
@@ -763,7 +763,7 @@ const en: Dict = {
     steps: [
       ["01", "Upload a photo", "One clear photo is enough. You can describe clothes, pose or accessories."],
       ["02", "See the preview", "In about a minute. Don't like it? Change the description and try again."],
-      ["03", "Order with cash on delivery", "We confirm by phone, make it in 7–12 working days and ship by courier."],
+      ["03", "Order with cash on delivery", "We confirm by phone, make it in 10–15 working days and ship by courier."],
     ],
   },
 };

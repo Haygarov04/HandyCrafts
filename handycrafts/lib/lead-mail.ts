@@ -49,7 +49,7 @@ const copy: Record<Lang, { subject: string; title: string; text: string; cta: st
     {
       subject: "Имаш ли въпрос за фигурката?",
       title: "Нещо не е ли ясно?",
-      text: "Плащаш чак когато получиш пратката и я видиш, с наложен платеж. Всяка фигурка се оцветява на ръка и я изпращаме за 7–12 работни дни. Ако искаш друга поза, дрехи или размер — просто отговори на този имейл и ще го оправим.",
+      text: "Плащаш чак когато получиш пратката и я видиш, с наложен платеж. Всяка фигурка се оцветява на ръка и я изпращаме за 10–15 работни дни. Ако искаш друга поза, дрехи или размер — просто отговори на този имейл и ще го оправим.",
       cta: "Виж поръчката",
     },
     {
@@ -69,7 +69,7 @@ const copy: Record<Lang, { subject: string; title: string; text: string; cta: st
     {
       subject: "Any questions about your figurine?",
       title: "Anything unclear?",
-      text: "You only pay when the parcel arrives, cash on delivery. Every figurine is painted by hand and ships in 7–12 working days. Want a different pose, outfit or size? Just reply to this email.",
+      text: "You only pay when the parcel arrives, cash on delivery. Every figurine is painted by hand and ships in 10–15 working days. Want a different pose, outfit or size? Just reply to this email.",
       cta: "See the order",
     },
     {

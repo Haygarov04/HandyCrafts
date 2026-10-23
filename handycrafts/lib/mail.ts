@@ -166,7 +166,7 @@ const copy: Record<Lang, Record<CustomerEmail, { subject: string; title: string;
     confirmed: {
       subject: "Поръчка {n} е потвърдена",
       title: "Поръчката е потвърдена",
-      text: "Благодарим за потвърждението! Фигурката влиза в опашката за изработка. Обичайният срок е 7–12 работни дни.",
+      text: "Благодарим за потвърждението! Фигурката влиза в опашката за изработка. Обичайният срок е 10–15 работни дни.",
     },
     printing: {
       subject: "Изработваме поръчка {n}",
@@ -203,7 +203,7 @@ const copy: Record<Lang, Record<CustomerEmail, { subject: string; title: string;
     confirmed: {
       subject: "Order {n} confirmed",
       title: "Your order is confirmed",
-      text: "Thanks for confirming! Your figurine is now in the making queue. It usually takes 7–12 working days.",
+      text: "Thanks for confirming! Your figurine is now in the making queue. It usually takes 10–15 working days.",
     },
     printing: {
       subject: "We're making order {n}",

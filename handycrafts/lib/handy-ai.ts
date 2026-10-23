@@ -58,7 +58,7 @@ function facts(lang: Lang) {
     `Figurines (14, 17 and 20 cm): ${f}. Pet keychains: 6 cm €30, 10 cm €40.`,
     `"Paint it yourself" kit: the same personalised figurine, sent white in primer with a strip of six pots filled with its own paint colours, two brushes and a printed colour guide, for the customer (or their child) to paint at home: ${catalog.kit.sizes.map((s) => `${s.cm} cm €${s.price} (2 people €${s.group[2]}, 3 people €${s.group[3]}, a pet €${s.pet})`).join("; ")}.`,
     "A car, motorbike or other vehicle in the figurine is made and charged extra; the price for it is agreed when we call to confirm the order. A figurine with a vehicle has no round base. The customer can ask to remove the vehicle.",
-    "Made in 7–12 working days. Delivered across Bulgaria by Econt or Speedy at the courier's rate. Cash on delivery: the customer pays only when the parcel arrives and can check it in front of the courier.",
+    "Made in 10–15 working days. Delivered across Bulgaria by Econt or Speedy at the courier's rate. Cash on delivery: the customer pays only when the parcel arrives and can check it in front of the courier.",
     "The preview is a guide: the real figurine is finished by hand from it, so small details can also be written in the order note.",
     "We confirm every order by phone before making it.",
     `Reply in ${lang === "en" ? "English" : "Bulgarian"}.`,

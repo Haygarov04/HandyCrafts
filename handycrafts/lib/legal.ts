@@ -43,7 +43,7 @@ function sellerLines(lang: Lang) {
 /** Google Analytics / Ads and the Meta Pixel; the pixel is on unless its ID is set to empty. */
 const tracking = Boolean(process.env.NEXT_PUBLIC_GA_ID || process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || (process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "1426817696297029"));
 
-const days = { bg: "7–12 работни дни", en: "7–12 working days" };
+const days = { bg: "10–15 работни дни", en: "10–15 working days" };
 
 export function legalDoc(id: LegalId, lang: Lang): LegalDoc {
   return lang === "en" ? en(id) : bg(id);

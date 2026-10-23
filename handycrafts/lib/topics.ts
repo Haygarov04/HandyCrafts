@@ -140,7 +140,7 @@ const topics: Topic[] = [
       alt: "Фигурка на двойка като подарък за годишнина",
       sections: [
         { title: "Защо фигурка", text: ["Цветята увяхват, а фигурката остава. Направена е по конкретна снимка — от сватбата, от първата ви почивка, от вчера."] },
-        { title: "Навреме", text: ["Изработката е 7–12 работни дни. Напиши датата на годишнината в бележката и ще ти кажем дали успяваме."] },
+        { title: "Навреме", text: ["Изработката е 10–15 работни дни. Напиши датата на годишнината в бележката и ще ти кажем дали успяваме."] },
       ],
       faq: [
         { q: "Какво да подаря за първа годишнина?", a: "Фигурка на двама ви на една основа — от 60 €." },
@@ -158,7 +158,7 @@ const topics: Topic[] = [
       alt: "Couple figurine as an anniversary gift",
       sections: [
         { title: "Why a figurine", text: ["Flowers fade, a figurine stays. It's made from a specific photo — from the wedding, your first trip, yesterday."] },
-        { title: "On time", text: ["Making takes 7–12 working days. Add the anniversary date to the order note and we'll tell you if we can make it."] },
+        { title: "On time", text: ["Making takes 10–15 working days. Add the anniversary date to the order note and we'll tell you if we can make it."] },
       ],
       faq: [
         { q: "What should I give for a first anniversary?", a: "A figurine of the two of you on one base — from €60." },
@@ -184,7 +184,7 @@ const topics: Topic[] = [
         { title: "За всяка възраст", text: ["За дете, приятелка, мама, татко или колега. Най-малката фигурка, 14 см, е 40 €."] },
       ],
       faq: [
-        { q: "Ще стане ли до рождения ден?", a: "Изработката е 7–12 работни дни плюс 1–2 дни доставка. Напиши датата в бележката." },
+        { q: "Ще стане ли до рождения ден?", a: "Изработката е 10–15 работни дни плюс 1–2 дни доставка. Напиши датата в бележката." },
         { q: "Може ли с надпис?", a: "Пиши ни за надпис върху основата и ще ти кажем възможно ли е." },
         { q: "Колко струва?", a: priceBg.figurine },
       ],
@@ -202,7 +202,7 @@ const topics: Topic[] = [
         { title: "For any age", text: ["For a child, a friend, mum, dad or a colleague. The smallest figurine, 14 cm, is €40."] },
       ],
       faq: [
-        { q: "Will it arrive before the birthday?", a: "Making takes 7–12 working days plus 1–2 days delivery. Add the date to the note." },
+        { q: "Will it arrive before the birthday?", a: "Making takes 10–15 working days plus 1–2 days delivery. Add the date to the note." },
         { q: "Can it have a name on it?", a: "Write to us about text on the base and we'll tell you if it's possible." },
         { q: "How much is it?", a: priceEn.figurine },
       ],
@@ -307,7 +307,7 @@ const topics: Topic[] = [
       ],
       faq: [
         { q: "Може ли в роклята от бала?", a: "Да — снимката и описанието определят облеклото." },
-        { q: "Колко време отнема?", a: "7–12 работни дни плюс доставка." },
+        { q: "Колко време отнема?", a: "10–15 работни дни плюс доставка." },
         { q: "Колко струва?", a: priceBg.figurine },
       ],
     },
@@ -324,7 +324,7 @@ const topics: Topic[] = [
       ],
       faq: [
         { q: "Can it wear the prom dress?", a: "Yes — the photo and your description set the outfit." },
-        { q: "How long does it take?", a: "7–12 working days plus delivery." },
+        { q: "How long does it take?", a: "10–15 working days plus delivery." },
         { q: "How much is it?", a: priceEn.figurine },
       ],
     },

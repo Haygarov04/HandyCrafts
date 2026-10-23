@@ -110,5 +110,5 @@ export function money(value: number) {
   return `${value.toFixed(value % 1 ? 2 : 0)} ${currency}`;
 }
 
-export const productionDays = "7–12 работни дни";
+export const productionDays = "10–15 работни дни";
 export const maxQty = 5;

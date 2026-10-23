@@ -2,7 +2,7 @@ import { productionDays } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
 import type { LandingContent } from "@/app/components/Landing";
 
-const productionDaysEn = "7–12 working days";
+const productionDaysEn = "10–15 working days";
 
 export type LandingId = "custom" | "figurine" | "pet" | "gift";
 

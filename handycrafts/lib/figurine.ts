@@ -18,6 +18,10 @@ const framing =
 // busts instead of full bodies, and results that looked like a real child rather than a figurine.
 const anatomy =
   "Correct anatomy for every figure: exactly two arms, two hands with five fingers, two legs and two feet each, no extra, merged or missing limbs.";
+// The workshop paints these by hand: a slightly bigger head and simple, smooth shapes with clear edges
+// between colours are much easier to paint than realistic proportions and fine detail.
+const style =
+  "Style: premium hand-painted collectible figurine in a friendly stylized look: the head slightly oversized, about one quarter of the total height, on a compact body with slightly shorter legs. Smooth, simplified forms with large clean shapes and crisp edges between areas of colour, few tiny details, so it is easy to paint by hand. Patterns on clothes stay simple and clear. Soft matte finish, clean sculpted hair, natural expression, eyes sharp. Not chibi and not a baby face: adults keep adult faces and the likeness stays exact.";
 const toy =
   "It must read as a small physical painted resin figurine, not a real person and not a photo: sculpted forms and painted details, but the faces stay a faithful portrait.";
 
@@ -76,7 +80,7 @@ function paintedPrompt(input: FigurineInput) {
       input.product !== "keychain" ? fullBody : "",
       input.product !== "keychain" ? vehicle : "",
       anatomy,
-      "Style: premium hand-painted resin miniature with realistic proportions (not big heads, not chibi), soft matte finish, clean sculpted hair, natural expressions, eyes sharp.",
+      style,
       toy,
       framing,
     ]
@@ -94,7 +98,7 @@ function paintedPrompt(input: FigurineInput) {
     input.product !== "keychain" ? fullBody : "",
     input.product !== "keychain" ? vehicle : "",
     anatomy,
-    "Style: premium hand-painted resin miniature with realistic proportions (not a big head, not chibi), soft matte finish, clean sculpted hair, natural expression, eyes sharp.",
+    style,
     toy,
     framing,
   ]

@@ -2,7 +2,7 @@ import { Manrope, Unbounded } from "next/font/google";
 import "../globals.css";
 import { dict, type Lang } from "@/lib/i18n";
 import { seller, sellerComplete } from "@/lib/legal";
-import { absolute, business, siteName, socials } from "@/lib/site";
+import { absolute, business, realPhotos, siteName, socials } from "@/lib/site";
 import JsonLd from "./JsonLd";
 import SiteFrame from "./SiteFrame";
 
@@ -24,10 +24,10 @@ export default function RootShell({ lang, children }: { lang: Lang; children: Re
     "@type": "Store",
     name: siteName,
     alternateName: "Handy Crafts",
-    priceRange: "30 € – 110 €",
+    priceRange: "20 € – 110 €",
     url: absolute(lang === "en" ? "/en" : "/"),
     logo: absolute("/icon.png"),
-    image: absolute("/og-family.jpg"),
+    image: [absolute("/og-family.jpg"), ...realPhotos()],
     email: business.email,
     description: t.meta.storeDescription,
     address: {

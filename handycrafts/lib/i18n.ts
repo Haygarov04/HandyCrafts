@@ -11,6 +11,7 @@ const enPaths: Record<string, string> = {
   "/figurka-po-snimka": "/en/custom-figurine-from-photo",
   "/figurka-na-domashen-lyubimets": "/en/pet-figurine-from-photo",
   "/personaliziran-podarak": "/en/personalized-gift",
+  "/figurka-za-otsvetyavane": "/en/paint-your-own-figurine",
   "/poveritelnost": "/en/privacy",
   "/vrashtane": "/en/returns",
   "/dostavka": "/en/delivery",
@@ -89,14 +90,14 @@ const bg = {
   } as Record<ProductId, { label: string; short: string }>,
   delivery: { econt: "Офис на Еконт", speedy: "Офис на Спиди", address: "До адрес" },
   meta: {
-    title: "Персонализирани фигурки по снимка от 40 € | HandyCrafts",
+    title: "Персонализирани фигурки по снимка от 20 € | HandyCrafts",
     description:
-      "Персонализирана 3D фигурка по твоя снимка от 40 €. Виж визуализацията за минута. Ръчна изработка и доставка в цяла България.",
+      "3D фигурка по твоя снимка — ръчно оцветена от 40 € или за оцветяване с бои и четки от 20 €. Визуализация за минута, наложен платеж.",
     ogTitle: "HandyCrafts — фигурка по снимка",
     ogDescription: "Качи снимка, виж фигурката си веднага и я поръчай с наложен платеж.",
     studioTitle: "Създай фигурка по снимка",
     studioDescription:
-      "Качи снимка и за минута виж как ще изглежда твоята 3D фигурка. Човек или домашен любимец, от 40 €. Плащане с наложен платеж.",
+      "Качи снимка и за минута виж как ще изглежда твоята 3D фигурка. Оцветена от 40 € или за оцветяване от 20 €. Наложен платеж.",
     contactTitle: "Контакти",
     contactDescription: "Въпрос за фигурка по снимка, поръчка на няколко души или по-голям размер? Пиши на HandyCrafts, Русе.",
     termsTitle: "Общи условия",
@@ -225,7 +226,7 @@ const bg = {
     },
     {
       q: "Колко струва и как се плаща?",
-      a: "Фигурка 14 см е 40 €, 17 см е 60 €, 20 см е 80 €. Ключодържател на любимец е 6 см за 30 € или 10 см за 40 €. За двама или трима души на една основа виж въпроса по-горе. Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
+      a: "Фигурка 14 см е 40 €, 17 см е 60 €, 20 см е 80 €. Фигурка за оцветяване („Оцвети сам“, с бои, четки и шаблон) е от 30 € за човек и от 20 € за любимец. Ключодържател на любимец е 6 см за 30 € или 10 см за 40 €. За двама или трима души на една основа виж въпроса по-горе. Плащаш с наложен платеж при получаване. Доставката е по тарифа на Еконт или Спиди.",
     },
     {
       q: "За колко време става?",
@@ -444,14 +445,14 @@ const en: Dict = {
   },
   delivery: { econt: "Econt office", speedy: "Speedy office", address: "To an address" },
   meta: {
-    title: "Personalised figurines from a photo, from €40 | HandyCrafts",
+    title: "Personalised figurines from a photo, from €20 | HandyCrafts",
     description:
-      "A 3D figurine made from your photo, from €40. See the preview in a minute and pay cash on delivery. Handmade in Ruse, Bulgaria.",
+      "A 3D figurine from your photo — hand-painted from €40 or paint-your-own with paints and brushes from €20. Preview in a minute, cash on delivery.",
     ogTitle: "HandyCrafts — a figurine from your photo",
     ogDescription: "Upload a photo, see your figurine right away and order with cash on delivery.",
     studioTitle: "Create a figurine from a photo",
     studioDescription:
-      "Upload a photo and see your 3D figurine in about a minute. A person or a pet, from €40. Cash on delivery.",
+      "Upload a photo and see your 3D figurine in about a minute. Hand-painted from €40 or paint-your-own from €20. Cash on delivery.",
     contactTitle: "Contact",
     contactDescription: "A question about a custom figurine, a group order or a bigger size? Write to HandyCrafts in Ruse, Bulgaria.",
     termsTitle: "Terms and conditions",
@@ -579,7 +580,7 @@ const en: Dict = {
     },
     {
       q: "How much does it cost and how do I pay?",
-      a: "A figurine is €40 for 14 cm, €60 for 17 cm and €80 for 20 cm. A pet keychain is €30 for 6 cm or €40 for 10 cm. For two or three people on one base see the question above. You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
+      a: "A figurine is €40 for 14 cm, €60 for 17 cm and €80 for 20 cm. A paint-your-own figurine (with paints, brushes and a colour guide) is from €30 for a person and €20 for a pet. A pet keychain is €30 for 6 cm or €40 for 10 cm. For two or three people on one base see the question above. You pay cash on delivery. Delivery is charged at the Econt or Speedy rate.",
     },
     {
       q: "How long does it take?",

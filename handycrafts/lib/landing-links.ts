@@ -6,4 +6,5 @@ export const landingLinks: { path: string; label: Record<Lang, string> }[] = [
   { path: "/figurka-po-snimka", label: { bg: "Фигурка по снимка", en: "Custom figurine from a photo" } },
   { path: "/figurka-na-domashen-lyubimets", label: { bg: "Фигурка на домашен любимец", en: "Pet figurine from a photo" } },
   { path: "/personaliziran-podarak", label: { bg: "Персонализиран подарък", en: "Personalised gift" } },
+  { path: "/figurka-za-otsvetyavane", label: { bg: "Фигурка за оцветяване", en: "Paint-your-own figurine" } },
 ];

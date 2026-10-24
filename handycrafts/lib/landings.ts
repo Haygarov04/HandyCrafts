@@ -4,9 +4,9 @@ import type { LandingContent } from "@/app/components/Landing";
 
 const productionDaysEn = "10–15 working days";
 
-export type LandingId = "custom" | "figurine" | "pet" | "gift";
+export type LandingId = "custom" | "figurine" | "pet" | "gift" | "kit";
 
-export const landingIds: LandingId[] = ["custom", "figurine", "pet", "gift"];
+export const landingIds: LandingId[] = ["custom", "figurine", "pet", "gift", "kit"];
 
 export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
   custom: {
@@ -344,6 +344,104 @@ export const landingContent: Record<LandingId, Record<Lang, LandingContent>> = {
         { q: "Will it arrive in time for the holiday?", a: `We usually ship within ${productionDaysEn} of confirmation. Add the date to the note and we'll tell you by phone whether we can make it.` },
         { q: "Can I order without the person knowing?", a: "Yes. All you need is one photo of them. Only you see the preview." },
         { q: "What should I give my partner for our anniversary?", a: "A figurine of the two of you on one base — from €60. You see it before you order." },
+      ],
+    },
+  },
+  kit: {
+    bg: {
+      metaTitle: "Фигурка за оцветяване по снимка — от 20 € с бои и четки",
+      path: "/figurka-za-otsvetyavane",
+      crumb: "Фигурка за оцветяване",
+      kicker: "Оцвети сам · фигурка по снимка",
+      title: "Фигурка за оцветяване по твоя снимка",
+      lead: "Персонализирана 3D фигурка по снимка, която оцветявате сами — с детето, с половинката или с цялото семейство. Пристига бяла и грундирана, с бои в нейните цветове, две четки и шаблон. От 30 € за хора и от 20 € за домашен любимец.",
+      cta: { label: "Направи своя комплект", href: "/studio?product=kit" },
+      image: { src: "/shop/kit-3.webp", alt: "Бяла фигурка на семейство за оцветяване с бои, четки и цветен шаблон", ratio: "aspect-square" },
+      product: "kit",
+      productName: "Фигурка за оцветяване по снимка — комплект „Оцвети сам“",
+      sections: [
+        {
+          title: "Какво е „Оцвети сам“",
+          text: [
+            "Това е същата персонализирана фигурка, която правим по снимка — с лицата, прическите, дрехите и позата на вашите хора или на любимеца. Разликата е, че я получавате неоцветена: бяла, грундирана и готова за боя.",
+            "В кутията има всичко нужно: шест бои точно в цветовете на фигурката, тънка четка за лицето, по-дебела за дрехите и шаблон, на който се вижда кое с какъв цвят е. Не ви трябва опит — шаблонът води стъпка по стъпка.",
+          ],
+        },
+        {
+          title: "Подарък, който се прави заедно",
+          text: [
+            "Една вечер без телефони — децата оцветяват себе си, мама и татко, двойката си оцветява един друг. Затова „Оцвети сам“ е любим подарък за семейства, за двойки, за рожден ден, Коледа и Свети Валентин.",
+            "Готовата фигурка остава на рафта като спомен за вечерта, в която сте я оцветили заедно.",
+          ],
+        },
+        {
+          title: "Размери и цени",
+          text: [
+            "Фигурка за оцветяване на един човек е 30 € (17 см) или 35 € (20 см). За двама — 40 € / 45 €, за трима на една основа — 50 € / 55 €. Фигурка за оцветяване на куче или котка е 20 € (17 см) или 25 € (20 см).",
+            "Ако предпочитате да я оцветим ние, ръчно оцветената фигурка е от 40 €. Плащате с наложен платеж при получаване, без предплащане.",
+          ],
+        },
+        {
+          title: "Как поръчвате",
+          text: [
+            "Качвате една снимка в сайта и за около минута виждате как ще изглежда фигурката, когато я оцветите. Поръчвате само ако ви харесва.",
+            `Изработваме фигурката в Русе за ${productionDays} и я пращаме с Еконт или Спиди до офис или адрес в цяла България.`,
+          ],
+        },
+      ],
+      faq: [
+        { q: "Колко струва фигурка за оцветяване?", a: "От 30 € за един човек и от 20 € за домашен любимец. За двама е от 40 €, за трима от 50 €. С бои, четки и шаблон, с наложен платеж." },
+        { q: "Какво има в кутията?", a: "Бялата грундирана фигурка, шест бои в нейните цветове, две четки и шаблон кое с какъв цвят е." },
+        { q: "Трудно ли се оцветява?", a: "Не. Формите са гладки, с ясни граници между цветовете, а шаблонът показва кое с какъв цвят е. Справят се и деца над 6 години с малко помощ." },
+        { q: "Ще видя ли как ще изглежда?", a: "Да. След като качите снимката, за около минута виждате визуализация на фигурката оцветена — така, както ще изглежда по шаблона." },
+        { q: "Колко време отнема?", a: `Изработката е ${productionDays}, а доставката с Еконт или Спиди обикновено е 1–2 работни дни след това.` },
+      ],
+    },
+    en: {
+      metaTitle: "Paint-your-own figurine from a photo — from €20 with paints",
+      path: "/figurka-za-otsvetyavane",
+      crumb: "Paint-your-own figurine",
+      kicker: "Paint it yourself · figurine from a photo",
+      title: "A paint-your-own figurine made from your photo",
+      lead: "A personalised 3D figurine from a photo that you paint yourselves — with your kids, your partner or the whole family. It arrives white and primed, with paints in its own colours, two brushes and a colour guide. From €30 for people and €20 for a pet.",
+      cta: { label: "Make your kit", href: "/studio?product=kit" },
+      image: { src: "/shop/kit-3.webp", alt: "A white family figurine to paint, with paints, brushes and a colour guide", ratio: "aspect-square" },
+      product: "kit",
+      productName: "Paint-your-own figurine from a photo",
+      sections: [
+        {
+          title: "What is “Paint it yourself”",
+          text: [
+            "It's the same personalised figurine we make from a photo — with the faces, hair, clothes and pose of your people or your pet. The difference is that it arrives unpainted: white, primed and ready for paint.",
+            "The box has everything you need: six paints in the figurine's own colours, a fine brush for the face, a wider one for the clothes and a colour guide showing which colour goes where. No experience needed.",
+          ],
+        },
+        {
+          title: "A gift you make together",
+          text: [
+            "An evening without phones — kids paint themselves, mum and dad, couples paint each other. That's why it's a favourite gift for families, couples, birthdays, Christmas and Valentine's Day.",
+          ],
+        },
+        {
+          title: "Sizes and prices",
+          text: [
+            "A paint-your-own figurine of one person is €30 (17 cm) or €35 (20 cm). Two people are €40 / €45, three on one base €50 / €55. A dog or cat is €20 (17 cm) or €25 (20 cm).",
+            "If you'd rather we paint it, a hand-painted figurine starts at €40. You pay cash on delivery.",
+          ],
+        },
+        {
+          title: "How to order",
+          text: [
+            "Upload one photo and in about a minute you see how the figurine will look once painted. Order only if you like it.",
+            `We make it in Ruse in ${productionDaysEn} and ship with Econt or Speedy anywhere in Bulgaria.`,
+          ],
+        },
+      ],
+      faq: [
+        { q: "How much is a paint-your-own figurine?", a: "From €30 for one person and €20 for a pet; two people from €40, three from €50. Paints, brushes and a colour guide included, cash on delivery." },
+        { q: "What's in the box?", a: "The white primed figurine, six paints in its colours, two brushes and a colour guide." },
+        { q: "Is it hard to paint?", a: "No. The shapes are smooth with clear edges between colours and the guide shows which colour goes where. Kids over 6 manage with a little help." },
+        { q: "How long does it take?", a: `Making it takes ${productionDaysEn}; delivery with Econt or Speedy usually takes 1–2 working days after that.` },
       ],
     },
   },

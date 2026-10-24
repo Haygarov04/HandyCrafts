@@ -1,4 +1,8 @@
 import { catalog, currency, maxPeople, priceFor, productIds, type ProductId } from "@/lib/catalog";
+import { realPieces } from "@/lib/gallery";
+
+/** Photos of real finished figurines, shown to search engines and AI search next to the page's own picture. */
+export const realPhotos = () => realPieces.slice(0, 6).map((piece) => absolute(piece.result));
 
 export const siteName = "HandyCrafts";
 
@@ -34,16 +38,16 @@ export const business = {
 /** `product: "all"` covers everything the shop sells now. */
 export function productJsonLd(input: { product: ProductId | "all"; name: string; description: string; image: string; url: string }) {
   const products = input.product === "all" ? productIds : [input.product];
-  // Group figurines (up to three people) set the top of the price range.
+  // Group figurines (up to three people) set the top of the price range, a pet kit the bottom.
   const prices = products.flatMap((id) =>
-    catalog[id].sizes.flatMap((size) => [size.price, priceFor(id, size.cm, maxPeople) ?? size.price])
+    catalog[id].sizes.flatMap((size) => [size.price, priceFor(id, size.cm, maxPeople) ?? size.price, priceFor(id, size.cm, 1, "pet") ?? size.price])
   );
   return {
     "@context": "https://schema.org",
     "@type": "Product",
     name: input.name,
     description: input.description,
-    image: absolute(input.image),
+    image: [absolute(input.image), ...realPhotos()],
     url: absolute(input.url),
     brand: { "@type": "Brand", name: siteName },
     offers: {

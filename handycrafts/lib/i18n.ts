@@ -35,6 +35,8 @@ export function localize(lang: Lang, href: string) {
   if (topic && topicSlugs[topic[1]]) return `/en/ideas/${topicSlugs[topic[1]]}${rest}`;
   // City pages exist only in Bulgarian.
   if (path.startsWith("/figurka-po-snimka/")) return "/en/custom-figurine-from-photo";
+  // So is the blog.
+  if (path === "/blog" || path.startsWith("/blog/")) return "/en/ideas";
   return `/en${path}${rest}`;
 }
 

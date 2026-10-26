@@ -1,3 +1,4 @@
+import { articles } from "@/lib/blog";
 import { catalog, priceFor, productionDays } from "@/lib/catalog";
 import { landingLinks } from "@/lib/landing-links";
 import { absolute, business, siteName, socials } from "@/lib/site";
@@ -40,6 +41,8 @@ ${keychain.map((line) => `- ${line}`).join("\n")}
 - [Създай фигурка (визуализация)](${absolute("/studio")})
 ${landingLinks.map((page) => `- [${page.label.bg}](${absolute(page.path)})`).join("\n")}
 - [Доставка](${absolute("/dostavka")})
+- [Блог](${absolute("/blog")})
+${articles.map((article) => `- [${article.title}](${absolute(`/blog/${article.slug}`)})`).join("\n")}
 - [Контакти](${absolute("/contact")})
 
 ## Контакти

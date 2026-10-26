@@ -82,6 +82,7 @@ export default function Footer({ sellerLine }: { sellerLine?: string }) {
                 {page.label[lang]}
               </Link>
             ))}
+            {lang === "bg" ? <Link href="/blog" className="block hover:text-paper">Блог</Link> : null}
           </div>
         </div>
       </div>

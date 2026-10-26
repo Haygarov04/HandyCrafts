@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { langs, localize } from "@/lib/i18n";
 import { landingLinks } from "@/lib/landing-links";
+import { articles } from "@/lib/blog";
 import { absolute } from "@/lib/site";
 import { citySlugs } from "@/lib/topic-slugs";
 import { topicList } from "@/lib/topics";
@@ -26,7 +27,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
-  return [...cities, ...pages.flatMap((page) =>
+  // The blog is Bulgarian only.
+  const blog = [
+    { url: absolute("/blog"), lastModified: now, changeFrequency: "weekly" as const, priority: 0.6 },
+    ...articles.map((article) => ({ url: absolute(`/blog/${article.slug}`), lastModified: new Date(article.date), changeFrequency: "monthly" as const, priority: 0.6 })),
+  ];
+  return [...cities, ...blog, ...pages.flatMap((page) =>
     langs.map((lang) => ({
       url: absolute(localize(lang, page.path)),
       lastModified: now,

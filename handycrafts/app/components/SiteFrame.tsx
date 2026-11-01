@@ -5,6 +5,7 @@ import Analytics from "./Analytics";
 import CartDrawer from "./CartDrawer";
 import { CartProvider } from "./cart";
 import Footer from "./Footer";
+import LangHint from "./LangHint";
 import Navbar from "./Navbar";
 import VisitCounter from "./VisitCounter";
 
@@ -23,6 +24,7 @@ export default function SiteFrame({ children, sellerLine }: { children: React.Re
           <Footer sellerLine={sellerLine} />
         </>
       )}
+      {manage ? null : <LangHint />}
       {manage ? null : <CartDrawer />}
       {manage ? null : <Analytics />}
       {manage ? null : <VisitCounter />}

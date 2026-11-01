@@ -59,7 +59,8 @@ export function alternates(bgPath: string, lang: Lang) {
   const en = localize("en", bgPath);
   return {
     canonical: lang === "en" ? en : bgPath,
-    languages: { bg: bgPath, en, "x-default": bgPath },
+    // Visitors who speak neither language are better served by English.
+    languages: { bg: bgPath, en, "x-default": en },
   };
 }
 

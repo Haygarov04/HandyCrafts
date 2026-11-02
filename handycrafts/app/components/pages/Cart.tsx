@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useCart } from "@/app/components/cart";
 import QtyControl from "@/app/components/QtyControl";
 import { useLang } from "@/app/components/lang";
+import { storedOrigin } from "@/app/components/origin-store";
 import { deliveryLabel, isFullName, type Delivery } from "@/lib/order-types";
 
 const LEAD_KEY = "hc_lead_id";
@@ -133,6 +134,7 @@ export default function CartPage() {
           website: form.website,
           newsletter,
           leadId: leadId.current,
+          origin: storedOrigin(),
           items: cart.items.map((item) => ({ draftId: item.draftId, qty: item.qty, cm: item.cm })),
         }),
       });

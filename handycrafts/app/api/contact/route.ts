@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { translator } from "@/lib/api-lang";
+import { cleanOrigin } from "@/lib/attribution";
 import { sendContactMail } from "@/lib/mail";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
 
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    await sendContactMail({ name, email, phone, message });
+    await sendContactMail({ name, email, phone, message, origin: cleanOrigin(body?.origin, req.headers), page: cleanText(body?.page, 120) });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("CONTACT", error);

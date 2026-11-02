@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { originLine } from "@/lib/attribution";
 import { money } from "@/lib/catalog";
 import { hasBlob } from "@/lib/files";
 import { hasRedis } from "@/lib/kv";
@@ -132,6 +133,7 @@ export default async function ManagePage({ searchParams }: Props) {
                   </div>
                   <p className="mt-0.5 text-sm text-ink/55">
                     {order.number} · {order.source ? `${sourceLabel[order.source]} · ` : ""}
+                    {order.origin ? `${originLine(order.origin)} · ` : ""}
                     {order.customer.city ? `${order.customer.city} · ` : ""}
                     {new Date(order.createdAt).toLocaleString("bg-BG", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Sofia" })}
                   </p>

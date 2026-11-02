@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { originLine } from "@/lib/attribution";
 import { notFound } from "next/navigation";
 import { money } from "@/lib/catalog";
 import { deliveryLabel, itemTitle, sourceLabel, statusLabel, statusTone } from "@/lib/order-types";
@@ -71,6 +72,8 @@ export default async function OrderPage({ params }: Props) {
           <Row label={c.delivery === "address" ? "Адрес" : "Офис"} value={c.address || "—"} />
           <Row label={order.manual ? "Сума" : "Плащане"} value={order.manual ? money(order.total) : `Наложен платеж · ${money(order.total)}`} />
           <Row label="Език" value={order.lang === "en" ? "Английски" : "Български"} />
+          {order.origin ? <Row label="Откъде" value={originLine(order.origin)} /> : null}
+          {order.origin?.landing ? <Row label="Влязъл през" value={order.origin.landing} /> : null}
         </dl>
         {order.note ? (
           <p className="mt-4 rounded-2xl bg-paper px-4 py-3 text-sm leading-6">

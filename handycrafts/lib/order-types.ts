@@ -1,3 +1,4 @@
+import type { Origin } from "@/lib/attribution";
 import type { ProductId } from "@/lib/catalog";
 export const orderStatuses = [
   "new",
@@ -118,6 +119,8 @@ export type Order = {
   /** Added by hand in the panel (an order from Facebook, TikTok, the phone…). */
   manual?: boolean;
   source?: OrderSource;
+  /** Where a site order's customer came from and their country (never the IP). */
+  origin?: Origin;
   /** Emails sent to the customer, newest last. */
   emails?: { type: string; at: string; ok: boolean }[];
 };

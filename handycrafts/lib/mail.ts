@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { originLine, type Origin } from "@/lib/attribution";
 import { dict, localize, type Lang } from "@/lib/i18n";
 import type { Order, OrderStatus } from "@/lib/order-types";
 import { escapeHtml } from "@/lib/security";
@@ -278,7 +279,8 @@ export async function sendNewOrderToShop(order: Order) {
   const to = process.env.CONTACT_TO;
   if (!to) return false;
   const c = order.customer;
-  const body = `<p style="margin:0 0 6px;font-size:13px;color:#8a847b">${order.lang === "en" ? "🇬🇧 Английски сайт" : "🇧🇬 Български сайт"}</p>
+  const from = originLine(order.origin);
+  const body = `<p style="margin:0 0 6px;font-size:13px;color:#8a847b">${order.lang === "en" ? "🇬🇧 Английски сайт" : "🇧🇬 Български сайт"}${from ? ` · Откъде: ${escapeHtml(from)}` : ""}</p>
 <h1 style="margin:0 0 14px;font-size:24px">Нова поръчка ${order.number}</h1>
 <p style="margin:0"><b>${escapeHtml(c.name)}</b> · <a href="tel:${escapeHtml(c.phone)}">${escapeHtml(c.phone)}</a>${c.email ? ` · ${escapeHtml(c.email)}` : ""}</p>
 ${order.note ? `<p style="margin:12px 0 0;padding:12px 14px;background:${paper};border-radius:12px"><b>Бележка:</b> ${escapeHtml(order.note)}</p>` : ""}
@@ -293,10 +295,11 @@ ${button("Отвори в /manage", absolute(`/manage/${order.id}`))}`;
   });
 }
 
-export async function sendContactMail(input: { name: string; email: string; phone: string; message: string }) {
+export async function sendContactMail(input: { name: string; email: string; phone: string; message: string; origin?: Origin; page?: string }) {
   const to = process.env.CONTACT_TO;
   if (!to || !mailReady()) throw new Error("mail not configured");
-  const body = `<h1 style="margin:0 0 14px;font-size:22px">Съобщение от сайта</h1>
+  const from = [originLine(input.origin), input.page ? `пише от ${input.page}` : ""].filter(Boolean).join(" · ");
+  const body = `${from ? `<p style="margin:0 0 6px;font-size:13px;color:#8a847b">Откъде: ${escapeHtml(from)}</p>` : ""}<h1 style="margin:0 0 14px;font-size:22px">Съобщение от сайта</h1>
 <p style="margin:0"><b>${escapeHtml(input.name)}</b> · ${escapeHtml(input.email)}${input.phone ? ` · ${escapeHtml(input.phone)}` : ""}</p>
 <p style="margin:14px 0 0;padding:14px 16px;background:${paper};border-radius:14px;white-space:pre-wrap">${escapeHtml(input.message)}</p>`;
   const ok = await sendEmail({

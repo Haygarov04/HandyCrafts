@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { storedOrigin } from "@/app/components/origin-store";
 import { useLang } from "@/app/components/lang";
 
 const field = "w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 outline-none transition focus:border-ember";
@@ -25,7 +26,8 @@ export default function ContactPage() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-lang": lang },
-        body: JSON.stringify(form),
+        // Where they came from and which page they write from, so the shop knows what brings messages.
+        body: JSON.stringify({ ...form, origin: storedOrigin(), page: window.location.pathname }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || c.failed);

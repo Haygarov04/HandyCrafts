@@ -1,24 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
+import { channelOf } from "@/lib/attribution";
+import { rememberOrigin } from "./origin-store";
 
 const KEY = "hc_visit_counted";
 
+/** The visit counter's sources are a little coarser than the channels kept with orders. */
 function sourceOf(url: URL, referrer: string) {
-  const utm = (url.searchParams.get("utm_source") || "").toLowerCase();
-  const ref = referrer.toLowerCase();
-  const text = `${utm} ${ref}`;
-  if (/tiktok/.test(text)) return "tiktok";
-  if (/instagram|\big\b/.test(text)) return "instagram";
-  if (/facebook|fb\.|\bfb\b|messenger/.test(text)) return "facebook";
-  if (/google/.test(text)) return "google";
-  if (!utm && (!ref || ref.includes(url.hostname))) return "direct";
-  return "other";
+  const channel = channelOf(url, referrer);
+  return channel === "email" ? "other" : channel;
 }
 
 /** Sends one anonymous "visit" per browser session, tagged with where the visitor came from. */
 export default function VisitCounter() {
   useEffect(() => {
+    rememberOrigin();
     try {
       if (sessionStorage.getItem(KEY)) return;
       sessionStorage.setItem(KEY, "1");

@@ -1,7 +1,7 @@
 import { getJSON, incr } from "@/lib/kv";
 
 /** Where a visitor came from. Anything unknown is "other". */
-export const visitSources = ["tiktok", "instagram", "facebook", "google", "direct", "other"] as const;
+export const visitSources = ["tiktok", "instagram", "facebook", "google", "ai", "direct", "other"] as const;
 export type VisitSource = (typeof visitSources)[number];
 
 export const visitSourceLabel: Record<VisitSource, string> = {
@@ -9,6 +9,7 @@ export const visitSourceLabel: Record<VisitSource, string> = {
   instagram: "Instagram",
   facebook: "Facebook",
   google: "Google",
+  ai: "ChatGPT / AI",
   direct: "Директно",
   other: "Други сайтове",
 };

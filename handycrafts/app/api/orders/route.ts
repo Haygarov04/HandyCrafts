@@ -9,6 +9,7 @@ import { isLeadId, updateLead } from "@/lib/leads";
 import { createOrder, getDraft, listOrders, logEmail, nextOrderNumber } from "@/lib/orders";
 import { subscribe } from "@/lib/newsletter";
 import { notifyAll } from "@/lib/push";
+import { cleanOrigin } from "@/lib/attribution";
 import { allow, cleanText, sameOrigin } from "@/lib/security";
 
 export const runtime = "nodejs";
@@ -120,6 +121,7 @@ export async function POST(req: Request) {
       internalNote: "",
       items,
       total: items.reduce((sum, item) => sum + item.price * item.qty, 0),
+      origin: cleanOrigin(body.origin, req.headers),
     };
 
     await createOrder(order);

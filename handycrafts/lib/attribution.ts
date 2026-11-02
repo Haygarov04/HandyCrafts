@@ -2,13 +2,14 @@
 // country. Kept with orders and contact messages so the shop can see which channels bring customers.
 // Only the country is stored, never the IP address.
 
-export const channels = ["instagram", "tiktok", "facebook", "google", "ai", "email", "other", "direct"] as const;
+export const channels = ["instagram", "tiktok", "facebook", "pinterest", "google", "ai", "email", "other", "direct"] as const;
 export type Channel = (typeof channels)[number];
 
 export const channelLabel: Record<Channel, string> = {
   instagram: "Instagram",
   tiktok: "TikTok",
   facebook: "Facebook",
+  pinterest: "Pinterest",
   google: "Google",
   ai: "ChatGPT / AI",
   email: "Имейл",
@@ -38,6 +39,7 @@ export function channelOf(url: URL, referrer: string): Channel {
   if (/tiktok/.test(text)) return "tiktok";
   if (/instagram|\big\b/.test(text)) return "instagram";
   if (/facebook|fb\.|\bfb\b|messenger/.test(text)) return "facebook";
+  if (/pinterest|pin\.it/.test(text)) return "pinterest";
   if (/chatgpt|openai|perplexity|gemini|copilot|claude\.ai|bard/.test(text)) return "ai";
   if (/google/.test(text)) return "google";
   if (/mail|newsletter/.test(text)) return "email";

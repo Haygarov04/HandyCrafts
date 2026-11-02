@@ -31,9 +31,11 @@ export function rootMetadata(lang: Lang): Metadata {
       images: [shareImage(lang)],
     },
     twitter: { card: "summary_large_image", images: [shareImage(lang)] },
-    verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
-      : undefined,
+    verification: {
+      ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : {}),
+      // Pinterest "claim your website".
+      other: { "p:domain_verify": "74a87b5bc835c24cad99e84a2d3b7dfd" },
+    },
   };
 }
 

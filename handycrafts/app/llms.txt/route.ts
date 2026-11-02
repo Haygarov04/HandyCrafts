@@ -45,6 +45,11 @@ ${landingLinks.map((page) => `- [${page.label.bg}](${absolute(page.path)})`).joi
 ${articles.map((article) => `- [${article.title}](${absolute(`/blog/${article.slug}`)})`).join("\n")}
 - [Контакти](${absolute("/contact")})
 
+## За AI асистенти
+- [Каталог с всички продукти и цени (JSON)](${absolute("/catalog.json")})
+- [Пълният текст на сайта](${absolute("/llms-full.txt")})
+- English site: ${absolute("/en")}
+
 ## Контакти
 - Имейл: ${business.email}
 ${socials.map((profile) => `- ${profile.name}: ${profile.url}`).join("\n")}

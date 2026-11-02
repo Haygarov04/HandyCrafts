@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { hasBlob } from "@/lib/files";
 import { sendDueReminders } from "@/lib/lead-mail";
 import { setJSON } from "@/lib/kv";
+import { submitSitemapToIndexNow } from "@/lib/indexnow";
 import { listOrders } from "@/lib/orders";
 
 export const runtime = "nodejs";
@@ -23,7 +24,9 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
   const reminders = await sendDueReminders().catch(() => ({ sent: 0 }));
-  if (!hasBlob()) return NextResponse.json({ skipped: "no blob store", reminders });
+  // Once a week, tell Bing & co. about every page (IndexNow).
+  const indexNow = new Date().getUTCDay() === 1 ? await submitSitemapToIndexNow().catch(() => ({ status: 0 })) : undefined;
+  if (!hasBlob()) return NextResponse.json({ skipped: "no blob store", reminders, indexNow });
 
   const now = Date.now();
   const orders = await listOrders(5000);
@@ -77,5 +80,5 @@ export async function GET(req: Request) {
 
   for (let i = 0; i < stale.length; i += 100) await del(stale.slice(i, i + 100));
 
-  return NextResponse.json({ draftFilesDeleted: stale.length, orderFilesDeleted: orderFiles, reminders });
+  return NextResponse.json({ draftFilesDeleted: stale.length, orderFilesDeleted: orderFiles, reminders, indexNow });
 }

@@ -603,6 +603,7 @@ export default function StudioPage() {
               <div className="mx-auto max-w-lg">
                 <HandyAI
                   lang={lang}
+                  pet={preview.subject === "pet"}
                   current={{ draftId: preview.draftId, url: preview.url }}
                   added={added}
                   checkoutHref={href("/cart")}

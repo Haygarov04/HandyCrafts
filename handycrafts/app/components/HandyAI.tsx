@@ -32,6 +32,11 @@ const copy = {
       "Друг цвят на дрехите",
       "По-широка усмивка",
     ],
+    // For a pet the chips and greeting talk about fur, collar and pose, not hair and clothes.
+    petLaunchText: "Поза, нашийник, играчка, цвят на козината — кажи с думи или прати снимка.",
+    petHello:
+      "Здравей! Аз съм Handy AI ✦ Ето първата версия на любимеца ти. Ако нещо не е като него — шарките, ушите, позата — просто ми напиши или ми прати още снимка. Ако ти харесва, добави я в количката 🙂",
+    petIdeas: ["Да е легнал", "Добави нашийник с медальон", "Сложи му любимата играчка", "Шарките като на снимката"],
     placeholder: "Напиши какво да променя…",
     attach: "Добави снимка",
     removePhoto: "Махни",
@@ -77,6 +82,10 @@ const copy = {
       "Different clothes colour",
       "Bigger smile",
     ],
+    petLaunchText: "Pose, collar, a toy, fur colours — say it in words or send a photo.",
+    petHello:
+      "Hi! I'm Handy AI ✦ Here's the first version of your pet. If something isn't quite them — the markings, the ears, the pose — just tell me or send another photo. If you like it, add it to your cart 🙂",
+    petIdeas: ["Lying down", "Add a collar with a tag", "Add their favourite toy", "Markings like in the photo"],
     placeholder: "Tell me what to change…",
     attach: "Add a photo",
     removePhoto: "Remove",
@@ -120,12 +129,12 @@ function load(): Saved | null {
 }
 
 /** The saved conversation, with this preview added as a new version if it was made outside the chat. */
-function restore(lang: Lang, current: Version): Saved {
+function restore(lang: Lang, current: Version, pet: boolean): Saved {
   const saved = load();
   if (!saved)
     return {
       first: current.draftId,
-      entries: fresh(lang, current),
+      entries: fresh(lang, current, pet),
       editsLeft: null,
     };
   if (
@@ -154,13 +163,14 @@ function withNewPreview(
   ];
 }
 
-function fresh(lang: Lang, version: Version): Entry[] {
+function fresh(lang: Lang, version: Version, pet: boolean): Entry[] {
+  const c = copy[lang];
   return [
     { kind: "version", version, n: 1 },
     {
       kind: "bot",
-      text: copy[lang].hello,
-      quick: copy[lang].ideas.map((idea) => `idea:${idea}` as Quick),
+      text: pet ? c.petHello : c.hello,
+      quick: (pet ? c.petIdeas : c.ideas).map((idea) => `idea:${idea}` as Quick),
     },
   ];
 }
@@ -193,6 +203,8 @@ type Props = {
   onAddToCart: () => void;
   /** A change the studio wants made (a pose chip, edited details): opens the chat and sends it. */
   request?: { id: number; text: string } | null;
+  /** The preview is of a pet: greeting and suggestions about fur and pose, not hair and clothes. */
+  pet?: boolean;
 };
 
 /**
@@ -207,17 +219,18 @@ export default function HandyAI({
   onVersion,
   onAddToCart,
   request,
+  pet = false,
 }: Props) {
   const c = copy[lang];
   const [open, setOpen] = useState(false);
   // Until someone has opened Handy AI once, the launcher pulses to catch the eye.
   const [seen, setSeen] = useState(true);
-  const [first] = useState(() => restore(lang, current).first);
+  const [first] = useState(() => restore(lang, current, pet).first);
   const [entries, setEntries] = useState<Entry[]>(
-    () => restore(lang, current).entries,
+    () => restore(lang, current, pet).entries,
   );
   const [editsLeft, setEditsLeft] = useState<number | null>(
-    () => restore(lang, current).editsLeft,
+    () => restore(lang, current, pet).editsLeft,
   );
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState<{ file: File; url: string } | null>(null);
@@ -519,7 +532,7 @@ export default function HandyAI({
             {c.launch}
           </span>
           <span className="mt-1 block text-sm leading-snug text-paper/70">
-            {c.launchText}
+            {pet ? c.petLaunchText : c.launchText}
           </span>
         </span>
         {versions.length > 1 ? (

@@ -46,6 +46,9 @@ ${articles.map((article) => `- [${article.title}](${absolute(`/blog/${article.sl
 - [Контакти](${absolute("/contact")})
 
 ## За AI асистенти
+- MCP сървър (Streamable HTTP, без ключ): ${absolute("/mcp")} — инструменти: list_products, get_quote, create_order_link, get_shipping, get_real_photos, get_faq, send_inquiry
+- [Публичен API (OpenAPI)](${absolute("/openapi.json")}) — ${absolute("/api/public/v1")}
+- [Документация за агенти](${absolute("/en/developers")})
 - [Каталог с всички продукти и цени (JSON)](${absolute("/catalog.json")})
 - [Пълният текст на сайта](${absolute("/llms-full.txt")})
 - English site: ${absolute("/en")}

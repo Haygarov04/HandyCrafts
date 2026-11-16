@@ -83,6 +83,7 @@ export default function Footer({ sellerLine }: { sellerLine?: string }) {
               </Link>
             ))}
             {lang === "bg" ? <Link href="/blog" className="block hover:text-paper">Блог</Link> : null}
+            <Link href="/en/developers" className="block hover:text-paper">{lang === "bg" ? "За AI агенти" : "For AI agents"}</Link>
           </div>
         </div>
       </div>

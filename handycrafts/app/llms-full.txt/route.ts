@@ -31,7 +31,7 @@ export function GET() {
   );
   const text = [
     `# ${siteName} — full site text`,
-    `> Custom 3D printed, hand-painted figurines from a photo, made in Ruse, Bulgaria. Prices and sizes as JSON: ${absolute("/catalog.json")}. Short summary: ${absolute("/llms.txt")}.`,
+    `> Custom 3D printed, hand-painted figurines from a photo, made in Ruse, Bulgaria. Prices and sizes as JSON: ${absolute("/catalog.json")}. Short summary: ${absolute("/llms.txt")}. MCP server for AI agents: ${absolute("/mcp")}; public API: ${absolute("/openapi.json")}.`,
     "# Product pages",
     ...pages,
     "# FAQ",

@@ -29,6 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
   // The blog is Bulgarian only.
   const blog = [
+    { url: absolute("/en/developers"), lastModified: now, changeFrequency: "monthly" as const, priority: 0.4 },
     { url: absolute("/blog"), lastModified: now, changeFrequency: "weekly" as const, priority: 0.6 },
     ...articles.map((article) => ({ url: absolute(`/blog/${article.slug}`), lastModified: new Date(article.date), changeFrequency: "monthly" as const, priority: 0.6 })),
   ];

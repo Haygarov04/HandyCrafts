@@ -40,7 +40,7 @@ export function channelOf(url: URL, referrer: string): Channel {
   if (/instagram|\big\b/.test(text)) return "instagram";
   if (/facebook|fb\.|\bfb\b|messenger/.test(text)) return "facebook";
   if (/pinterest|pin\.it/.test(text)) return "pinterest";
-  if (/chatgpt|openai|perplexity|gemini|copilot|claude\.ai|bard/.test(text)) return "ai";
+  if (/chatgpt|openai|perplexity|gemini|copilot|claude\.ai|bard|ai-agent|\bmcp\b/.test(text)) return "ai";
   if (/google/.test(text)) return "google";
   if (/mail|newsletter/.test(text)) return "email";
   if (!utm && (!ref || ref.includes(url.hostname))) return "direct";

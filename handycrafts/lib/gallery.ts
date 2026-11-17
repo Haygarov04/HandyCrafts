@@ -13,6 +13,10 @@ export type RealPiece = {
 };
 
 export const realPieces: RealPiece[] = [
+  { result: "/real/fisherman.webp", caption: { bg: "Фигурка на рибар с шаран в ръце", en: "Figurine of a fisherman holding a carp" } },
+  { result: "/real/builder.webp", caption: { bg: "Фигурка на строител с каска, инструменти и къщичка", en: "Figurine of a builder with a hard hat, tools and a little house" } },
+  { result: "/real/footballer.webp", caption: { bg: "Фигурка на футболист с фланелка с номер и табела за 40 години", en: "Figurine of a footballer in a numbered shirt with a 40th birthday sign" } },
+  { result: "/real/barber.webp", caption: { bg: "Фигурка на бръснар с престилка, ножица и гребен", en: "Figurine of a barber in an apron with scissors and a comb" } },
   { result: "/real/man-glasses.webp", caption: { bg: "Фигурка на мъж с очила и риза на палми", en: "Figurine of a man in glasses and a palm-print shirt" } },
   { result: "/real/office-panic.webp", caption: { bg: "Фигурка на мъж на бюро с лаптоп и бутон PANIC", en: "Figurine of a man at a desk with a laptop and a PANIC button" } },
   { result: "/real/man-tesla.webp", caption: { bg: "Фигурка на мъж, облегнат на колата си", en: "Figurine of a man leaning on his car" } },

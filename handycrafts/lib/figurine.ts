@@ -34,6 +34,18 @@ const fullBody = "Full body from the top of the head to the shoes, both feet res
 const vehicle =
   "If the person is posing with a car, motorbike or other vehicle and it is part of the figurine, sculpt the vehicle as part of the same piece and use no round base, podium or pedestal at all: the vehicle and the person stand directly on the plain surface.";
 
+// The Christmas option: one fixed outfit for everyone on the figurine, whatever the photo shows. The customer
+// still picks the pose; the outfit itself can't be changed, not in the details and not in the Handy AI chat.
+export const christmasOutfit = {
+  bg: "червен пуловер, тъмносини дънки, бели обувки и коледна шапка",
+  en: "red jumper, dark blue jeans, white shoes and a Santa hat",
+};
+const christmasPeople =
+  "Christmas outfit, the same for every person (children too), replacing whatever they wear in the photo: a plain red knitted sweater (pullover), dark navy-blue denim jeans, white sneakers and a classic red Santa hat with a white fur trim and a white pompom. Keep glasses only if they wear them in the photo";
+const christmasPet = "Christmas outfit: a small red knitted sweater and a classic red Santa hat with a white fur trim and a white pompom, sized for the pet.";
+const christmasLock =
+  "This is a Christmas figurine with a fixed outfit: everyone keeps exactly the red knitted sweater, dark navy-blue jeans, white sneakers and red Santa hat with white trim (a pet keeps its red sweater and Santa hat). Never change, remove or recolour these clothes, shoes or hats, even if the request asks for it; only make the rest of the change.";
+
 /** A kit's prompt is the figurine's one with its paint pots and brushes added. */
 function forKit(product: ProductId, prompt: string) {
   return product === "kit" ? `${prompt} ${paintKit}` : prompt;
@@ -46,6 +58,8 @@ type FigurineInput = {
   cm: number;
   clothes: string;
   pose: string;
+  /** The fixed Christmas outfit replaces the customer's clothes. */
+  christmas?: boolean;
 };
 
 export function figurinePrompt(input: FigurineInput) {
@@ -55,12 +69,17 @@ export function figurinePrompt(input: FigurineInput) {
 function paintedPrompt(input: FigurineInput) {
   const extras = input.clothes.trim();
 
+  if (input.christmas) {
+    // The pose is still theirs; the clothes are the Christmas outfit, whatever they wrote.
+    return paintedPrompt({ ...input, christmas: false, clothes: input.subject === "pet" ? christmasPet : christmasPeople });
+  }
+
   if (input.subject === "pet") {
     const pose = input.pose.trim() || "sitting calmly and looking at the camera";
     return [
       `Turn this photo into a studio product photo of one physical ${kinds[input.product]} of this exact pet, about ${input.cm} cm tall.`,
       "Keep the pet recognizable: same species and breed, fur color and pattern, markings, eye color, ear shape and tail.",
-      extras ? `Accessories: ${extras}.` : "No clothes, only a collar if one is visible in the photo.",
+      extras ? (extras === christmasPet ? extras : `Accessories: ${extras}.`) : "No clothes, only a collar if one is visible in the photo.",
       `Pose: ${pose}. Whole animal visible, nothing cropped.`,
       "Style: premium hand-painted stylized resin miniature, cute but faithful proportions, slightly larger head and big bright eyes, fur sculpted in soft clean clumps, smooth matte finish.",
       framing,
@@ -110,7 +129,7 @@ function paintedPrompt(input: FigurineInput) {
  * A change asked for in the studio chat. <IMAGE_0> is the current preview, <IMAGE_1> the customer's
  * original photo (for the likeness) and <IMAGE_2>, if there is one, a photo they just added.
  */
-export function editPrompt(input: { product: ProductId; subject: SubjectId; request: string; extraPhoto: boolean; hasOriginal: boolean }) {
+export function editPrompt(input: { product: ProductId; subject: SubjectId; request: string; extraPhoto: boolean; hasOriginal: boolean; christmas?: boolean }) {
   return forKit(input.product, [
     `<IMAGE_0> is a studio product photo of a custom ${kinds[input.product]}.`,
     input.hasOriginal
@@ -121,12 +140,13 @@ export function editPrompt(input: { product: ProductId; subject: SubjectId; requ
       : "",
     `Edit <IMAGE_0> to make exactly this change the customer asked for (it may be written in Bulgarian or English): "${input.request}".`,
     "Change only that. Do not add glasses or accessories that are not already there unless asked. Keep everything else the same: the same figurine, style, colors, base, pose and framing, unless the request says otherwise.",
+    input.christmas ? christmasLock : "",
     input.subject === "pet" ? "" : anatomy,
     input.subject === "pet" ? "" : likeness,
     input.subject === "pet" || input.product === "keychain"
       ? ""
       : "A figurine with a car or other vehicle has no round base or podium — the vehicle and the person stand directly on the surface. If the change removes the vehicle, put the person on a low plain round base.",
-    input.subject === "pet" ? "" : "The customer's request always wins over the rules above: if they ask to make someone slimmer, taller, shorter or different in build, or to put a face from a photo on a specific person, do exactly that for that person only, and keep them recognisable.",
+    input.subject === "pet" ? "" : "Apart from a fixed Christmas outfit, the customer's request always wins over the rules above: if they ask to make someone slimmer, taller, shorter or different in build, or to put a face from a photo on a specific person, do exactly that for that person only, and keep them recognisable.",
     toy,
     framing,
   ]

@@ -65,12 +65,15 @@ function facts(lang: Lang) {
   ].join(" ");
 }
 
-function systemPrompt(input: { lang: Lang; product: ProductId; subject: SubjectId; editsLeft: number; hasPhoto: boolean }) {
+function systemPrompt(input: { lang: Lang; product: ProductId; subject: SubjectId; christmas?: boolean; editsLeft: number; hasPhoto: boolean }) {
   return [
     "You are Handy AI, the friendly assistant inside the HandyCrafts studio. The customer is looking at an AI preview of their custom figurine and chats with you to change it or ask questions.",
     facts(input.lang),
     `Their item: ${({ figurine: "figurine", keychain: "keychain", kit: "paint-it-yourself figurine (sent white with its paints, brushes and a colour guide; the preview shows it painted, as it will look from the guide, so colour changes are fine)" })[input.product]} of a ${input.subject === "pet" ? "pet" : "person"}. Changes left in this chat: ${input.editsLeft}.`,
     input.hasPhoto ? "The customer attached an extra photo with this message." : "",
+    input.christmas
+      ? "This is a Christmas figurine with a fixed outfit: a red knitted sweater, dark blue jeans, white shoes and a red Santa hat (a pet: red sweater and Santa hat). The outfit cannot be changed: if they ask to change, remove or recolour the clothes, shoes or hat, use \"answer\" and kindly explain the Christmas outfit stays as it is, and that for their own clothes they can make a normal figurine with a new preview. Pose, hair, smile, glasses, face details and small items in the hands (a gift, a candy cane) can be changed with \"edit\"; for those, never mention any change to the clothes in the instruction."
+      : "",
     "Decide one action:",
     '- "edit": they ask for a visual change to the figurine (hair, face details, glasses, clothes, colours, pose, accessories, adding someone from the attached photo, etc.). Write "instruction": one clear English sentence describing only that visual change, max 40 words. Logos, names, numbers and prints on clothes, balls or other items are fine (e.g. a club crest, a brand logo, a name on a shirt) — describe them exactly. Name exactly who each change is for (e.g. "the man", "the girl on the left") and keep every detail they asked for (taller, slimmer, which face goes on whom). If they say the faces do not look like the real people, the instruction is to resculpt every face faithfully from the original photo — same face shape, nose, eyes, eyebrows, lips, hair and age. Never make the figurine look like a famous person.',
     '- "answer": a question about prices, sizes, delivery, timing, payment, how it works. Answer from the facts above only; if unsure, say we will confirm by phone.',
@@ -117,6 +120,7 @@ export async function askAssistant(input: {
   lang: Lang;
   product: ProductId;
   subject: SubjectId;
+  christmas?: boolean;
   editsLeft: number;
   hasPhoto: boolean;
   history: ChatTurn[];

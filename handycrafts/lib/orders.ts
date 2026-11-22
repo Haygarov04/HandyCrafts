@@ -26,6 +26,8 @@ export type Draft = {
   likeness?: string;
   /** The preview shows a car or other vehicle, which is charged extra after a call with the customer. */
   vehicle?: boolean;
+  /** Made with the Christmas option: a fixed outfit that chat edits can't change. */
+  christmas?: boolean;
 };
 
 const DRAFT_TTL = 60 * 60 * 24 * 30;

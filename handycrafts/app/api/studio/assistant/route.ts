@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ action: "limit", reply: tr("За днес Handy AI е изморен 🙂 Пиши ни и ще помогнем лично.", "Handy AI is tired for today 🙂 Write to us and we'll help in person.") });
   }
 
-  const result = await askAssistant({ key, lang, product: draft.product, subject: draft.subject || "person", editsLeft, hasPhoto, history, message });
+  const result = await askAssistant({ key, lang, product: draft.product, subject: draft.subject || "person", christmas: Boolean(draft.christmas), editsLeft, hasPhoto, history, message });
   if (result.action !== "edit") return NextResponse.json({ action: result.action, reply: result.reply, editsLeft });
 
   if (editsLeft <= 0) {

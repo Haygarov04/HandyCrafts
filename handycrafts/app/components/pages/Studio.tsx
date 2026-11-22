@@ -33,7 +33,7 @@ const kitImages = 3;
 /** Shared with checkout, so an email left here and the details typed there end up as one unfinished order. */
 const LEAD_KEY = "hc_lead_id";
 
-type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number; clothes?: string; pose?: string; vehicle?: boolean };
+type Preview = { draftId: string; url: string; product: ProductId; subject: SubjectId; people?: number; clothes?: string; pose?: string; vehicle?: boolean; christmas?: boolean };
 
 export default function StudioPage() {
   const cart = useCart();
@@ -51,6 +51,8 @@ export default function StudioPage() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [clothes, setClothes] = useState("");
   const [pose, setPose] = useState("");
+  // The Christmas option: a fixed outfit for everyone (red jumper, dark jeans, white shoes, Santa hat); only the pose is theirs.
+  const [christmas, setChristmas] = useState(false);
   const [busy, setBusy] = useState(false);
   const [progress, setProgress] = useState(0);
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -92,10 +94,12 @@ export default function StudioPage() {
       setCm(priceFor(kept, keptCm) !== null ? keptCm : catalog[kept].sizes[0].cm);
       setClothes(saved.clothes || "");
       setPose(saved.pose || "");
+      setChristmas(Boolean(saved.christmas) || params.get("christmas") === "1");
       setPreview(saved.preview);
       setAdded(Boolean(saved.added));
     } else {
       if (isSubjectId(who)) setSubject(who);
+      if (params.get("christmas") === "1") setChristmas(true);
       const many = Number(params.get("people"));
       if (many > 1 && who !== "pet") setPeopleChoice(Math.min(maxPeople, many));
       if (isProductId(requested) && isOffered(requested, isSubjectId(who) ? who : requested === "keychain" ? "pet" : "person")) {
@@ -138,8 +142,8 @@ export default function StudioPage() {
 
   useEffect(() => {
     if (!restored) return;
-    saveState({ step, product, subject, people: peopleChoice, cm, clothes, pose, preview, added });
-  }, [restored, step, product, subject, peopleChoice, cm, clothes, pose, preview, added]);
+    saveState({ step, product, subject, people: peopleChoice, cm, clothes, pose, christmas, preview, added });
+  }, [restored, step, product, subject, peopleChoice, cm, clothes, pose, christmas, preview, added]);
 
   // Only person figurines can have more than one person; other choices fall back to one.
   const people = normalizePeople(product, subject, peopleChoice);
@@ -206,6 +210,7 @@ export default function StudioPage() {
       body.set("cm", String(cm));
       body.set("clothes", clothes);
       body.set("pose", pose);
+      if (christmas) body.set("christmas", "1");
       if (photoFile) body.set("photo", photoFile);
       else if (preview) body.set("draftId", preview.draftId);
       const res = await fetch("/api/studio/preview", { method: "POST", body, headers: { "x-lang": lang } });
@@ -220,7 +225,7 @@ export default function StudioPage() {
       });
       setProgress(100);
       trackEvent("generate_preview", { product, subject });
-      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people, clothes, pose, vehicle: Boolean(data.vehicle) });
+      setPreview({ draftId: data.draftId, url: data.previewUrl, product, subject, people, clothes, pose, christmas, vehicle: Boolean(data.vehicle) });
       setMail((prev) => ({ ...prev, sentTo: "", error: "" }));
       setFreshCount((n) => n + 1);
     } catch (issue) {
@@ -238,7 +243,7 @@ export default function StudioPage() {
       product: preview.product,
       subject: preview.subject,
       people: preview.people || 1,
-      label: t.itemLabel(preview.product, preview.subject, preview.people || 1) + (preview.vehicle ? t.withVehicle : ""),
+      label: t.itemLabel(preview.product, preview.subject, preview.people || 1) + (preview.vehicle ? t.withVehicle : "") + (preview.christmas ? t.withChristmas : ""),
       cm,
       price,
       qty: 1,
@@ -278,19 +283,19 @@ export default function StudioPage() {
 
   // Back from "Промени детайлите" without changing anything: show the same preview, don't draw a new one.
   const sameDetails = Boolean(
-    preview && preview.product === product && preview.subject === subject && (preview.people || 1) === people && (preview.clothes ?? "") === clothes && (preview.pose ?? "") === pose
+    preview && preview.product === product && preview.subject === subject && (preview.people || 1) === people && Boolean(preview.christmas) === christmas && (christmas || (preview.clothes ?? "") === clothes) && (preview.pose ?? "") === pose
   );
 
   // Only the clothes or pose changed: refine the current preview with Handy AI instead of starting over.
   const onlyLooks = Boolean(
-    preview && !sameDetails && preview.product === product && preview.subject === subject && (preview.people || 1) === people
+    preview && !sameDetails && preview.product === product && preview.subject === subject && (preview.people || 1) === people && Boolean(preview.christmas) === christmas
   );
 
   function next() {
     if (step === 2 && sameDetails) setStep(3);
     else if (step === 2 && onlyLooks && preview) {
       const parts = [
-        clothes !== (preview.clothes ?? "") ? `${s.clothesPrefix} ${clothes || s.asInPhoto}` : "",
+        !christmas && clothes !== (preview.clothes ?? "") ? `${s.clothesPrefix} ${clothes || s.asInPhoto}` : "",
         pose !== (preview.pose ?? "") ? `${s.posePrefix} ${pose || s.asInPhoto}` : "",
       ].filter(Boolean);
       setPreview({ ...preview, clothes, pose });
@@ -501,16 +506,47 @@ export default function StudioPage() {
                 <span className="text-ink/65">{s.aiTeaserText}</span>
               </span>
             </div>
-            <label className="mt-8 block text-sm font-semibold">
-              {copy[subject].extrasLabel}
-              <textarea
-                value={clothes}
-                onChange={(event) => setClothes(event.target.value)}
-                maxLength={500}
-                placeholder={copy[subject].extrasHint}
-                className="mt-2 min-h-28 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 font-normal outline-none focus:border-ember"
-              />
-            </label>
+            <button
+              type="button"
+              aria-pressed={christmas}
+              onClick={() => setChristmas((value) => !value)}
+              className={`mt-8 flex w-full items-center gap-4 rounded-2xl border-2 px-4 py-4 text-left transition ${
+                christmas ? "border-[#c0392b] bg-[#c0392b]/[0.07]" : "border-transparent bg-white hover:border-ink/15"
+              }`}
+            >
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#c0392b] text-2xl" aria-hidden>
+                🎄
+              </span>
+              <span className="min-w-0 flex-1">
+                <b className="block font-semibold">{s.christmasTitle}</b>
+                <span className="block text-sm leading-snug text-ink/65">{s.christmasText}</span>
+              </span>
+              <span
+                className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 text-xs font-bold ${
+                  christmas ? "border-[#c0392b] bg-[#c0392b] text-white" : "border-ink/20"
+                }`}
+                aria-hidden
+              >
+                {christmas ? "✓" : ""}
+              </span>
+            </button>
+            {christmas ? (
+              <p className="mt-5 rounded-2xl bg-white px-4 py-3 text-sm text-ink/70">
+                <b className="block text-ink">{copy[subject].extrasLabel}</b>
+                {subject === "pet" ? s.christmasLockedPet : s.christmasLocked}
+              </p>
+            ) : (
+              <label className="mt-5 block text-sm font-semibold">
+                {copy[subject].extrasLabel}
+                <textarea
+                  value={clothes}
+                  onChange={(event) => setClothes(event.target.value)}
+                  maxLength={500}
+                  placeholder={copy[subject].extrasHint}
+                  className="mt-2 min-h-28 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 font-normal outline-none focus:border-ember"
+                />
+              </label>
+            )}
             <label className="mt-5 block text-sm font-semibold">
               {s.pose}
               <textarea
@@ -604,6 +640,7 @@ export default function StudioPage() {
                 <HandyAI
                   lang={lang}
                   pet={preview.subject === "pet"}
+                  christmas={Boolean(preview.christmas)}
                   current={{ draftId: preview.draftId, url: preview.url }}
                   added={added}
                   checkoutHref={href("/cart")}
@@ -618,7 +655,7 @@ export default function StudioPage() {
                         product: preview.product,
                         subject: preview.subject,
                         people: preview.people || 1,
-                        label: t.itemLabel(preview.product, preview.subject, preview.people || 1) + (version.vehicle ? t.withVehicle : ""),
+                        label: t.itemLabel(preview.product, preview.subject, preview.people || 1) + (version.vehicle ? t.withVehicle : "") + (preview.christmas ? t.withChristmas : ""),
                         cm,
                         price,
                         qty: 1,

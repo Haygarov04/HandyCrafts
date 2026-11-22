@@ -37,6 +37,10 @@ const copy = {
     petHello:
       "Здравей! Аз съм Handy AI ✦ Ето първата версия на любимеца ти. Ако нещо не е като него — шарките, ушите, позата — просто ми напиши или ми прати още снимка. Ако ти харесва, добави я в количката 🙂",
     petIdeas: ["Да е легнал", "Добави нашийник с медальон", "Сложи му любимата играчка", "Шарките като на снимката"],
+    // A Christmas figurine keeps its outfit, so its chips and greeting offer pose, smile and small props instead.
+    christmasHello:
+      "Здравей! Аз съм Handy AI ✦ Ето коледната ти фигурка 🎄 Коледното облекло остава същото, но мога да променя позата, прическата, усмивката или да сложа подаръче в ръцете. Ако ти харесва, добави я в количката 🙂",
+    christmasIdeas: ["Да маха с ръка", "Да държи подаръче", "По-широка усмивка", "Друга прическа"],
     placeholder: "Напиши какво да променя…",
     attach: "Добави снимка",
     removePhoto: "Махни",
@@ -86,6 +90,9 @@ const copy = {
     petHello:
       "Hi! I'm Handy AI ✦ Here's the first version of your pet. If something isn't quite them — the markings, the ears, the pose — just tell me or send another photo. If you like it, add it to your cart 🙂",
     petIdeas: ["Lying down", "Add a collar with a tag", "Add their favourite toy", "Markings like in the photo"],
+    christmasHello:
+      "Hi! I'm Handy AI ✦ Here's your Christmas figurine 🎄 The Christmas outfit stays the same, but I can change the pose, hair or smile, or put a little gift in their hands. If you like it, add it to your cart 🙂",
+    christmasIdeas: ["Waving", "Holding a little gift", "Bigger smile", "A different hairstyle"],
     placeholder: "Tell me what to change…",
     attach: "Add a photo",
     removePhoto: "Remove",
@@ -129,12 +136,12 @@ function load(): Saved | null {
 }
 
 /** The saved conversation, with this preview added as a new version if it was made outside the chat. */
-function restore(lang: Lang, current: Version, pet: boolean): Saved {
+function restore(lang: Lang, current: Version, pet: boolean, christmas = false): Saved {
   const saved = load();
   if (!saved)
     return {
       first: current.draftId,
-      entries: fresh(lang, current, pet),
+      entries: fresh(lang, current, pet, christmas),
       editsLeft: null,
     };
   if (
@@ -163,14 +170,14 @@ function withNewPreview(
   ];
 }
 
-function fresh(lang: Lang, version: Version, pet: boolean): Entry[] {
+function fresh(lang: Lang, version: Version, pet: boolean, christmas = false): Entry[] {
   const c = copy[lang];
   return [
     { kind: "version", version, n: 1 },
     {
       kind: "bot",
-      text: pet ? c.petHello : c.hello,
-      quick: (pet ? c.petIdeas : c.ideas).map((idea) => `idea:${idea}` as Quick),
+      text: pet ? c.petHello : christmas ? c.christmasHello : c.hello,
+      quick: (pet ? c.petIdeas : christmas ? c.christmasIdeas : c.ideas).map((idea) => `idea:${idea}` as Quick),
     },
   ];
 }
@@ -205,6 +212,8 @@ type Props = {
   request?: { id: number; text: string } | null;
   /** The preview is of a pet: greeting and suggestions about fur and pose, not hair and clothes. */
   pet?: boolean;
+  /** A Christmas figurine: its outfit is fixed, so the greeting and chips offer pose, smile and props. */
+  christmas?: boolean;
 };
 
 /**
@@ -220,17 +229,18 @@ export default function HandyAI({
   onAddToCart,
   request,
   pet = false,
+  christmas = false,
 }: Props) {
   const c = copy[lang];
   const [open, setOpen] = useState(false);
   // Until someone has opened Handy AI once, the launcher pulses to catch the eye.
   const [seen, setSeen] = useState(true);
-  const [first] = useState(() => restore(lang, current, pet).first);
+  const [first] = useState(() => restore(lang, current, pet, christmas).first);
   const [entries, setEntries] = useState<Entry[]>(
-    () => restore(lang, current, pet).entries,
+    () => restore(lang, current, pet, christmas).entries,
   );
   const [editsLeft, setEditsLeft] = useState<number | null>(
-    () => restore(lang, current, pet).editsLeft,
+    () => restore(lang, current, pet, christmas).editsLeft,
   );
   const [text, setText] = useState("");
   const [photo, setPhoto] = useState<{ file: File; url: string } | null>(null);

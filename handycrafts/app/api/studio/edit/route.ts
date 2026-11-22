@@ -74,7 +74,7 @@ export async function POST(req: Request) {
     if (original) images.push({ bytes: await streamToBuffer(original.body), contentType: original.contentType });
     if (extra) images.push(extra);
 
-    const prompt = editPrompt({ product: base.product, subject: base.subject || "person", request, extraPhoto: Boolean(extra), hasOriginal: Boolean(original) });
+    const prompt = editPrompt({ product: base.product, subject: base.subject || "person", request, extraPhoto: Boolean(extra), hasOriginal: Boolean(original), christmas: base.christmas });
     const source = await editImage(key, prompt, images);
     const preview = source ? await pullImage(source) : null;
     if (!preview) {
